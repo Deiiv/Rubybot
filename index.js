@@ -74,6 +74,9 @@ client.on('message', msg => {
 			})
 
 			let role = msg.guild.roles.find(role => role.name === guild);
+			if(!role){
+				msg.channel.send("Role for guild " + guild + " not found");
+			};
 			msg.member.addRole(role)
 				.then(() => {
 					message += 'Set role for guild ' + guild + " " + peepoHappy;
