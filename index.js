@@ -76,16 +76,18 @@ client.on('message', msg => {
 			let role = msg.guild.roles.find(role => role.name === guild);
 			if(!role){
 				msg.channel.send("Role for guild " + guild + " not found");
-			};
-			msg.member.addRole(role)
-				.then(() => {
-					message += 'Set role for guild ' + guild + " " + peepoHappy;
-					msg.channel.send(message);
-				})
-				.catch(error => {
-					console.log(error);
-					msg.channel.send('Encountered an error: ' + error.message);
-				});
+			}
+			else{
+				msg.member.addRole(role)
+					.then(() => {
+						message += 'Set role for guild ' + guild + " " + peepoHappy;
+						msg.channel.send(message);
+					})
+					.catch(error => {
+						console.log(error);
+						msg.channel.send('Encountered an error: ' + error.message);
+					});
+			}
 		}
 		else{
 			msg.channel.send('Invalid guild! Please send one of the following: ' + validGuilds.toString());
