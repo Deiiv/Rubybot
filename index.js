@@ -29,7 +29,7 @@ client.on('guildMemberAdd', member => {
 
 	let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
 
-	if(member.guild.name === "Test"){ //POP
+	if(member.guild.name === "POP"){
 		message += "\n\nCheck out our rules/info in the " + member.guild.channels.find(ch => ch.name === 'information').toString() + " channel " + hypers + "\n\nSet your role with '!setguild <guild>'\nWhere <guild> is one of the following:\n" + validGuilds.toString();
 	}
 	else{
@@ -94,11 +94,32 @@ client.on('message', msg => {
 		}
 	}
 
-	if (msg.content.startsWith('!test')) {
-		let message = {
-			username: msg.author.username,
-			id: msg.author.id
-		};
+	// if (msg.content.startsWith('!test')) {
+	// 	let message = {
+	// 		username: msg.author.username,
+	// 		id: msg.author.id
+	// 	};
+	// 	fetch(process.env.rubybotApi + "data/adduser", {
+	// 		method: 'post',
+	// 		body:    JSON.stringify(message),
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 	})
+	// 	.then(res => res.text())
+	// 	.then(body => {
+	// 		console.log(body);
+	// 		msg.channel.send("Got response from API: " + body);
+	// 	})
+	// 	.catch(err => {
+	// 		console.log("Error in fetch");
+	// 		console.log(err);
+	// 		msg.channel.send("Encountered an error!");
+	// 	});
+	// }
+})
+
+client.login(process.env.clientkey)
+
+var sendToApi = function(message) {
 		fetch(process.env.rubybotApi + "data/adduser", {
 			method: 'post',
 			body:    JSON.stringify(message),
@@ -114,7 +135,4 @@ client.on('message', msg => {
 			console.log(err);
 			msg.channel.send("Encountered an error!");
 		});
-	}
-})
-
-client.login(process.env.clientkey)
+}
