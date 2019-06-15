@@ -2,7 +2,7 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fetch = require('node-fetch');
-const validGuilds = ["Ruby", "Silk Road", "Rookies", "Forgotten"];
+const validGuilds = ["Ruby", "Silk Road", "Rookies", "Forgotten", "Insolence"];
 var monkaThink, hypers, pepeRuby, pepeCry, peepoHappy;
 
 client.on("ready", () => {
