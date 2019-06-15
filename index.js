@@ -80,7 +80,7 @@ client.on('message', msg => {
 			else{
 				msg.member.addRole(role)
 					.then(() => {
-						message += 'Set role for guild ' + guild + " " + peepoHappy;
+						message += 'Role set for guild ' + guild + " " + peepoHappy;
 						msg.channel.send(message);
 					})
 					.catch(error => {
@@ -94,30 +94,21 @@ client.on('message', msg => {
 		}
 	}
 
-	// if (msg.content.startsWith('!test')) {
-	// 	let message = {
-	// 		username: msg.author.username,
-	// 		id: msg.author.id
-	// 	};
-	// 	fetch(process.env.rubybotApi + "data/adduser", {
-	// 		method: 'post',
-	// 		body:    JSON.stringify(message),
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 	})
-	// 	.then(res => res.text())
-	// 	.then(body => {
-	// 		console.log(body);
-	// 		msg.channel.send("Got response from API: " + body);
-	// 	})
-	// 	.catch(err => {
-	// 		console.log("Error in fetch");
-	// 		console.log(err);
-	// 		msg.channel.send("Encountered an error!");
-	// 	});
-	// }
+	if (msg.content.startsWith('!info')) {
+		
+	}
+
+	if (msg.content.startsWith('!help')) {
+		
+	}
 })
 
 client.login(process.env.clientkey)
+
+// let message = {
+// 	username: msg.author.username,
+// 	id: msg.author.id
+// };
 
 var sendToApi = function(message) {
 		fetch(process.env.rubybotApi + "data/adduser", {
