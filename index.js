@@ -30,7 +30,7 @@ client.on('guildMemberAdd', member => {
 	let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
 
 	if(member.guild.name === "POP"){
-		message += "\n\nCheck out our rules/info in the " + member.guild.channels.find(ch => ch.name === 'information').toString() + " channel " + hypers + "\n\nSet your role with '!setguild <guild>'\nWhere <guild> is one of the following:\n" + validGuilds.toString();
+		message += "\n\nSet your role with '!setguild <guild>' " + hypers + "\nWhere <guild> is one of the following:\n" + validGuilds.toString();
 	}
 	else{
 		message += "\n\nPlease check out our rules/info in the " + member.guild.channels.find(ch => ch.name === 'information').toString() + " channel " + hypers;
