@@ -2,7 +2,7 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fetch = require('node-fetch');
-const validGuilds = ["Ruby", "Silk Road", "Rookies", "Forgotten", "Insolence"];
+const validGuilds = ["Ruby", "Silk Road", "Rookies", "Forgotten", "Insolence", "Obsidium"];
 var monkaThink, hypers, pepeRuby, pepeCry, peepoHappy;
 
 client.on("ready", () => {
@@ -30,7 +30,7 @@ client.on('guildMemberAdd', member => {
 	let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
 
 	if(member.guild.name === "POP"){
-		message += "\n\nSet your role with '!setguild <guild>' " + hypers + "\nWhere <guild> is one of the following:\n" + validGuilds.toString();
+		message += "\n\nSet your role with '!setguild Guild' " + hypers + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
 	}
 	else{
 		message += "\n\nPlease check out our rules/info in the " + member.guild.channels.find(ch => ch.name === 'information').toString() + " channel " + hypers;
