@@ -16,7 +16,7 @@ const infoEmbed = new Discord.RichEmbed()
 const helpEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField(":pencil2: To set your guild role:", "!setguild")
-	.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
+	// .addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 	.addField(":blue_book: For viewing bot information:", "!info");
 
@@ -145,11 +145,7 @@ client.on('message', msg => {
 		need to add option for "!help prof"
 
 		*/
-		// msg.channel.send(helpEmbed);
-		let message = new Discord.RichEmbed()
-			.setColor(embedColour)
-			.addField("Nothing here yet boiz", peepoHappy);
-		msg.channel.send(message);
+		msg.channel.send(helpEmbed);
 	}
 
 	//alma monthly call
