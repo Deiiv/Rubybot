@@ -15,7 +15,7 @@ const infoEmbed = new Discord.RichEmbed()
 
 const helpEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
-	.addField(":pencil2: To set your guild role:", "!setguild")
+	.addField(":pencil2: To set your guild role:", "!setguild GUILD")
 	// .addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 	.addField(":blue_book: For viewing bot information:", "!info");
@@ -53,10 +53,19 @@ client.on('guildMemberAdd', member => {
 	if (!channel) return;
 
 	// let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
-	let message = "please check out our rules/info in the " + member.guild.channels.find(ch => ch.name === 'information').toString() + " channel " + hypers;
+	let message;
 	
 	if(member.guild.name === "POP"){
-		message += "set your role with '!setguild Guild' " + hypers + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
+		message = "please set your role with '!setguild Guild' " + hypers + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
+	}
+	else{
+		infoChannel = member.guild.channels.find(ch => ch.name === 'information');
+		if(infoChannel){
+			message = "please check out our rules/info in the " + .toString() + " channel " + hypers;
+		}
+		else{
+			message = "please check out our rules/info in the appropriate info channel " + hypers;
+		}
 	}
 
 	let welcomeMessageEmbed = new Discord.RichEmbed()
