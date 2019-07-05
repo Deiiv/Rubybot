@@ -61,7 +61,7 @@ client.on('guildMemberAdd', member => {
 	else{
 		infoChannel = member.guild.channels.find(ch => ch.name === 'information');
 		if(infoChannel){
-			message = "please check out our rules/info in the " + .toString() + " channel " + hypers;
+			message = "please check out our rules/info in the " + infoChannel.toString() + " channel " + hypers;
 		}
 		else{
 			message = "please check out our rules/info in the appropriate info channel " + hypers;
