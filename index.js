@@ -2,14 +2,14 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fetch = require('node-fetch');
-const validGuilds = ["Ruby", "Silk Road", "Rookies", "Forgotten", "Insolence", "Obsidium"];
+const validGuilds = ["Ruby", "Silk Road", "Rookies", "Insolence", "Obsidium", "Steamed Ham"];
 const embedColour = "#FEC6C7"
 var monkaThink, hypers, pepeRuby, pepeCry, peepoHappy;
 
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.01")
+	.addField("Version:", "6.03")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -56,7 +56,7 @@ client.on('guildMemberAdd', member => {
 	let message;
 	
 	if(member.guild.name === "POP"){
-		message = "please set your role with '!setguild Guild' " + hypers + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
+		message = "please set your role with '!setguild Guild' " + hypers;	// + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
 	}
 	else{
 		infoChannel = member.guild.channels.find(ch => ch.name === 'information');
@@ -161,9 +161,10 @@ client.on('message', msg => {
 	if (msg.content.startsWith('!alma')) {
 		let messageContent = msg.content.split(" ");
 		if(messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13){
+
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
-				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call");
+				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call in the #almanax channel");
 			msg.channel.send(message);
 			sendToAlmaApi(messageContent[1], msg.member.guild.name, function(response, error){
 				if(error){
