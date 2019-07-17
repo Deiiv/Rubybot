@@ -177,7 +177,7 @@ client.on('message', msg => {
 	//alma monthly call
 	if (msg.content.startsWith('!alma')) {
 		let messageContent = msg.content.split(" ");
-		if(messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13){
+		if(messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13){
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
 				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call in the #almanax channel");
