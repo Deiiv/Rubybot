@@ -83,9 +83,7 @@ client.on('guildMemberAdd', member => {
 //message event
 client.on('message', msg => {
 	if (msg.author.bot) return;
-
-	console.log("");
-
+	
 	if (msg.content.startsWith('!setguild')) {
 		getValidGuilds()
 			.then(validGuilds => {
