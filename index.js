@@ -8,21 +8,23 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.04")
+	.addField("Version:", "6.05")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
 const helpEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
-	.addField(":pencil2: To set your guild role:", "!setguild GUILD")
 	// .addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 	.addField(":blue_book: For viewing bot information:", "!info")
+	.addField(":pencil2: To set your guild as a role:", "!setguild GUILD")
+	.addField(":pencil2: To set a  misc. role:", "!setrole ROLE")
 	.addField(":closed_lock_with_key: For admin actions:", "!admin");
 
 const adminEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
-	.addField("View/edit list of valid guilds for roles (only for bot internal list, doesn't affect discord available roles):", "!guildlist view\n!guildlist add GUILD\n!guildlist remove GUILD");
+	.addField("View/edit list of valid guilds for roles (only for bot internal list, doesn't affect discord available roles):", "!guildlist view\n!guildlist add GUILD\n!guildlist remove GUILD")
+	.addField("View/edit list of valid roles (separate from guilds, and is only valid in your current server) (only for bot internal list, doesn't affect discord available roles):", "!rolelist view\n!rolelist add ROLE\n!rolelist remove ROLE");
 
 // prof help
 //     embed=discord.Embed(color=0xFEC6C7)
