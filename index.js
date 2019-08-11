@@ -374,26 +374,18 @@ client.on('message', msg => {
 			handleProfEvent(username, userid, "view")
 				.then(response => {
 					let data = JSON.parse(response);
-					if (!data.profList) {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField("No entry found!", "Initialize by using !setguild command, or adding a prof (!prof help for details)");
-						msg.channel.send(message);
+					if (!data.guild) {
+						data.guild = "None (use !setguild to set this value)";
 					}
-					else {
-						if (!data.guild) {
-							data.guild = "None";
-						}
-						if (data.profList.length < 1) {
-							data.profList = "None"
-						}
+					if (data.profList.length < 1) {
+						data.profList = "None (add a prof with !add, see !prof help for details)"
+					}
 
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField(":shield:  " + username + "'s Guild:", data.guild)
-							.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
-						msg.channel.send(message);
-					}
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField(":shield:  " + username + "'s Guild:", data.guild)
+						.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
+					msg.channel.send(message);
 				})
 				.catch(error => {
 					console.log(error);
