@@ -233,29 +233,38 @@ client.on('message', msg => {
 
 				getValidGuilds()
 					.then(validGuilds => {
-						console.log("Old guildList : " + validGuilds.toString());
-						validGuilds.push(guildToAdd);
-						console.log("New guildList : " + validGuilds.toString());
+						if (validGuilds.includes(guildToAdd)) {
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField('Guild ' + guildToAdd + ' is already in guild list', monkaThink);
+							msg.channel.send(message);
+						}
+						else {
+							console.log("Old guildList : " + validGuilds.toString());
+							validGuilds.push(guildToAdd);
+							console.log("New guildList : " + validGuilds.toString());
 
-						let message = {
-							"action": "update",
-							"value": validGuilds.toString()
-						};
-						sendToGeneralApi(message, "/admin/guildlist", function(response, error) {
-							if (error) {
-								console.log(error);
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField('Encountered an error: ' + error.message, ":interrobang:");
-								msg.channel.send(message);
-							}
-							else {
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField('Guild list updated, new list: ', validGuilds.toString());
-								msg.channel.send(message);
-							}
-						});
+							let message = {
+								"action": "update",
+								"value": validGuilds.toString(),
+								"type": "guilds"
+							};
+							sendToGeneralApi(message, "/admin/guildlist", function(response, error) {
+								if (error) {
+									console.log(error);
+									let message = new Discord.RichEmbed()
+										.setColor(embedColour)
+										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									msg.channel.send(message);
+								}
+								else {
+									let message = new Discord.RichEmbed()
+										.setColor(embedColour)
+										.addField('Guild list updated, new list: ', validGuilds.toString());
+									msg.channel.send(message);
+								}
+							});
+						}
 					})
 					.catch(error => {
 						console.log(error);
@@ -279,7 +288,8 @@ client.on('message', msg => {
 
 							let message = {
 								"action": "update",
-								"value": validGuilds.toString()
+								"value": validGuilds.toString(),
+								"type": "guilds"
 							};
 							sendToGeneralApi(message, "/admin/guildlist", function(response, error) {
 								if (error) {
@@ -353,47 +363,284 @@ client.on('message', msg => {
 			});
 	}
 
-	//prof actions
-	if (msg.content.startsWith('!prof')) {
-		let memberRoles = msg.member.roles;
-		let listOfRoles = [];
+	//set role
+	if (msg.content.startsWith('!setrole')) {
+		getValidRoles(msg.member.guild.name)
+			.then(validRoles => {
+				let roleName = msg.content.substring(9);
 
-		memberRoles.forEach(function(role) {
-			listOfRoles.push(role.name);
-		});
+				if (roleName && validRoles.includes(roleName)) {
+					if (msg.member.roles.find(r => r.name === roleName)) {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('You already have the ' + roleName + ' role', monkaThink);
+						msg.channel.send(message);
+						return;
+					}
 
+					let role = msg.guild.roles.find(role => role.name === roleName);
+					if (!role) {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField("Role " + roleName + " not found", ":interrobang:");
+						msg.channel.send(message);
+					}
+					else {
+						msg.member.addRole(role)
+							.then(() => {
+								let message = new Discord.RichEmbed()
+									.setColor(embedColour)
+									.addField("Done!", roleName + " role successfully set " + peepoHappy);
+								msg.channel.send(message);
+							})
+							.catch(error => {
+								console.log(error);
+								let message = new Discord.RichEmbed()
+									.setColor(embedColour)
+									.addField('Encountered an error: ' + error.message, ":interrobang:");
+								msg.channel.send(message);
+							});
+					}
+				}
+				else {
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
+					msg.channel.send(message);
+				}
+			})
+			.catch(error => {
+				console.log(error);
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Encountered an error: ' + error.message, ":interrobang:");
+				msg.channel.send(message);
+			});
+	}
 
-		let username = msg.author.username;
-		let userid = msg.author.id;
+	//set role
+	if (msg.content.startsWith('!removerole')) {
+		getValidRoles(msg.member.guild.name)
+			.then(validRoles => {
+				let roleName = msg.content.substring(12);
 
-		let messageContent = msg.content.split(" ");
+				if (roleName && validRoles.includes(roleName)) {
+					let role = msg.guild.roles.find(role => role.name === roleName);
+					if (msg.member.roles.find(r => r.name === roleName)) {
+						msg.member.removeRole(role)
+							.then(() => {
+								let message = new Discord.RichEmbed()
+									.setColor(embedColour)
+									.addField("Done!", roleName + " role successfully removed " + peepoHappy);
+								msg.channel.send(message);
+							})
+							.catch(error => {
+								console.log(error);
+								let message = new Discord.RichEmbed()
+									.setColor(embedColour)
+									.addField('Encountered an error: ' + error.message, ":interrobang:");
+								msg.channel.send(message);
+							});
+					}
+					else {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('You don\'t have the ' + roleName + ' role', monkaThink);
+						msg.channel.send(message);
+						return;
+					}
+				}
+				else {
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
+					msg.channel.send(message);
+				}
+			})
+			.catch(error => {
+				console.log(error);
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Encountered an error: ' + error.message, ":interrobang:");
+				msg.channel.send(message);
+			});
+	}
 
-		if (messageContent.length < 2) {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Invalid input!', "View proper usage by calling !help");
-			msg.channel.send(message);
-			return;
-		}
+	//managing role list
+	if (msg.content.startsWith('!rolelist')) {
+		//check that a valid user is calling the command
+		if (msg.member.roles.find(r => r.name === "BotAdmin")) {
+			let messageContent = msg.content.split(" ");
+			//get current list of valid guilds
+			if (messageContent[1] === "view") {
+				getValidRoles(msg.member.guild.name)
+					.then(validRoles => {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Current list of valid roles:', validRoles.toString());
+						msg.channel.send(message);
+					})
+					.catch(error => {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						msg.channel.send(message);
+					});
+			}
+			else if (messageContent[1] === "add") {
+				let roleToAdd = messageContent.splice(2).join(" ");
+				console.log("New Role : " + roleToAdd);
 
-		if (messageContent[1] === "add" && messageContent[2]) {
-			if (profList.includes(messageContent[2])) {
+				getValidRoles(msg.member.guild.name)
+					.then(validRoles => {
+						if (validRoles.includes(roleToAdd)) {
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField('Role ' + roleToAdd + ' is already in role list', monkaThink);
+							msg.channel.send(message);
+						}
+						else {
+							console.log("Old rolesList : " + validRoles.toString());
+							validRoles.push(roleToAdd);
+							console.log("New rolesList : " + validRoles.toString());
 
+							let message = {
+								"action": "update",
+								"value": validRoles.toString(),
+								"type": "roles",
+								"guild": msg.member.guild.name
+							};
+							sendToGeneralApi(message, "/admin/rolelist", function(response, error) {
+								if (error) {
+									console.log(error);
+									let message = new Discord.RichEmbed()
+										.setColor(embedColour)
+										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									msg.channel.send(message);
+								}
+								else {
+									let message = new Discord.RichEmbed()
+										.setColor(embedColour)
+										.addField('Roles list updated, new list: ', validRoles.toString());
+									msg.channel.send(message);
+								}
+							});
+						}
+					})
+					.catch(error => {
+						console.log(error);
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						msg.channel.send(message);
+					});
+
+			}
+			else if (messageContent[1] === "remove") {
+				let roleToRemove = messageContent.splice(2).join(" ");
+				console.log("Removing Role : " + roleToRemove);
+
+				getValidRoles(msg.member.guild.name)
+					.then(validRoles => {
+						if (validRoles.includes(roleToRemove)) {
+							console.log("Old roleList : " + validRoles.toString());
+							validRoles.splice(validRoles.indexOf(roleToRemove), 1);
+							console.log("New roleList : " + validRoles.toString());
+
+							let message = {
+								"action": "update",
+								"value": validRoles.toString(),
+								"type": "roles",
+								"guild": msg.member.guild.name
+							};
+							sendToGeneralApi(message, "/admin/rolelist", function(response, error) {
+								if (error) {
+									console.log(error);
+									let message = new Discord.RichEmbed()
+										.setColor(embedColour)
+										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									msg.channel.send(message);
+								}
+								else {
+									let message = new Discord.RichEmbed()
+										.setColor(embedColour)
+										.addField('Roles list updated, new list: ', validRoles.toString());
+									msg.channel.send(message);
+								}
+							});
+						}
+						else {
+							console.log("Role trying to remove is not in current list");
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField("The role " + roleToRemove + " is not in the current list, so can't remove it.", "" + pepoG);
+							msg.channel.send(message);
+						}
+					})
+					.catch(error => {
+						console.log(error);
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						msg.channel.send(message);
+					});
 			}
 			else {
 				let message = new Discord.RichEmbed()
 					.setColor(embedColour)
-					.addField('Invalid profession!', ":interrobang:");
+					.addField('Invalid input!', "View proper usage by calling !admin");
 				msg.channel.send(message);
 			}
 		}
 		else {
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
-				.addField('Invalid input!', "View proper usage by calling !admin");
+				.addField('Only members with the correct role can use this option', pepoG);
 			msg.channel.send(message);
 		}
 	}
+
+	//prof actions
+	// if (msg.content.startsWith('!prof')) {
+	// 	let memberRoles = msg.member.roles;
+	// 	let listOfRoles = [];
+
+	// 	memberRoles.forEach(function(role) {
+	// 		listOfRoles.push(role.name);
+	// 	});
+
+
+	// 	let username = msg.author.username;
+	// 	let userid = msg.author.id;
+
+	// 	let messageContent = msg.content.split(" ");
+
+	// 	if (messageContent.length < 2) {
+	// 		let message = new Discord.RichEmbed()
+	// 			.setColor(embedColour)
+	// 			.addField('Invalid input!', "View proper usage by calling !help");
+	// 		msg.channel.send(message);
+	// 		return;
+	// 	}
+
+	// 	if (messageContent[1] === "add" && messageContent[2]) {
+	// 		if (profList.includes(messageContent[2])) {
+
+	// 		}
+	// 		else {
+	// 			let message = new Discord.RichEmbed()
+	// 				.setColor(embedColour)
+	// 				.addField('Invalid profession!', ":interrobang:");
+	// 			msg.channel.send(message);
+	// 		}
+	// 	}
+	// 	else {
+	// 		let message = new Discord.RichEmbed()
+	// 			.setColor(embedColour)
+	// 			.addField('Invalid input!', "View proper usage by calling !admin");
+	// 		msg.channel.send(message);
+	// 	}
+	// }
 });
 
 client.login(process.env.clientkey);
@@ -450,14 +697,34 @@ var sendToAlmaApi = function(month, origin, callback) {
 var getValidGuilds = function() {
 	return new Promise((resolve, reject) => {
 		let message = {
-			"action": "get"
+			"action": "get",
+			"type": "guilds"
 		};
-		sendToGeneralApi(message, "/admin/guildlist", function(response, error) {
+		sendToGeneralApi(message, "admin/guildlist", function(response, error) {
 			if (error) {
 				return reject(error);
 			}
 			else {
 				let guildList = response.split(",");
+				return resolve(guildList);
+			}
+		});
+	});
+};
+
+var getValidRoles = function(guild) {
+	return new Promise((resolve, reject) => {
+		let message = {
+			"action": "get",
+			"type": "roles",
+			"guild": guild
+		};
+		sendToGeneralApi(message, "admin/rolelist", function(response, error) {
+			if (error) {
+				return reject(error);
+			}
+			else {
+				let guildList = response ? response.split(",") : [];
 				return resolve(guildList);
 			}
 		});
