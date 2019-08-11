@@ -8,13 +8,13 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.05")
+	.addField("Version:", "6.06")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
 const helpEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
-	// .addField(":closed_book: For help with adding and viewing professions:", "!help prof")
+	.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 	.addField(":blue_book: For viewing bot information:", "!info")
 	.addField(":pencil2: To set your guild as a role:", "!setguild GUILD")
@@ -27,14 +27,13 @@ const adminEmbed = new Discord.RichEmbed()
 	.addField("View/edit list of valid roles (separate from guilds, and is only valid in your current server) (only for bot internal list, doesn't affect discord available roles):", "!rolelist view\n!rolelist add ROLE\n!rolelist remove ROLE");
 
 // prof help
-//     embed=discord.Embed(color=0xFEC6C7)
-//     embed.add_field(name=':writing_hand: To start, add your IGN:', value='!adduser IGN')
-//     embed.add_field(name=':house: To set the Guild you are in:', value='!setguild GUILD')
-//     embed.add_field(name=':tools: To add or update a profession level you have:', value='!add PROFESSION LEVEL')
-//     embed.add_field(name=':mag_right: To view users with a profession:', value='!prof PROFESSION\n!prof PROFESSION MIN_LEVEL')
-//     embed.add_field(name=':eyes: To view your stats:', value='!view')
-//     embed.add_field(name=':eye: To view a specific users stats:', value='!view IGN')
-//     embed.add_field(name=':book: To view all users (including discord ID):', value='!users')
+const helpProfEmbed = new Discord.RichEmbed()
+	.setColor(embedColour)
+	.addField(":tools: To add or update a profession level you have:", "!add PROFESSION LEVEL")
+	.addField(":mag_right: To view users with a profession:", "!view PROFESSION\n!view PROFESSION MIN_LEVEL")
+	.addField(":eyes: To view your stats:", "!view")
+	.addField(":eyes: To view a specific users stats:", "!view user IGN");
+// .addField(":book: To view how many users are registered:", "!users")
 
 client.on("ready", () => {
 	console.log('Logged in as:');
@@ -58,6 +57,7 @@ client.on("ready", () => {
 client.on('guildMemberAdd', member => {
 	const channel = member.guild.channels.find(ch => ch.name === 'welcome');
 	if (!channel) return;
+	if (member.guild.name === "Silk Road") return;
 
 	// let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
 	let message;
@@ -96,8 +96,17 @@ client.on('message', msg => {
 					if (msg.member.roles.find(r => r.name === guild)) {
 						let message = new Discord.RichEmbed()
 							.setColor(embedColour)
-							.addField('You already have the ' + guild + ' role', monkaThink);
+							.addField('You already have the ' + guild + ' role, but I\'ll set the entry again for !view', monkaThink);
 						msg.channel.send(message);
+						let username = msg.author.username;
+						let userid = msg.author.id;
+						handleProfEvent(username, userid, "updateuser", "", "", guild)
+							.then(() => {
+								console.log("Done updating user in db");
+							})
+							.catch(error => {
+								console.log(error);
+							});
 						return;
 					}
 
@@ -133,6 +142,15 @@ client.on('message', msg => {
 									.setColor(embedColour)
 									.addField("Done!", text + 'Role set for guild ' + guild + " " + peepoHappy);
 								msg.channel.send(message);
+								let username = msg.author.username;
+								let userid = msg.author.id;
+								handleProfEvent(username, userid, "updateuser", "", "", guild)
+									.then(() => {
+										console.log("Done updating user in db");
+									})
+									.catch(error => {
+										console.log(error);
+									});
 							})
 							.catch(error => {
 								console.log(error);
@@ -166,7 +184,13 @@ client.on('message', msg => {
 
 	//help menu
 	if (msg.content.startsWith('!help')) {
-		msg.channel.send(helpEmbed);
+		let messageContent = msg.content.split(" ");
+		if (messageContent[1] && messageContent[1] === "prof") {
+			msg.channel.send(helpProfEmbed);
+		}
+		else {
+			msg.channel.send(helpEmbed);
+		}
 	}
 
 	//admin menu
@@ -342,27 +366,57 @@ client.on('message', msg => {
 
 	//view prof
 	if (msg.content.startsWith('!view')) {
-		let username = msg.author.username;
-		let userid = msg.author.id;
-		handleProfEvent(username, userid, "view")
-			.then(response => {
-				let data = JSON.parse(response);
-				if (data.guild.length < 1) {
-					data.guild = "None set! Set your guild with !setguild GUILD, or if already set, use !prof add X to initialize entry";
-				}
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField(":shield:  " + username + "'s Guild:", data.guild)
-					.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
-				msg.channel.send(message);
-			})
-			.catch(error => {
-				console.log(error);
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Encountered an error: ' + error.message, ":interrobang:");
-				msg.channel.send(message);
-			});
+		let messageContent = msg.content.split(" ");
+
+		if (messageContent.length === 1) {
+			let username = msg.author.username;
+			let userid = msg.author.id;
+			handleProfEvent(username, userid, "view")
+				.then(response => {
+					let data = JSON.parse(response);
+					if (!data.profList) {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField("No entry found!", "Initialize by using !setguild command, or adding a prof (!prof help for details)");
+						msg.channel.send(message);
+					}
+					else {
+						if (!data.guild) {
+							data.guild = "None";
+						}
+						if (data.profList.length < 1) {
+							data.profList = "None"
+						}
+
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField(":shield:  " + username + "'s Guild:", data.guild)
+							.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
+						msg.channel.send(message);
+					}
+				})
+				.catch(error => {
+					console.log(error);
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField('Encountered an error: ' + error.message, ":interrobang:");
+					msg.channel.send(message);
+				});
+		}
+		//view user by IGN !view user IGN
+		else if (messageContent[1] === "user") {
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Sorry, this command isn\'t available yet!', pepeCry);
+			msg.channel.send(message);
+		}
+		//view profs !view prof OR !view prof level
+		else {
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Sorry, this command isn\'t available yet!', pepeCry);
+			msg.channel.send(message);
+		}
 	}
 
 	//set role
@@ -602,47 +656,63 @@ client.on('message', msg => {
 		}
 	}
 
-	//prof actions
-	// if (msg.content.startsWith('!prof')) {
-	// 	let memberRoles = msg.member.roles;
-	// 	let listOfRoles = [];
+	// add prof actions
+	if (msg.content.startsWith('!add')) {
+		let username = msg.author.username;
+		let userid = msg.author.id;
 
-	// 	memberRoles.forEach(function(role) {
-	// 		listOfRoles.push(role.name);
-	// 	});
+		let messageContent = msg.content.split(" ");
 
+		if (messageContent.length < 3) {
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Invalid input!', "View proper usage by calling !help prof");
+			msg.channel.send(message);
+			return;
+		}
 
-	// 	let username = msg.author.username;
-	// 	let userid = msg.author.id;
+		if (messageContent[1] && messageContent[2]) {
+			messageContent[1] = messageContent[1].toLowerCase();
+			let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
+			if (profList.includes(prof)) {
+				if (messageContent[2] >= 1 && messageContent[2] <= 200) {
+					let username = msg.author.username;
+					let userid = msg.author.id;
 
-	// 	let messageContent = msg.content.split(" ");
+					handleProfEvent(username, userid, "updateprof", prof, messageContent[2])
+						.then(() => {
+							console.log("Done updating user in db");
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField('Profession set!', peepoHappy);
+							msg.channel.send(message);
+						})
+						.catch(error => {
+							console.log(error);
 
-	// 	if (messageContent.length < 2) {
-	// 		let message = new Discord.RichEmbed()
-	// 			.setColor(embedColour)
-	// 			.addField('Invalid input!', "View proper usage by calling !help");
-	// 		msg.channel.send(message);
-	// 		return;
-	// 	}
-
-	// 	if (messageContent[1] === "add" && messageContent[2]) {
-	// 		if (profList.includes(messageContent[2])) {
-
-	// 		}
-	// 		else {
-	// 			let message = new Discord.RichEmbed()
-	// 				.setColor(embedColour)
-	// 				.addField('Invalid profession!', ":interrobang:");
-	// 			msg.channel.send(message);
-	// 		}
-	// 	}
-	// 	else {
-	// 		let message = new Discord.RichEmbed()
-	// 			.setColor(embedColour)
-	// 			.addField('Invalid input!', "View proper usage by calling !admin");
-	// 		msg.channel.send(message);
-	// 	}
-	// }
+						});
+				}
+				else {
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField('Invalid profession level!', 'Level must be between 1-200 (inclusive)');
+					msg.channel.send(message);
+				}
+			}
+			else {
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Invalid profession! List of valid professions:', profList.toString());
+				msg.channel.send(message);
+			}
+		}
+		else {
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Invalid input!', "View proper usage by calling !help prof");
+			msg.channel.send(message);
+		}
+	}
 });
 
 client.login(process.env.clientkey);
@@ -733,7 +803,7 @@ var getValidRoles = function(guild) {
 	});
 };
 
-var handleProfEvent = function(username, userid, action, prof, level, listOfRoles) {
+var handleProfEvent = function(username, userid, action, prof, level, guild) {
 	return new Promise((resolve, reject) => {
 		let message = {
 			username: username,
@@ -741,10 +811,13 @@ var handleProfEvent = function(username, userid, action, prof, level, listOfRole
 			action: action
 		};
 
-		if (action === "add") {
+		if (action === "updateprof") {
 			message.prof = prof;
 			message.level = level;
-			message.listOfRoles = listOfRoles;
+		}
+
+		if (action === "updateuser") {
+			message.guild = guild;
 		}
 
 		sendToGeneralApi(message, "/prof", function(response, error) {
