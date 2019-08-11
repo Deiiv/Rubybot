@@ -650,9 +650,6 @@ client.on('message', msg => {
 
 	// add prof actions
 	if (msg.content.startsWith('!add')) {
-		let username = msg.author.username;
-		let userid = msg.author.id;
-
 		let messageContent = msg.content.split(" ");
 
 		if (messageContent.length < 3) {
@@ -676,7 +673,7 @@ client.on('message', msg => {
 							console.log("Done updating user in db");
 							let message = new Discord.RichEmbed()
 								.setColor(embedColour)
-								.addField('Profession set!', peepoHappy);
+								.addField('Profession ' + prof + ' set to level ' + messageContent[2] + ' for user ' + username, peepoHappy);
 							msg.channel.send(message);
 						})
 						.catch(error => {
