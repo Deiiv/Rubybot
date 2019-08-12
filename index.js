@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.06")
+	.addField("Version:", "6.07")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -57,13 +57,15 @@ client.on("ready", () => {
 client.on('guildMemberAdd', member => {
 	const channel = member.guild.channels.find(ch => ch.name === 'welcome');
 	if (!channel) return;
-	if (member.guild.name === "Silk Road") return;
 
 	// let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
 	let message;
 
 	if (member.guild.name === "POP") {
 		message = "please set your role with '!setguild Guild' " + hypers; // + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
+	}
+	else if(member.guild.name === "Silk Road"){
+		message = "please set your role with '!setguild Silk Road'"
 	}
 	else {
 		let infoChannel = member.guild.channels.find(ch => ch.name === 'information');
