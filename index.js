@@ -412,8 +412,9 @@ client.on('message', msg => {
 		//view user by IGN !view user IGN
 		else if (messageContent[1].toUpperCase() === "USER") {
 			if (messageContent[2]) {
+				let username = messageContent[2];
 				let params = {
-					username: messageContent[2],
+					username: username,
 					action: "view"
 				};
 				handleProfEvent(params)
