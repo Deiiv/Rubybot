@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.07")
+	.addField("Version:", "6.08")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -18,7 +18,7 @@ const helpEmbed = new Discord.RichEmbed()
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 	.addField(":blue_book: For viewing bot information:", "!info")
 	.addField(":pencil2: To set your guild as a role:", "!setguild GUILD")
-	.addField(":pencil2: To set a  misc. role:", "!setrole ROLE")
+	.addField(":pencil2: To set a misc. role:", "!setrole ROLE")
 	.addField(":closed_lock_with_key: For admin actions:", "!admin");
 
 const adminEmbed = new Discord.RichEmbed()
@@ -64,7 +64,7 @@ client.on('guildMemberAdd', member => {
 	if (member.guild.name === "POP") {
 		message = "please set your role with '!setguild Guild' " + hypers; // + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
 	}
-	else if(member.guild.name === "Silk Road"){
+	else if (member.guild.name === "Silk Road") {
 		message = "please set your role with '!setguild Silk Road'"
 	}
 	else {
@@ -100,9 +100,13 @@ client.on('message', msg => {
 							.setColor(embedColour)
 							.addField('You already have the ' + guild + ' role, but I\'ll set the entry again for !view', monkaThink);
 						msg.channel.send(message);
-						let username = msg.author.username;
-						let userid = msg.author.id;
-						handleProfEvent(username, userid, "updateuser", "", "", guild)
+						let params = {
+							username: msg.author.username,
+							userid: msg.author.id,
+							action: "updateuser",
+							guild: guild
+						};
+						handleProfEvent(params)
 							.then(() => {
 								console.log("Done updating user in db");
 							})
@@ -144,9 +148,13 @@ client.on('message', msg => {
 									.setColor(embedColour)
 									.addField("Done!", text + 'Role set for guild ' + guild + " " + peepoHappy);
 								msg.channel.send(message);
-								let username = msg.author.username;
-								let userid = msg.author.id;
-								handleProfEvent(username, userid, "updateuser", "", "", guild)
+								let params = {
+									username: msg.author.username,
+									userid: msg.author.id,
+									action: "updateuser",
+									guild: guild
+								};
+								handleProfEvent(params)
 									.then(() => {
 										console.log("Done updating user in db");
 									})
@@ -369,23 +377,27 @@ client.on('message', msg => {
 	//view prof
 	if (msg.content.startsWith('!view')) {
 		let messageContent = msg.content.split(" ");
-
 		if (messageContent.length === 1) {
 			let username = msg.author.username;
 			let userid = msg.author.id;
-			handleProfEvent(username, userid, "view")
+			let params = {
+				username: username,
+				userid: userid,
+				action: "view"
+			};
+			handleProfEvent(params)
 				.then(response => {
 					let data = JSON.parse(response);
 					if (!data.guild) {
 						data.guild = "None (use !setguild to set this value)";
 					}
-					if (data.profList.length < 1) {
+					if (data.profList && data.profList.length < 1) {
 						data.profList = "None (add a prof with !add, see !prof help for details)"
 					}
 
 					let message = new Discord.RichEmbed()
 						.setColor(embedColour)
-						.addField(":shield:  " + username + "'s Guild:", data.guild)
+						.addField(":shield: " + username + "'s Guild:", data.guild)
 						.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
 					msg.channel.send(message);
 				})
@@ -398,18 +410,112 @@ client.on('message', msg => {
 				});
 		}
 		//view user by IGN !view user IGN
-		else if (messageContent[1] === "user") {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Sorry, this command isn\'t available yet!', pepeCry);
-			msg.channel.send(message);
+		else if (messageContent[1].toUpperCase() === "USER") {
+			if (messageContent[2]) {
+				let params = {
+					username: messageContent[2],
+					action: "view"
+				};
+				handleProfEvent(params)
+					.then(response => {
+						if (response === "NONE") {
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField("User " + username + " doesn't exist in our records!", pepoG);
+							msg.channel.send(message);
+						}
+						else {
+							let data = JSON.parse(response);
+							if (!data.guild) {
+								data.guild = "None (use !setguild to set this value)";
+							}
+							if (data.profList && data.profList.length < 1) {
+								data.profList = "None (add a prof with !add, see !prof help for details)"
+							}
+
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField(":shield: " + username + "'s Guild:", data.guild)
+								.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
+							msg.channel.send(message);
+						}
+					})
+					.catch(error => {
+						console.log(error);
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						msg.channel.send(message);
+					});
+			}
+			else {
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Invalid input!', "View proper usage by calling !help prof");
+				msg.channel.send(message);
+			}
 		}
 		//view profs !view prof OR !view prof level
 		else {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Sorry, this command isn\'t available yet!', pepeCry);
-			msg.channel.send(message);
+			if (messageContent[1]) {
+				if (profList.includes(messageContent[1])) {
+					if (messageContent[2] && (messageContent[2] < 1 || messageContent[2] > 200)) {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Invalid input!', "View proper usage by calling !help prof");
+						msg.channel.send(message);
+						return;
+					}
+
+					let params = {
+						action: "getProf",
+						prof: messageContent[1],
+						level: messageContent[2]
+					};
+					handleProfEvent(params)
+						.then(response => {
+							var levelMessage = "";
+							if (messageContent[2]) {
+								levelMessage = " >= " + messageContent[2];
+							}
+							if (response === "NONE") {
+								let message = new Discord.RichEmbed()
+									.setColor(embedColour)
+									.addField(pepoG + " Users with " + messageContent[1] + levelMessage, "None!");
+								msg.channel.send(message);
+							}
+							else {
+								let data = JSON.parse(response);
+								if (data.string === "") {
+									data.string = "None!";
+								}
+								let message = new Discord.RichEmbed()
+									.setColor(embedColour)
+									.addField(pepoG + " List of users with " + messageContent[1] + " profession" + levelMessage, data.string);
+								msg.channel.send(message);
+							}
+						})
+						.catch(error => {
+							console.log(error);
+							let message = new Discord.RichEmbed()
+								.setColor(embedColour)
+								.addField('Encountered an error: ' + error.message, ":interrobang:");
+							msg.channel.send(message);
+						});
+				}
+				else {
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField('Invalid profession! List of valid professions:', profList.toString());
+					msg.channel.send(message);
+				}
+			}
+			else {
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Invalid input!', "View proper usage by calling !help prof");
+				msg.channel.send(message);
+			}
 		}
 	}
 
@@ -670,7 +776,15 @@ client.on('message', msg => {
 					let username = msg.author.username;
 					let userid = msg.author.id;
 
-					handleProfEvent(username, userid, "updateprof", prof, messageContent[2])
+					let params = {
+						username: username,
+						userid: userid,
+						action: "updateprof",
+						prof: prof,
+						level: messageContent[2]
+					};
+
+					handleProfEvent(params)
 						.then(() => {
 							console.log("Done updating user in db");
 							let message = new Discord.RichEmbed()
@@ -794,22 +908,16 @@ var getValidRoles = function(guild) {
 	});
 };
 
-var handleProfEvent = function(username, userid, action, prof, level, guild) {
+var handleProfEvent = function(data) {
 	return new Promise((resolve, reject) => {
 		let message = {
-			username: username,
-			id: userid,
-			action: action
+			username: data.username,
+			id: data.userid,
+			action: data.action,
+			prof: data.prof,
+			level: data.level || "0",
+			guild: data.guild
 		};
-
-		if (action === "updateprof") {
-			message.prof = prof;
-			message.level = level;
-		}
-
-		if (action === "updateuser") {
-			message.guild = guild;
-		}
 
 		sendToGeneralApi(message, "/prof", function(response, error) {
 			if (error) {
