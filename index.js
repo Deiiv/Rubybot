@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.08")
+	.addField("Version:", "6.09")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -34,6 +34,17 @@ const helpProfEmbed = new Discord.RichEmbed()
 	.addField(":eyes: To view your stats:", "!view")
 	.addField(":eyes: To view a specific users stats:", "!view user IGN");
 // .addField(":book: To view how many users are registered:", "!users")
+
+/*
+
+when no guild in entry that was created
+
+add nickname instead of username (maybe setnickname command)
+
+
+!portals
+
+*/
 
 client.on("ready", () => {
 	console.log('Logged in as:');
@@ -69,8 +80,12 @@ client.on('guildMemberAdd', member => {
 	}
 	else {
 		let infoChannel = member.guild.channels.find(ch => ch.name === 'information');
-		if (infoChannel) {
-			message = "please check out our rules/info in the " + infoChannel.toString() + " channel " + hypers;
+		let bioChannel = member.guild.channels.find(ch => ch.name === 'bio');
+		if (infoChannel && bioChannel) {
+			message = "please check out our rules/info: " + infoChannel.toString() + pepoG
+			+ "\nMeet our members over at: " + bioChannel.toString() + peepoHappy
+			+ "\nSet your guild with: '!setguild Ruby'" + pepeRuby
+			+ "\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " + hypers;
 		}
 		else {
 			message = "please check out our rules/info in the appropriate info channel " + hypers;
@@ -101,7 +116,7 @@ client.on('message', msg => {
 							.addField('You already have the ' + guild + ' role, but I\'ll set the entry again for !view', monkaThink);
 						msg.channel.send(message);
 						let params = {
-							username: msg.author.username,
+							username: msg.member.displayName,
 							userid: msg.author.id,
 							action: "updateuser",
 							guild: guild
@@ -149,7 +164,7 @@ client.on('message', msg => {
 									.addField("Done!", text + 'Role set for guild ' + guild + " " + peepoHappy);
 								msg.channel.send(message);
 								let params = {
-									username: msg.author.username,
+									username: msg.member.displayName,
 									userid: msg.author.id,
 									action: "updateuser",
 									guild: guild
@@ -378,7 +393,7 @@ client.on('message', msg => {
 	if (msg.content.startsWith('!view')) {
 		let messageContent = msg.content.split(" ");
 		if (messageContent.length === 1) {
-			let username = msg.author.username;
+			let username = msg.member.displayName;
 			let userid = msg.author.id;
 			let params = {
 				username: username,
@@ -774,7 +789,7 @@ client.on('message', msg => {
 			let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
 			if (profList.includes(prof)) {
 				if (messageContent[2] >= 1 && messageContent[2] <= 200) {
-					let username = msg.author.username;
+					let username = msg.member.displayName;
 					let userid = msg.author.id;
 
 					let params = {
