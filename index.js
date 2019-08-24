@@ -537,7 +537,19 @@ client.on('message', msg => {
 
 	//set role
 	if (msg.content.startsWith('!setrole')) {
-		getValidRoles(msg.member.guild.name)
+		let guild = "Ruby";
+		try{
+			guild = msg.member.guild.name;
+		}
+		catch(err){
+			console.log(err);
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Encountered an error: ' + error.message, ":interrobang:");
+			msg.channel.send(message);
+			return
+		}
+		getValidRoles(guild)
 			.then(validRoles => {
 				let roleName = msg.content.substring(9);
 
