@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.09")
+	.addField("Version:", "6.10")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -82,10 +82,10 @@ client.on('guildMemberAdd', member => {
 		let infoChannel = member.guild.channels.find(ch => ch.name === 'information');
 		let bioChannel = member.guild.channels.find(ch => ch.name === 'bio');
 		if (infoChannel && bioChannel) {
-			message = "please check out our rules/info: " + infoChannel.toString() + pepoG
-			+ "\nMeet our members over at: " + bioChannel.toString() + peepoHappy
-			+ "\nSet your guild with: '!setguild Ruby'" + pepeRuby
-			+ "\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " + hypers;
+			message = "please check out our rules/info: " + infoChannel.toString() + pepoG +
+				"\nMeet our members over at: " + bioChannel.toString() + peepoHappy +
+				"\nSet your guild with: '!setguild Ruby'" + pepeRuby +
+				"\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " + hypers;
 		}
 		else {
 			message = "please check out our rules/info in the appropriate info channel " + hypers;
@@ -232,7 +232,19 @@ client.on('message', msg => {
 				.setColor(embedColour)
 				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
 			msg.channel.send(message);
-			sendToAlmaApi(messageContent[1], msg.member.guild.name, function(response, error) {
+			let guild = "Ruby";
+			try {
+				guild = msg.member.guild.name;
+			}
+			catch (err) {
+				console.log(err);
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Encountered an error: ' + err.message, ":interrobang:");
+				msg.channel.send(message);
+				return
+			}
+			sendToAlmaApi(messageContent[1], guild, function(response, error) {
 				if (error) {
 					let message = new Discord.RichEmbed()
 						.setColor(embedColour)
@@ -538,10 +550,10 @@ client.on('message', msg => {
 	//set role
 	if (msg.content.startsWith('!setrole')) {
 		let guild = "Ruby";
-		try{
+		try {
 			guild = msg.member.guild.name;
 		}
-		catch(err){
+		catch (err) {
 			console.log(err);
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
@@ -604,7 +616,19 @@ client.on('message', msg => {
 
 	//set role
 	if (msg.content.startsWith('!removerole')) {
-		getValidRoles(msg.member.guild.name)
+		let guild = "Ruby";
+		try {
+			guild = msg.member.guild.name;
+		}
+		catch (err) {
+			console.log(err);
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Encountered an error: ' + err.message, ":interrobang:");
+			msg.channel.send(message);
+			return
+		}
+		getValidRoles(guild)
 			.then(validRoles => {
 				let roleName = msg.content.substring(12);
 
@@ -656,8 +680,20 @@ client.on('message', msg => {
 		if (msg.member.roles.find(r => r.name === "BotAdmin")) {
 			let messageContent = msg.content.split(" ");
 			//get current list of valid guilds
+			let guild = "Ruby";
+			try {
+				guild = msg.member.guild.name;
+			}
+			catch (err) {
+				console.log(err);
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Encountered an error: ' + err.message, ":interrobang:");
+				msg.channel.send(message);
+				return
+			}
 			if (messageContent[1] === "view") {
-				getValidRoles(msg.member.guild.name)
+				getValidRoles(guild)
 					.then(validRoles => {
 						let message = new Discord.RichEmbed()
 							.setColor(embedColour)
@@ -674,8 +710,19 @@ client.on('message', msg => {
 			else if (messageContent[1] === "add") {
 				let roleToAdd = messageContent.splice(2).join(" ");
 				console.log("New Role : " + roleToAdd);
-
-				getValidRoles(msg.member.guild.name)
+				let guild = "Ruby";
+				try {
+					guild = msg.member.guild.name;
+				}
+				catch (err) {
+					console.log(err);
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField('Encountered an error: ' + err.message, ":interrobang:");
+					msg.channel.send(message);
+					return
+				}
+				getValidRoles(guild)
 					.then(validRoles => {
 						if (validRoles.includes(roleToAdd)) {
 							let message = new Discord.RichEmbed()
@@ -692,7 +739,7 @@ client.on('message', msg => {
 								"action": "update",
 								"value": validRoles.toString(),
 								"type": "roles",
-								"guild": msg.member.guild.name
+								"guild": guild
 							};
 							sendToGeneralApi(message, "/admin/rolelist", function(response, error) {
 								if (error) {
@@ -723,8 +770,19 @@ client.on('message', msg => {
 			else if (messageContent[1] === "remove") {
 				let roleToRemove = messageContent.splice(2).join(" ");
 				console.log("Removing Role : " + roleToRemove);
-
-				getValidRoles(msg.member.guild.name)
+				let guild = "Ruby";
+				try {
+					guild = msg.member.guild.name;
+				}
+				catch (err) {
+					console.log(err);
+					let message = new Discord.RichEmbed()
+						.setColor(embedColour)
+						.addField('Encountered an error: ' + err.message, ":interrobang:");
+					msg.channel.send(message);
+					return
+				}
+				getValidRoles(guild)
 					.then(validRoles => {
 						if (validRoles.includes(roleToRemove)) {
 							console.log("Old roleList : " + validRoles.toString());
@@ -735,7 +793,7 @@ client.on('message', msg => {
 								"action": "update",
 								"value": validRoles.toString(),
 								"type": "roles",
-								"guild": msg.member.guild.name
+								"guild": guild
 							};
 							sendToGeneralApi(message, "/admin/rolelist", function(response, error) {
 								if (error) {
