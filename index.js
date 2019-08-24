@@ -545,7 +545,7 @@ client.on('message', msg => {
 			console.log(err);
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
-				.addField('Encountered an error: ' + error.message, ":interrobang:");
+				.addField('Encountered an error: ' + err.message, ":interrobang:");
 			msg.channel.send(message);
 			return
 		}
