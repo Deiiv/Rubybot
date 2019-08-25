@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const fetch = require('node-fetch');
 const embedColour = "#FEC6C7";
 var monkaThink, hypers, pepeRuby, pepeCry, peepoHappy, pepoG;
-const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"]
+const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
@@ -76,15 +76,15 @@ client.on('guildMemberAdd', member => {
 		message = "please set your role with '!setguild Guild' " + hypers; // + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
 	}
 	else if (member.guild.name === "Silk Road") {
-		message = "please set your role with '!setguild Silk Road'"
+		message = "please set your role with '!setguild Silk Road'";
 	}
 	else {
 		let infoChannel = member.guild.channels.find(ch => ch.name === 'information');
 		let bioChannel = member.guild.channels.find(ch => ch.name === 'bio');
 		if (infoChannel && bioChannel) {
-			message = "please check out our rules/info: " + infoChannel.toString() + pepoG +
-				"\nMeet our members over at: " + bioChannel.toString() + peepoHappy +
-				"\nSet your guild with: '!setguild Ruby'" + pepeRuby +
+			message = "please check out our rules/info: " + infoChannel.toString() + " " + pepoG +
+				"\nMeet our members over at: " + bioChannel.toString() + " " + peepoHappy +
+				"\nSet your guild with: '!setguild Ruby' " + pepeRuby +
 				"\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " + hypers;
 		}
 		else {
@@ -227,23 +227,23 @@ client.on('message', msg => {
 	if (msg.content.startsWith('!alma')) {
 		let messageContent = msg.content.split(" ");
 		if (messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13) {
-			let almaChannel = msg.member.guild.channels.find(ch => ch.name === 'almanax');
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
-			msg.channel.send(message);
-			let guild = "Ruby";
+			let almaChannel = "";
 			try {
-				guild = msg.member.guild.name;
+				almaChannel = msg.member.guild.channels.find(ch => ch.name === 'almanax');
 			}
 			catch (err) {
 				console.log(err);
 				let message = new Discord.RichEmbed()
 					.setColor(embedColour)
-					.addField('Encountered an error: ' + err.message, ":interrobang:");
+					.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
 				msg.channel.send(message);
-				return
+				return;
 			}
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
+			msg.channel.send(message);
+			let guild = msg.member.guild.name;
 			sendToAlmaApi(messageContent[1], guild, function(response, error) {
 				if (error) {
 					let message = new Discord.RichEmbed()
@@ -405,10 +405,8 @@ client.on('message', msg => {
 	if (msg.content.startsWith('!view')) {
 		let messageContent = msg.content.split(" ");
 		if (messageContent.length === 1) {
-			let username = msg.member.displayName;
 			let userid = msg.author.id;
 			let params = {
-				username: username,
 				userid: userid,
 				action: "view"
 			};
@@ -419,13 +417,13 @@ client.on('message', msg => {
 						data.guild = "None (use !setguild to set this value)";
 					}
 					if (data.profList && data.profList.length < 1) {
-						data.profList = "None (add a prof with !add, see !prof help for details)"
+						data.profList = "None (add a prof with !add, see !prof help for details)";
 					}
 
 					let message = new Discord.RichEmbed()
 						.setColor(embedColour)
-						.addField(":shield: " + username + "'s Guild:", data.guild)
-						.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
+						.addField(":shield: " + data.username + "'s Guild:", data.guild)
+						.addField(":hammer_pick: " + data.username + "'s Professions:", data.profList);
 					msg.channel.send(message);
 				})
 				.catch(error => {
@@ -458,7 +456,7 @@ client.on('message', msg => {
 								data.guild = "None (use !setguild to set this value)";
 							}
 							if (data.profList && data.profList.length < 1) {
-								data.profList = "None (add a prof with !add, see !prof help for details)"
+								data.profList = "None (add a prof with !add, see !prof help for details)";
 							}
 
 							let message = new Discord.RichEmbed()
@@ -557,9 +555,9 @@ client.on('message', msg => {
 			console.log(err);
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
-				.addField('Encountered an error: ' + err.message, ":interrobang:");
+				.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
 			msg.channel.send(message);
-			return
+			return;
 		}
 		getValidRoles(guild)
 			.then(validRoles => {
@@ -624,9 +622,9 @@ client.on('message', msg => {
 			console.log(err);
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
-				.addField('Encountered an error: ' + err.message, ":interrobang:");
+				.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
 			msg.channel.send(message);
-			return
+			return;
 		}
 		getValidRoles(guild)
 			.then(validRoles => {
@@ -688,9 +686,9 @@ client.on('message', msg => {
 				console.log(err);
 				let message = new Discord.RichEmbed()
 					.setColor(embedColour)
-					.addField('Encountered an error: ' + err.message, ":interrobang:");
+					.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
 				msg.channel.send(message);
-				return
+				return;
 			}
 			if (messageContent[1] === "view") {
 				getValidRoles(guild)
@@ -718,9 +716,9 @@ client.on('message', msg => {
 					console.log(err);
 					let message = new Discord.RichEmbed()
 						.setColor(embedColour)
-						.addField('Encountered an error: ' + err.message, ":interrobang:");
+						.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
 					msg.channel.send(message);
-					return
+					return;
 				}
 				getValidRoles(guild)
 					.then(validRoles => {
@@ -778,9 +776,9 @@ client.on('message', msg => {
 					console.log(err);
 					let message = new Discord.RichEmbed()
 						.setColor(embedColour)
-						.addField('Encountered an error: ' + err.message, ":interrobang:");
+						.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
 					msg.channel.send(message);
-					return
+					return;
 				}
 				getValidRoles(guild)
 					.then(validRoles => {
