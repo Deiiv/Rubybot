@@ -484,7 +484,9 @@ client.on('message', msg => {
 		//view profs !view prof OR !view prof level
 		else {
 			if (messageContent[1]) {
-				if (profList.includes(messageContent[1])) {
+				messageContent[1] = messageContent[1].toLowerCase();
+				let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
+				if (profList.includes(prof)) {
 					if (messageContent[2] && (messageContent[2] < 1 || messageContent[2] > 200)) {
 						let message = new Discord.RichEmbed()
 							.setColor(embedColour)
@@ -495,7 +497,7 @@ client.on('message', msg => {
 
 					let params = {
 						action: "getProf",
-						prof: messageContent[1],
+						prof: prof,
 						level: messageContent[2]
 					};
 					handleProfEvent(params)
@@ -507,7 +509,7 @@ client.on('message', msg => {
 							if (response === "NONE") {
 								let message = new Discord.RichEmbed()
 									.setColor(embedColour)
-									.addField(pepoG + " Users with " + messageContent[1] + levelMessage, "None!");
+									.addField(pepoG + " Users with " + prof + levelMessage, "None!");
 								msg.channel.send(message);
 							}
 							else {
@@ -517,7 +519,7 @@ client.on('message', msg => {
 								}
 								let message = new Discord.RichEmbed()
 									.setColor(embedColour)
-									.addField(pepoG + " List of users with " + messageContent[1] + " profession" + levelMessage, data.string);
+									.addField(pepoG + " List of users with " + prof + " profession" + levelMessage, data.string);
 								msg.channel.send(message);
 							}
 						})
