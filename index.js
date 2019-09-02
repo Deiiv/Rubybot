@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.10")
+	.addField("Version:", "6.11")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -495,16 +495,18 @@ client.on('message', msg => {
 						return;
 					}
 
+					let level = Math.floor(messageContent[2]);
+
 					let params = {
 						action: "getProf",
 						prof: prof,
-						level: messageContent[2]
+						level: level
 					};
 					handleProfEvent(params)
 						.then(response => {
 							var levelMessage = "";
 							if (messageContent[2]) {
-								levelMessage = " >= " + messageContent[2];
+								levelMessage = " >= " + level;
 							}
 							if (response === "NONE") {
 								let message = new Discord.RichEmbed()
@@ -858,7 +860,8 @@ client.on('message', msg => {
 			messageContent[1] = messageContent[1].toLowerCase();
 			let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
 			if (profList.includes(prof)) {
-				if (messageContent[2] >= 1 && messageContent[2] <= 200) {
+				let level = Math.floor(messageContent[2]);
+				if (level >= 1 && level <= 200) {
 					let username = msg.member.displayName;
 					let userid = msg.author.id;
 
@@ -867,7 +870,7 @@ client.on('message', msg => {
 						userid: userid,
 						action: "updateprof",
 						prof: prof,
-						level: messageContent[2]
+						level: level
 					};
 
 					handleProfEvent(params)
@@ -875,7 +878,7 @@ client.on('message', msg => {
 							console.log("Done updating user in db");
 							let message = new Discord.RichEmbed()
 								.setColor(embedColour)
-								.addField('Profession ' + prof + ' set to level ' + messageContent[2] + ' for user ' + username, peepoHappy);
+								.addField('Profession ' + prof + ' set to level ' + level + ' for user ' + username, peepoHappy);
 							msg.channel.send(message);
 						})
 						.catch(error => {
