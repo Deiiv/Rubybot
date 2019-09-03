@@ -860,7 +860,7 @@ client.on('message', msg => {
 			messageContent[1] = messageContent[1].toLowerCase();
 			let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
 			if (profList.includes(prof)) {
-				let level = Math.floor(messageContent[2]);
+				let level = (Math.floor(messageContent[2])).toString();
 				if (level >= 1 && level <= 200) {
 					let username = msg.member.displayName;
 					let userid = msg.author.id;
