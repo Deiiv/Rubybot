@@ -937,7 +937,7 @@ client.on('message', msg => {
 					else {
 						let message = new Discord.RichEmbed()
 							.setColor(embedColour)
-							.addField('Done! Your message has been sent to the guild leadership', hypers);
+							.addField('Done! Your message has been sent to the guild leadership', "You will receive a reply from someone shortly " + peepoHappy);
 						msg.channel.send(message);
 					}
 				});
