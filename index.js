@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.11")
+	.addField("Version:", "6.12")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -16,6 +16,7 @@ const helpEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
+	.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 	.addField(":blue_book: For viewing bot information:", "!info")
 	.addField(":pencil2: To set your guild as a role:", "!setguild GUILD")
 	.addField(":pencil2: To set a misc. role:", "!setrole ROLE")
@@ -904,6 +905,48 @@ client.on('message', msg => {
 			let message = new Discord.RichEmbed()
 				.setColor(embedColour)
 				.addField('Invalid input!', "View proper usage by calling !help prof");
+			msg.channel.send(message);
+		}
+	}
+
+	//contacts discord admins
+	if (msg.content.startsWith('!contact')) {
+		if(msg.guild === null){
+			if(msg.content.length < 10){
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Invalid input! Please include a message', "View proper usage by calling !help");
+				msg.channel.send(message);
+			}
+			else if(msg.content.length > 1024){
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Your message is too long!', "Please shorten your message, you can also send multiple messages instead of one.");
+				msg.channel.send(message);
+			}
+			else{
+				console.log(msg);
+				let message = {
+					"message": msg.content.substring(9),
+					"discordid": msg.author.username + "#" + msg.author.discriminator
+				};
+				sendToGeneralApi(message, "member-message", function(response, error) {
+					if (error) {
+						return reject(error);
+					}
+					else {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Done! Your message has been sent to the guild leadership', hypers);
+						msg.channel.send(message);
+					}
+				});
+			}
+		}
+		else{
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField("Sorry, can't send your message!", "This command can only be used in private messages (pm me, the bot " + peepoHappy + ")");
 			msg.channel.send(message);
 		}
 	}
