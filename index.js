@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.12")
+	.addField("Version:", "6.13")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -17,6 +17,7 @@ const helpEmbed = new Discord.RichEmbed()
 	.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 	.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 	.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
+	.addField(":mailbox_with_mail: To contact the alliance leadership:", "!submit YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 	.addField(":blue_book: For viewing bot information:", "!info")
 	.addField(":pencil2: To set your guild as a role:", "!setguild GUILD")
 	.addField(":pencil2: To set a misc. role:", "!setrole ROLE")
