@@ -954,7 +954,7 @@ client.on('message', msg => {
 	//contacts discord admins in alliance discord
 	if (msg.content.startsWith('!submit')) {
 		if(msg.guild === null){
-			if(msg.content.length < 10){
+			if(msg.content.length < 9){
 				let message = new Discord.RichEmbed()
 					.setColor(embedColour)
 					.addField('Invalid input! Please include a message', "View proper usage by calling !help");
@@ -968,7 +968,7 @@ client.on('message', msg => {
 			}
 			else{
 				let message = {
-					"message": msg.content.substring(9),
+					"message": msg.content.substring(8),
 					"discordid": msg.author.username + "#" + msg.author.discriminator,
 					"alliance": "true"
 				};
