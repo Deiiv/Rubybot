@@ -909,7 +909,7 @@ client.on('message', msg => {
 		}
 	}
 
-	//contacts discord admins
+	//contacts discord admins in guild discord
 	if (msg.content.startsWith('!contact')) {
 		if(msg.guild === null){
 			if(msg.content.length < 10){
@@ -925,7 +925,6 @@ client.on('message', msg => {
 				msg.channel.send(message);
 			}
 			else{
-				console.log(msg);
 				let message = {
 					"message": msg.content.substring(9),
 					"discordid": msg.author.username + "#" + msg.author.discriminator
@@ -938,6 +937,48 @@ client.on('message', msg => {
 						let message = new Discord.RichEmbed()
 							.setColor(embedColour)
 							.addField('Done! Your message has been sent to the guild leadership', "You will receive a reply from someone shortly " + peepoHappy);
+						msg.channel.send(message);
+					}
+				});
+			}
+		}
+		else{
+			let message = new Discord.RichEmbed()
+				.setColor(embedColour)
+				.addField("Sorry, can't send your message!", "This command can only be used in private messages (pm me, the bot " + peepoHappy + ")");
+			msg.channel.send(message);
+		}
+	}
+
+	//contacts discord admins in alliance discord
+	if (msg.content.startsWith('!submit')) {
+		if(msg.guild === null){
+			if(msg.content.length < 10){
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Invalid input! Please include a message', "View proper usage by calling !help");
+				msg.channel.send(message);
+			}
+			else if(msg.content.length > 1024){
+				let message = new Discord.RichEmbed()
+					.setColor(embedColour)
+					.addField('Your message is too long!', "Please shorten your message, you can also send multiple messages instead of one.");
+				msg.channel.send(message);
+			}
+			else{
+				let message = {
+					"message": msg.content.substring(9),
+					"discordid": msg.author.username + "#" + msg.author.discriminator,
+					"alliance": "true"
+				};
+				sendToGeneralApi(message, "member-message", function(response, error) {
+					if (error) {
+						return reject(error);
+					}
+					else {
+						let message = new Discord.RichEmbed()
+							.setColor(embedColour)
+							.addField('Done! Your message has been sent to the alliance leadership', peepoHappy);
 						msg.channel.send(message);
 					}
 				});
