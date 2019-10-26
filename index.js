@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.13")
+	.addField("Version:", "6.14")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -117,6 +117,19 @@ client.on('message', msg => {
 							.setColor(embedColour)
 							.addField('You already have the ' + guild + ' role, but I\'ll set the entry again for !view', monkaThink);
 						msg.channel.send(message);
+
+						//if in alliance disc (Ally role exists) set it
+						let allyRole = msg.guild.roles.find(role => role.name === "Ally");
+						if (allyRole) {
+							console.log("Setting Ally role");
+							msg.member.addRole(role)
+								.then(() => {
+									console.log("Ally role set");
+								.catch(error => {
+									console.log(error);
+								});
+						}
+
 						let params = {
 							username: msg.member.displayName,
 							userid: msg.author.id,
@@ -159,6 +172,18 @@ client.on('message', msg => {
 						msg.channel.send(message);
 					}
 					else {
+						//if in alliance disc (Ally role exists) set it
+						let allyRole = msg.guild.roles.find(role => role.name === "Ally");
+						if (allyRole) {
+							console.log("Setting Ally role");
+							msg.member.addRole(role)
+								.then(() => {
+									console.log("Ally role set");
+								.catch(error => {
+									console.log(error);
+								});
+						}
+
 						msg.member.addRole(role)
 							.then(() => {
 								let message = new Discord.RichEmbed()
