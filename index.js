@@ -122,7 +122,7 @@ client.on('message', msg => {
 						let allyRole = msg.guild.roles.find(role => role.name === "Ally");
 						if (allyRole) {
 							console.log("Setting Ally role");
-							msg.member.addRole(role)
+							msg.member.addRole(allyRole)
 								.then(() => {
 									console.log("Ally role set");
 								})
@@ -177,7 +177,7 @@ client.on('message', msg => {
 						let allyRole = msg.guild.roles.find(role => role.name === "Ally");
 						if (allyRole) {
 							console.log("Setting Ally role");
-							msg.member.addRole(role)
+							msg.member.addRole(allyRole)
 								.then(() => {
 									console.log("Ally role set");
 								})
