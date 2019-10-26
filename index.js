@@ -125,6 +125,7 @@ client.on('message', msg => {
 							msg.member.addRole(role)
 								.then(() => {
 									console.log("Ally role set");
+								})
 								.catch(error => {
 									console.log(error);
 								});
@@ -179,6 +180,7 @@ client.on('message', msg => {
 							msg.member.addRole(role)
 								.then(() => {
 									console.log("Ally role set");
+								})
 								.catch(error => {
 									console.log(error);
 								});
