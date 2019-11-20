@@ -8,7 +8,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.14")
+	.addField("Version:", "6.16")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -19,8 +19,8 @@ const helpEmbed = new Discord.RichEmbed()
 	.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 	.addField(":mailbox_with_mail: To contact the alliance leadership:", "!submit YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 	.addField(":blue_book: For viewing bot information:", "!info")
-	.addField(":pencil2: To set your guild as a role:", "!setguild GUILD")
-	.addField(":pencil2: To set a misc. role:", "!setrole ROLE")
+	.addField(":pencil2: To set your guild as a role:", "!setguild Guild")
+	.addField(":pencil2: To set a misc. role:", "!setrole ROLE\n!removerole ROLE")
 	.addField(":closed_lock_with_key: For admin actions:", "!admin");
 
 const adminEmbed = new Discord.RichEmbed()
@@ -68,7 +68,7 @@ client.on("ready", () => {
 
 //new member event
 client.on('guildMemberAdd', member => {
-	const channel = member.guild.channels.find(ch => ch.name === 'welcome');
+	const channel = member.guild.channels.find(ch => ch.name.includes('welcome'));
 	if (!channel) return;
 
 	// let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
