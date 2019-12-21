@@ -1,14 +1,19 @@
-require('dotenv').config();
-const Discord = require('discord.js');
+require("dotenv").config();
+const Discord = require("discord.js");
 const client = new Discord.Client();
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 const embedColour = "#FEC6C7";
 var monkaThink, hypers, pepeRuby, pepeCry, peepoHappy, pepoG;
+//for !roll command XdY
+var minX = 1;
+var maxX = 4;
+var minY = 1;
+var maxY = 100;
 const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.16")
+	.addField("Version:", "6.17")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -21,7 +26,8 @@ const helpEmbed = new Discord.RichEmbed()
 	.addField(":blue_book: For viewing bot information:", "!info")
 	.addField(":pencil2: To set your guild as a role:", "!setguild Guild")
 	.addField(":pencil2: To set a misc. role:", "!setrole ROLE\n!removerole ROLE")
-	.addField(":closed_lock_with_key: For admin actions:", "!admin");
+	.addField(":closed_lock_with_key: For admin actions:", "!admin")
+	.addField(":game_die: To roll a die:", "!roll XdY\nEx: !roll 1d6\nX must be between " + minX + " and " + maxX + "\nY must be between " + minY + " and " + maxY);
 
 const adminEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
@@ -49,14 +55,14 @@ add nickname instead of username (maybe setnickname command)
 */
 
 client.on("ready", () => {
-	console.log('Logged in as:');
+	console.log("Logged in as:");
 	console.log(client.user.username + " " + client.user.id);
-	console.log('\nConnected to the following servers:');
+	console.log("\nConnected to the following servers:");
 	client.guilds.forEach(function(guild) {
 		console.log(guild.name + " " + guild.id);
 		// if(guild.name === "x") guild.leave();
 	});
-	console.log('------------------------------\n');
+	console.log("------------------------------\n");
 
 	hypers = client.emojis.find(emoji => emoji.name === "hypers") || "";
 	pepeRuby = client.emojis.find(emoji => emoji.name === "pepeRuby") || "";
@@ -67,8 +73,8 @@ client.on("ready", () => {
 });
 
 //new member event
-client.on('guildMemberAdd', member => {
-	const channel = member.guild.channels.find(ch => ch.name.includes('welcome'));
+client.on("guildMemberAdd", member => {
+	const channel = member.guild.channels.find(ch => ch.name.includes("welcome"));
 	if (!channel) return;
 
 	// let message = "Welcome to the server, <@" + member.id + ">! " + pepeRuby;
@@ -76,36 +82,52 @@ client.on('guildMemberAdd', member => {
 
 	if (member.guild.name === "POP") {
 		message = "please set your role with '!setguild Guild' " + hypers; // + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
-	}
-	else if (member.guild.name === "Silk Road") {
+	} else if (member.guild.name === "Silk Road") {
 		message = "please set your role with '!setguild Silk Road'";
-	}
-	else {
-		let infoChannel = member.guild.channels.find(ch => ch.name === 'information');
-		let bioChannel = member.guild.channels.find(ch => ch.name === 'bio');
+	} else {
+		let infoChannel = member.guild.channels.find(ch => ch.name === "information");
+		let bioChannel = member.guild.channels.find(ch => ch.name === "bio");
 		if (infoChannel && bioChannel) {
-			message = "please check out our rules/info: " + infoChannel.toString() + " " + pepoG +
-				"\nMeet our members over at: " + bioChannel.toString() + " " + peepoHappy +
-				"\nSet your guild with: '!setguild Ruby' " + pepeRuby +
-				"\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " + hypers;
-		}
-		else {
+			message = "please check out our rules/info: " + infoChannel.toString() + " " + pepoG + "\nMeet our members over at: " + bioChannel.toString() + " " + peepoHappy + "\nSet your guild with: '!setguild Ruby' " + pepeRuby + "\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " + hypers;
+		} else {
 			message = "please check out our rules/info in the appropriate info channel " + hypers;
 		}
 	}
 
-	let welcomeMessageEmbed = new Discord.RichEmbed()
-		.setColor(embedColour)
-		.addField("Welcome! " + pepeRuby, "<@" + member.id + ">, " + message);
+	let welcomeMessageEmbed = new Discord.RichEmbed().setColor(embedColour).addField("Welcome! " + pepeRuby, "<@" + member.id + ">, " + message);
 
 	channel.send(welcomeMessageEmbed);
 });
 
 //message event
-client.on('message', msg => {
+client.on("message", msg => {
 	if (msg.author.bot) return;
 
-	if (msg.content.startsWith('!setguild')) {
+	if (msg.content.startsWith("!roll")) {
+		let messageContent = msg.content.split(" ");
+		let numbers = [];
+		if (messageContent[1]) {
+			let x = messageContent[1].split("d")[0];
+			let y = messageContent[1].split("d")[1];
+
+			if (x < minX || x > maxX) {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("X in !roll XdY must be between " + minX + " and " + maxX, ":game_die:");
+				msg.channel.send(message);
+			} else if (y < minY || y > maxY) {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Y in !roll XdY must be between " + minY + " and " + maxY, ":game_die:");
+				msg.channel.send(message);
+			} else {
+				for (let i = 0; i < x; i++) {
+					numbers.push(Math.floor(Math.random() * y) + 1).toString();
+				}
+
+				let message = new Discord.RichEmbed().setColor(embedColour).addField(":game_die: " + messageContent[1], numbers.join(" | "));
+				msg.channel.send(message);
+			}
+		}
+	}
+
+	if (msg.content.startsWith("!setguild")) {
 		getValidGuilds()
 			.then(validGuilds => {
 				let guild = msg.content.substring(10);
@@ -113,16 +135,15 @@ client.on('message', msg => {
 
 				if (guild && validGuilds.includes(guild)) {
 					if (msg.member.roles.find(r => r.name === guild)) {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('You already have the ' + guild + ' role, but I\'ll set the entry again for !view', monkaThink);
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("You already have the " + guild + " role, but I'll set the entry again for !view", monkaThink);
 						msg.channel.send(message);
 
 						//if in alliance disc (Ally role exists) set it
 						let allyRole = msg.guild.roles.find(role => role.name === "Ally");
 						if (allyRole) {
 							console.log("Setting Ally role");
-							msg.member.addRole(allyRole)
+							msg.member
+								.addRole(allyRole)
 								.then(() => {
 									console.log("Ally role set");
 								})
@@ -151,15 +172,14 @@ client.on('message', msg => {
 					shortList.forEach(function(guildRole) {
 						if (msg.member.roles.find(r => r.name === guildRole)) {
 							let oldRole = msg.guild.roles.find(role => role.name === guildRole);
-							msg.member.removeRole(oldRole)
+							msg.member
+								.removeRole(oldRole)
 								.then(() => {
 									text += "Removed previous role for guild " + guildRole + " " + pepeCry + "\n";
 								})
 								.catch(error => {
 									console.log(error);
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 									msg.channel.send(message);
 								});
 						}
@@ -167,17 +187,15 @@ client.on('message', msg => {
 
 					let role = msg.guild.roles.find(role => role.name === guild);
 					if (!role) {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField("Role for guild " + guild + " not found", ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Role for guild " + guild + " not found", ":interrobang:");
 						msg.channel.send(message);
-					}
-					else {
+					} else {
 						//if in alliance disc (Ally role exists) set it
 						let allyRole = msg.guild.roles.find(role => role.name === "Ally");
 						if (allyRole) {
 							console.log("Setting Ally role");
-							msg.member.addRole(allyRole)
+							msg.member
+								.addRole(allyRole)
 								.then(() => {
 									console.log("Ally role set");
 								})
@@ -186,11 +204,10 @@ client.on('message', msg => {
 								});
 						}
 
-						msg.member.addRole(role)
+						msg.member
+							.addRole(role)
 							.then(() => {
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField("Done!", text + 'Role set for guild ' + guild + " " + peepoHappy);
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", text + "Role set for guild " + guild + " " + peepoHappy);
 								msg.channel.send(message);
 								let params = {
 									username: msg.member.displayName,
@@ -208,98 +225,77 @@ client.on('message', msg => {
 							})
 							.catch(error => {
 								console.log(error);
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField('Encountered an error: ' + error.message, ":interrobang:");
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 								msg.channel.send(message);
 							});
 					}
-				}
-				else {
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField("Invalid guild!", "Please send one of the following: " + validGuilds.toString());
+				} else {
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid guild!", "Please send one of the following: " + validGuilds.toString());
 					msg.channel.send(message);
 				}
 			})
 			.catch(error => {
 				console.log(error);
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Encountered an error: ' + error.message, ":interrobang:");
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
 			});
 	}
 
 	//info
-	if (msg.content.startsWith('!info')) {
+	if (msg.content.startsWith("!info")) {
 		msg.channel.send(infoEmbed);
 	}
 
 	//help menu
-	if (msg.content.startsWith('!help')) {
+	if (msg.content.startsWith("!help")) {
 		let messageContent = msg.content.split(" ");
 		if (messageContent[1] && messageContent[1] === "prof") {
 			msg.channel.send(helpProfEmbed);
-		}
-		else {
+		} else {
 			msg.channel.send(helpEmbed);
 		}
 	}
 
 	//admin menu
-	if (msg.content.startsWith('!admin')) {
+	if (msg.content.startsWith("!admin")) {
 		msg.channel.send(adminEmbed);
 	}
 
 	//alma monthly call
-	if (msg.content.startsWith('!alma')) {
+	if (msg.content.startsWith("!alma")) {
 		let messageContent = msg.content.split(" ");
 		if (messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13) {
 			let almaChannel = "";
 			try {
-				almaChannel = msg.member.guild.channels.find(ch => ch.name === 'almanax');
-			}
-			catch (err) {
+				almaChannel = msg.member.guild.channels.find(ch => ch.name === "almanax");
+			} catch (err) {
 				console.log(err);
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 				msg.channel.send(message);
 				return;
 			}
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Sending the request!', "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Sending the request!", "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
 			msg.channel.send(message);
 			let guild = msg.member.guild.name;
 			sendToAlmaApi(messageContent[1], guild, function(response, error) {
 				if (error) {
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField('Encountered an error: ' + error.message, ":interrobang:");
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);
-				}
-				else {
+				} else {
 					if (response === "INVALID_ORIGIN") {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField("This functionality isn't supported in this server", pepeCry);
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("This functionality isn't supported in this server", pepeCry);
 						msg.channel.send(message);
 					}
 				}
 			});
-		}
-		else {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Invalid input!', "Proper usage: !alma MM\nExamples: !alma 4, !alma 11");
+		} else {
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "Proper usage: !alma MM\nExamples: !alma 4, !alma 11");
 			msg.channel.send(message);
 		}
 	}
 
 	//managing guild list
-	if (msg.content.startsWith('!guildlist')) {
+	if (msg.content.startsWith("!guildlist")) {
 		//check that a valid user is calling the command
 		if (msg.member.roles.find(r => r.name === "BotAdmin")) {
 			let messageContent = msg.content.split(" ");
@@ -307,52 +303,39 @@ client.on('message', msg => {
 			if (messageContent[1] === "view") {
 				getValidGuilds()
 					.then(validGuilds => {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Current list of valid guilds:', validGuilds.toString());
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Current list of valid guilds:", validGuilds.toString());
 						msg.channel.send(message);
 					})
 					.catch(error => {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-			}
-			else if (messageContent[1] === "add") {
+			} else if (messageContent[1] === "add") {
 				let guildToAdd = messageContent.splice(2).join(" ");
 				console.log("New Guild : " + guildToAdd);
 
 				getValidGuilds()
 					.then(validGuilds => {
 						if (validGuilds.includes(guildToAdd)) {
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField('Guild ' + guildToAdd + ' is already in guild list', monkaThink);
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("Guild " + guildToAdd + " is already in guild list", monkaThink);
 							msg.channel.send(message);
-						}
-						else {
+						} else {
 							console.log("Old guildList : " + validGuilds.toString());
 							validGuilds.push(guildToAdd);
 							console.log("New guildList : " + validGuilds.toString());
 
 							let message = {
-								"action": "update",
-								"value": validGuilds.toString(),
-								"type": "guilds"
+								action: "update",
+								value: validGuilds.toString(),
+								type: "guilds"
 							};
 							sendToGeneralApi(message, "/admin/guildlist", function(response, error) {
 								if (error) {
 									console.log(error);
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 									msg.channel.send(message);
-								}
-								else {
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Guild list updated, new list: ', validGuilds.toString());
+								} else {
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Guild list updated, new list: ", validGuilds.toString());
 									msg.channel.send(message);
 								}
 							});
@@ -360,14 +343,10 @@ client.on('message', msg => {
 					})
 					.catch(error => {
 						console.log(error);
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-
-			}
-			else if (messageContent[1] === "remove") {
+			} else if (messageContent[1] === "remove") {
 				let guildToRemove = messageContent.splice(2).join(" ");
 				console.log("Removing Guild : " + guildToRemove);
 
@@ -379,59 +358,43 @@ client.on('message', msg => {
 							console.log("New guildList : " + validGuilds.toString());
 
 							let message = {
-								"action": "update",
-								"value": validGuilds.toString(),
-								"type": "guilds"
+								action: "update",
+								value: validGuilds.toString(),
+								type: "guilds"
 							};
 							sendToGeneralApi(message, "/admin/guildlist", function(response, error) {
 								if (error) {
 									console.log(error);
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 									msg.channel.send(message);
-								}
-								else {
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Guild list updated, new list: ', validGuilds.toString());
+								} else {
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Guild list updated, new list: ", validGuilds.toString());
 									msg.channel.send(message);
 								}
 							});
-						}
-						else {
+						} else {
 							console.log("Guild trying to remove is not in current list");
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField("The guild " + guildToRemove + " is not in the current list, so can't remove it.", "" + pepoG);
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("The guild " + guildToRemove + " is not in the current list, so can't remove it.", "" + pepoG);
 							msg.channel.send(message);
 						}
 					})
 					.catch(error => {
 						console.log(error);
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-			}
-			else {
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid input!', "View proper usage by calling !admin");
+			} else {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !admin");
 				msg.channel.send(message);
 			}
-		}
-		else {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Only members with the correct role can use this option', pepoG);
+		} else {
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Only members with the correct role can use this option", pepoG);
 			msg.channel.send(message);
 		}
 	}
 
 	//view prof
-	if (msg.content.startsWith('!view')) {
+	if (msg.content.startsWith("!view")) {
 		let messageContent = msg.content.split(" ");
 		if (messageContent.length === 1) {
 			let userid = msg.author.id;
@@ -457,9 +420,7 @@ client.on('message', msg => {
 				})
 				.catch(error => {
 					console.log(error);
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField('Encountered an error: ' + error.message, ":interrobang:");
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);
 				});
 		}
@@ -474,12 +435,9 @@ client.on('message', msg => {
 				handleProfEvent(params)
 					.then(response => {
 						if (response === "NONE") {
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField("User " + username + " doesn't exist in our records!", pepoG);
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("User " + username + " doesn't exist in our records!", pepoG);
 							msg.channel.send(message);
-						}
-						else {
+						} else {
 							let data = JSON.parse(response);
 							if (!data.guild) {
 								data.guild = "None (use !setguild to set this value)";
@@ -497,16 +455,11 @@ client.on('message', msg => {
 					})
 					.catch(error => {
 						console.log(error);
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-			}
-			else {
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid input!', "View proper usage by calling !help prof");
+			} else {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 				msg.channel.send(message);
 			}
 		}
@@ -517,9 +470,7 @@ client.on('message', msg => {
 				let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
 				if (profList.includes(prof)) {
 					if (messageContent[2] && (messageContent[2] < 1 || messageContent[2] > 200)) {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Invalid input!', "View proper usage by calling !help prof");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 						msg.channel.send(message);
 						return;
 					}
@@ -538,57 +489,41 @@ client.on('message', msg => {
 								levelMessage = " >= " + level;
 							}
 							if (response === "NONE") {
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField(pepoG + " Users with " + prof + levelMessage, "None!");
+								let message = new Discord.RichEmbed().setColor(embedColour).addField(pepoG + " Users with " + prof + levelMessage, "None!");
 								msg.channel.send(message);
-							}
-							else {
+							} else {
 								let data = JSON.parse(response);
 								if (data.string === "") {
 									data.string = "None!";
 								}
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField(pepoG + " List of users with " + prof + " profession" + levelMessage, data.string);
+								let message = new Discord.RichEmbed().setColor(embedColour).addField(pepoG + " List of users with " + prof + " profession" + levelMessage, data.string);
 								msg.channel.send(message);
 							}
 						})
 						.catch(error => {
 							console.log(error);
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField('Encountered an error: ' + error.message, ":interrobang:");
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 							msg.channel.send(message);
 						});
-				}
-				else {
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField('Invalid profession! List of valid professions:', profList.toString());
+				} else {
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid profession! List of valid professions:", profList.toString());
 					msg.channel.send(message);
 				}
-			}
-			else {
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid input!', "View proper usage by calling !help prof");
+			} else {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 				msg.channel.send(message);
 			}
 		}
 	}
 
 	//set role
-	if (msg.content.startsWith('!setrole')) {
+	if (msg.content.startsWith("!setrole")) {
 		let guild = "Ruby";
 		try {
 			guild = msg.member.guild.name;
-		}
-		catch (err) {
+		} catch (err) {
 			console.log(err);
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 			msg.channel.send(message);
 			return;
 		}
@@ -598,64 +533,48 @@ client.on('message', msg => {
 
 				if (roleName && validRoles.includes(roleName)) {
 					if (msg.member.roles.find(r => r.name === roleName)) {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('You already have the ' + roleName + ' role', monkaThink);
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("You already have the " + roleName + " role", monkaThink);
 						msg.channel.send(message);
 						return;
 					}
 
 					let role = msg.guild.roles.find(role => role.name === roleName);
 					if (!role) {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField("Role " + roleName + " not found", ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Role " + roleName + " not found", ":interrobang:");
 						msg.channel.send(message);
-					}
-					else {
-						msg.member.addRole(role)
+					} else {
+						msg.member
+							.addRole(role)
 							.then(() => {
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField("Done!", roleName + " role successfully set " + peepoHappy);
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", roleName + " role successfully set " + peepoHappy);
 								msg.channel.send(message);
 							})
 							.catch(error => {
 								console.log(error);
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField('Encountered an error: ' + error.message, ":interrobang:");
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 								msg.channel.send(message);
 							});
 					}
-				}
-				else {
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
+				} else {
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
 					msg.channel.send(message);
 				}
 			})
 			.catch(error => {
 				console.log(error);
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Encountered an error: ' + error.message, ":interrobang:");
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
 			});
 	}
 
 	//set role
-	if (msg.content.startsWith('!removerole')) {
+	if (msg.content.startsWith("!removerole")) {
 		let guild = "Ruby";
 		try {
 			guild = msg.member.guild.name;
-		}
-		catch (err) {
+		} catch (err) {
 			console.log(err);
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 			msg.channel.send(message);
 			return;
 		}
@@ -666,47 +585,36 @@ client.on('message', msg => {
 				if (roleName && validRoles.includes(roleName)) {
 					let role = msg.guild.roles.find(role => role.name === roleName);
 					if (msg.member.roles.find(r => r.name === roleName)) {
-						msg.member.removeRole(role)
+						msg.member
+							.removeRole(role)
 							.then(() => {
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField("Done!", roleName + " role successfully removed " + peepoHappy);
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", roleName + " role successfully removed " + peepoHappy);
 								msg.channel.send(message);
 							})
 							.catch(error => {
 								console.log(error);
-								let message = new Discord.RichEmbed()
-									.setColor(embedColour)
-									.addField('Encountered an error: ' + error.message, ":interrobang:");
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 								msg.channel.send(message);
 							});
-					}
-					else {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('You don\'t have the ' + roleName + ' role', monkaThink);
+					} else {
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("You don't have the " + roleName + " role", monkaThink);
 						msg.channel.send(message);
 						return;
 					}
-				}
-				else {
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
+				} else {
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
 					msg.channel.send(message);
 				}
 			})
 			.catch(error => {
 				console.log(error);
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Encountered an error: ' + error.message, ":interrobang:");
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
 			});
 	}
 
 	//managing role list
-	if (msg.content.startsWith('!rolelist')) {
+	if (msg.content.startsWith("!rolelist")) {
 		//check that a valid user is calling the command
 		if (msg.member.roles.find(r => r.name === "BotAdmin")) {
 			let messageContent = msg.content.split(" ");
@@ -714,76 +622,57 @@ client.on('message', msg => {
 			let guild = "Ruby";
 			try {
 				guild = msg.member.guild.name;
-			}
-			catch (err) {
+			} catch (err) {
 				console.log(err);
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 				msg.channel.send(message);
 				return;
 			}
 			if (messageContent[1] === "view") {
 				getValidRoles(guild)
 					.then(validRoles => {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Current list of valid roles:', validRoles.toString());
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Current list of valid roles:", validRoles.toString());
 						msg.channel.send(message);
 					})
 					.catch(error => {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-			}
-			else if (messageContent[1] === "add") {
+			} else if (messageContent[1] === "add") {
 				let roleToAdd = messageContent.splice(2).join(" ");
 				console.log("New Role : " + roleToAdd);
 				let guild = "Ruby";
 				try {
 					guild = msg.member.guild.name;
-				}
-				catch (err) {
+				} catch (err) {
 					console.log(err);
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 					msg.channel.send(message);
 					return;
 				}
 				getValidRoles(guild)
 					.then(validRoles => {
 						if (validRoles.includes(roleToAdd)) {
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField('Role ' + roleToAdd + ' is already in role list', monkaThink);
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("Role " + roleToAdd + " is already in role list", monkaThink);
 							msg.channel.send(message);
-						}
-						else {
+						} else {
 							console.log("Old rolesList : " + validRoles.toString());
 							validRoles.push(roleToAdd);
 							console.log("New rolesList : " + validRoles.toString());
 
 							let message = {
-								"action": "update",
-								"value": validRoles.toString(),
-								"type": "roles",
-								"guild": guild
+								action: "update",
+								value: validRoles.toString(),
+								type: "roles",
+								guild: guild
 							};
 							sendToGeneralApi(message, "/admin/rolelist", function(response, error) {
 								if (error) {
 									console.log(error);
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 									msg.channel.send(message);
-								}
-								else {
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Roles list updated, new list: ', validRoles.toString());
+								} else {
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Roles list updated, new list: ", validRoles.toString());
 									msg.channel.send(message);
 								}
 							});
@@ -791,25 +680,18 @@ client.on('message', msg => {
 					})
 					.catch(error => {
 						console.log(error);
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-
-			}
-			else if (messageContent[1] === "remove") {
+			} else if (messageContent[1] === "remove") {
 				let roleToRemove = messageContent.splice(2).join(" ");
 				console.log("Removing Role : " + roleToRemove);
 				let guild = "Ruby";
 				try {
 					guild = msg.member.guild.name;
-				}
-				catch (err) {
+				} catch (err) {
 					console.log(err);
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField('Encountered an error: ' + err.message, "Make sure you call this command from inside a server (not through PM's)");
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 					msg.channel.send(message);
 					return;
 				}
@@ -821,66 +703,48 @@ client.on('message', msg => {
 							console.log("New roleList : " + validRoles.toString());
 
 							let message = {
-								"action": "update",
-								"value": validRoles.toString(),
-								"type": "roles",
-								"guild": guild
+								action: "update",
+								value: validRoles.toString(),
+								type: "roles",
+								guild: guild
 							};
 							sendToGeneralApi(message, "/admin/rolelist", function(response, error) {
 								if (error) {
 									console.log(error);
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Encountered an error: ' + error.message, ":interrobang:");
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 									msg.channel.send(message);
-								}
-								else {
-									let message = new Discord.RichEmbed()
-										.setColor(embedColour)
-										.addField('Roles list updated, new list: ', validRoles.toString());
+								} else {
+									let message = new Discord.RichEmbed().setColor(embedColour).addField("Roles list updated, new list: ", validRoles.toString());
 									msg.channel.send(message);
 								}
 							});
-						}
-						else {
+						} else {
 							console.log("Role trying to remove is not in current list");
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField("The role " + roleToRemove + " is not in the current list, so can't remove it.", "" + pepoG);
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("The role " + roleToRemove + " is not in the current list, so can't remove it.", "" + pepoG);
 							msg.channel.send(message);
 						}
 					})
 					.catch(error => {
 						console.log(error);
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Encountered an error: ' + error.message, ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
-			}
-			else {
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid input!', "View proper usage by calling !admin");
+			} else {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !admin");
 				msg.channel.send(message);
 			}
-		}
-		else {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Only members with the correct role can use this option', pepoG);
+		} else {
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Only members with the correct role can use this option", pepoG);
 			msg.channel.send(message);
 		}
 	}
 
 	// add prof actions
-	if (msg.content.startsWith('!add')) {
+	if (msg.content.startsWith("!add")) {
 		let messageContent = msg.content.split(" ");
 
 		if (messageContent.length < 3) {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Invalid input!', "View proper usage by calling !help prof");
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 			msg.channel.send(message);
 			return;
 		}
@@ -889,7 +753,7 @@ client.on('message', msg => {
 			messageContent[1] = messageContent[1].toLowerCase();
 			let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
 			if (profList.includes(prof)) {
-				let level = (Math.floor(messageContent[2])).toString();
+				let level = Math.floor(messageContent[2]).toString();
 				if (level >= 1 && level <= 200) {
 					let username = msg.member.displayName;
 					let userid = msg.author.id;
@@ -905,117 +769,81 @@ client.on('message', msg => {
 					handleProfEvent(params)
 						.then(() => {
 							console.log("Done updating user in db");
-							let message = new Discord.RichEmbed()
-								.setColor(embedColour)
-								.addField('Profession ' + prof + ' set to level ' + level + ' for user ' + username, peepoHappy);
+							let message = new Discord.RichEmbed().setColor(embedColour).addField("Profession " + prof + " set to level " + level + " for user " + username, peepoHappy);
 							msg.channel.send(message);
 						})
 						.catch(error => {
 							console.log(error);
-
 						});
-				}
-				else {
-					let message = new Discord.RichEmbed()
-						.setColor(embedColour)
-						.addField('Invalid profession level!', 'Level must be between 1-200 (inclusive)');
+				} else {
+					let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid profession level!", "Level must be between 1-200 (inclusive)");
 					msg.channel.send(message);
 				}
-			}
-			else {
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid profession! List of valid professions:', profList.toString());
+			} else {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid profession! List of valid professions:", profList.toString());
 				msg.channel.send(message);
 			}
-		}
-		else {
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField('Invalid input!', "View proper usage by calling !help prof");
+		} else {
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 			msg.channel.send(message);
 		}
 	}
 
 	//contacts discord admins in guild discord
-	if (msg.content.startsWith('!contact')) {
-		if(msg.guild === null){
-			if(msg.content.length < 10){
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid input! Please include a message', "View proper usage by calling !help");
+	if (msg.content.startsWith("!contact")) {
+		if (msg.guild === null) {
+			if (msg.content.length < 10) {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input! Please include a message", "View proper usage by calling !help");
 				msg.channel.send(message);
-			}
-			else if(msg.content.length > 1024){
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Your message is too long!', "Please shorten your message, you can also send multiple messages instead of one.");
+			} else if (msg.content.length > 1024) {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Your message is too long!", "Please shorten your message, you can also send multiple messages instead of one.");
 				msg.channel.send(message);
-			}
-			else{
+			} else {
 				let message = {
-					"message": msg.content.substring(9),
-					"discordid": msg.author.username + "#" + msg.author.discriminator
+					message: msg.content.substring(9),
+					discordid: msg.author.username + "#" + msg.author.discriminator
 				};
 				sendToGeneralApi(message, "member-message", function(response, error) {
 					if (error) {
 						return reject(error);
-					}
-					else {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Done! Your message has been sent to the guild leadership', "You will receive a reply from someone shortly " + peepoHappy);
+					} else {
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Done! Your message has been sent to the guild leadership", "You will receive a reply from someone shortly " + peepoHappy);
 						msg.channel.send(message);
 					}
 				});
 			}
-		}
-		else{
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField("Sorry, can't send your message!", "This command can only be used in private messages (pm me, the bot " + peepoHappy + ")");
+		} else {
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Sorry, can't send your message!", "This command can only be used in private messages (pm me, the bot " + peepoHappy + ")");
 			msg.channel.send(message);
 		}
 	}
 
 	//contacts discord admins in alliance discord
-	if (msg.content.startsWith('!submit')) {
-		if(msg.guild === null){
-			if(msg.content.length < 9){
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Invalid input! Please include a message', "View proper usage by calling !help");
+	if (msg.content.startsWith("!submit")) {
+		if (msg.guild === null) {
+			if (msg.content.length < 9) {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Invalid input! Please include a message", "View proper usage by calling !help");
 				msg.channel.send(message);
-			}
-			else if(msg.content.length > 1024){
-				let message = new Discord.RichEmbed()
-					.setColor(embedColour)
-					.addField('Your message is too long!', "Please shorten your message, you can also send multiple messages instead of one.");
+			} else if (msg.content.length > 1024) {
+				let message = new Discord.RichEmbed().setColor(embedColour).addField("Your message is too long!", "Please shorten your message, you can also send multiple messages instead of one.");
 				msg.channel.send(message);
-			}
-			else{
+			} else {
 				let message = {
-					"message": msg.content.substring(8),
-					"discordid": msg.author.username + "#" + msg.author.discriminator,
-					"alliance": "true"
+					message: msg.content.substring(8),
+					discordid: msg.author.username + "#" + msg.author.discriminator,
+					alliance: "true"
 				};
 				sendToGeneralApi(message, "member-message", function(response, error) {
 					if (error) {
 						return reject(error);
-					}
-					else {
-						let message = new Discord.RichEmbed()
-							.setColor(embedColour)
-							.addField('Done! Your message has been sent to the alliance leadership', peepoHappy);
+					} else {
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Done! Your message has been sent to the alliance leadership", peepoHappy);
 						msg.channel.send(message);
 					}
 				});
 			}
-		}
-		else{
-			let message = new Discord.RichEmbed()
-				.setColor(embedColour)
-				.addField("Sorry, can't send your message!", "This command can only be used in private messages (pm me, the bot " + peepoHappy + ")");
+		} else {
+			let message = new Discord.RichEmbed().setColor(embedColour).addField("Sorry, can't send your message!", "This command can only be used in private messages (pm me, the bot " + peepoHappy + ")");
 			msg.channel.send(message);
 		}
 	}
@@ -1026,11 +854,11 @@ client.login(process.env.clientkey);
 var sendToGeneralApi = function(message, path, callback) {
 	let url = process.env.rubybotApi + path;
 	let msg = {
-		method: 'post',
+		method: "post",
 		body: JSON.stringify(message),
 		headers: {
-			'Content-Type': 'application/json'
-		},
+			"Content-Type": "application/json"
+		}
 	};
 	console.log("Calling url : " + url + " | with message : " + JSON.stringify(msg));
 	fetch(url, msg)
@@ -1054,12 +882,12 @@ var sendToAlmaApi = function(month, origin, callback) {
 	};
 
 	fetch(process.env.almaApi, {
-			method: 'post',
-			body: JSON.stringify(json),
-			headers: {
-				'Content-Type': 'application/json'
-			},
-		})
+		method: "post",
+		body: JSON.stringify(json),
+		headers: {
+			"Content-Type": "application/json"
+		}
+	})
 		.then(res => res.text())
 		.then(body => {
 			console.log(body);
@@ -1075,14 +903,13 @@ var sendToAlmaApi = function(month, origin, callback) {
 var getValidGuilds = function() {
 	return new Promise((resolve, reject) => {
 		let message = {
-			"action": "get",
-			"type": "guilds"
+			action: "get",
+			type: "guilds"
 		};
 		sendToGeneralApi(message, "admin/guildlist", function(response, error) {
 			if (error) {
 				return reject(error);
-			}
-			else {
+			} else {
 				let guildList = response.split(",");
 				return resolve(guildList);
 			}
@@ -1093,15 +920,14 @@ var getValidGuilds = function() {
 var getValidRoles = function(guild) {
 	return new Promise((resolve, reject) => {
 		let message = {
-			"action": "get",
-			"type": "roles",
-			"guild": guild
+			action: "get",
+			type: "roles",
+			guild: guild
 		};
 		sendToGeneralApi(message, "admin/rolelist", function(response, error) {
 			if (error) {
 				return reject(error);
-			}
-			else {
+			} else {
 				let guildList = response ? response.split(",") : [];
 				return resolve(guildList);
 			}
@@ -1123,8 +949,7 @@ var handleProfEvent = function(data) {
 		sendToGeneralApi(message, "/prof", function(response, error) {
 			if (error) {
 				return reject(error);
-			}
-			else {
+			} else {
 				return resolve(response);
 			}
 		});
