@@ -110,10 +110,10 @@ client.on("message", msg => {
 			let x = messageContent[1].split("d")[0];
 			let y = messageContent[1].split("d")[1];
 
-			if (x < minX || x > maxX) {
+			if (isNaN(x) || x < minX || x > maxX) {
 				let message = new Discord.RichEmbed().setColor(embedColour).addField("X in !roll XdY must be between " + minX + " and " + maxX, ":game_die:");
 				msg.channel.send(message);
-			} else if (y < minY || y > maxY) {
+			} else if (isNaN(y) || y < minY || y > maxY) {
 				let message = new Discord.RichEmbed().setColor(embedColour).addField("Y in !roll XdY must be between " + minY + " and " + maxY, ":game_die:");
 				msg.channel.send(message);
 			} else {
