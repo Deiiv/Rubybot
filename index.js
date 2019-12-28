@@ -267,7 +267,7 @@ client.on("message", msg => {
 		if (messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13) {
 			let almaChannel = "";
 			try {
-				almaChannel = msg.member.guild.channels.find(ch => ch.name === "almanax");
+				almaChannel = msg.member.guild.channels.find(ch => ch.name.includes("almanax"));
 			} catch (err) {
 				console.log(err);
 				let message = new Discord.RichEmbed().setColor(embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
