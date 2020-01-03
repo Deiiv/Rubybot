@@ -13,7 +13,7 @@ const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "M
 const infoEmbed = new Discord.RichEmbed()
 	.setColor(embedColour)
 	.addField("What am I for:", "Various functionality for Dofus in discord :robot:")
-	.addField("Version:", "6.17")
+	.addField("Version:", "6.18")
 	.addField("Written in:", "Node.Js")
 	.addField("Developed by:", "Deiv");
 
@@ -408,7 +408,7 @@ client.on("message", msg => {
 					if (!data.guild) {
 						data.guild = "None (use !setguild to set this value)";
 					}
-					if (data.profList && data.profList.length < 1) {
+					if (!data.profList || data.profList.length < 1) {
 						data.profList = "None (add a prof with !add, see !prof help for details)";
 					}
 
@@ -442,7 +442,7 @@ client.on("message", msg => {
 							if (!data.guild) {
 								data.guild = "None (use !setguild to set this value)";
 							}
-							if (data.profList && data.profList.length < 1) {
+							if (!data.profList || data.profList.length < 1) {
 								data.profList = "None (add a prof with !add, see !prof help for details)";
 							}
 
