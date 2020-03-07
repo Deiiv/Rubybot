@@ -531,22 +531,22 @@ client.on("message", msg => {
 			.then(validRoles => {
 				let roleName = msg.content.substring(9);
 
-				if (roleName && validRoles.includes(roleName)) {
-					if (msg.member.roles.find(r => r.name === roleName)) {
-						let message = new Discord.RichEmbed().setColor(embedColour).addField("You already have the " + roleName + " role", monkaThink);
+				if (roleName && validRoles.find(r => r.toLowerCase() === roleName.toLowerCase())) {
+					if (msg.member.roles.find(r => r.name.toLowerCase() === roleName.toLowerCase())) {
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("You already have the " + roleName.toLowerCase() + " role", monkaThink);
 						msg.channel.send(message);
 						return;
 					}
 
-					let role = msg.guild.roles.find(role => role.name === roleName);
+					let role = msg.guild.roles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
 					if (!role) {
-						let message = new Discord.RichEmbed().setColor(embedColour).addField("Role " + roleName + " not found", ":interrobang:");
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("Role " + roleName.toLowerCase() + " not found", ":interrobang:");
 						msg.channel.send(message);
 					} else {
 						msg.member
 							.addRole(role)
 							.then(() => {
-								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", roleName + " role successfully set " + peepoHappy);
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", roleName.toLowerCase() + " role successfully set " + peepoHappy);
 								msg.channel.send(message);
 							})
 							.catch(error => {
@@ -582,13 +582,13 @@ client.on("message", msg => {
 			.then(validRoles => {
 				let roleName = msg.content.substring(12);
 
-				if (roleName && validRoles.includes(roleName)) {
-					let role = msg.guild.roles.find(role => role.name === roleName);
-					if (msg.member.roles.find(r => r.name === roleName)) {
+				if (roleName && validRoles.find(r => r.toLowerCase() === roleName.toLowerCase())) {
+					let role = msg.guild.roles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
+					if (msg.member.roles.find(r => r.name.toLowerCase() === roleName.toLowerCase())) {
 						msg.member
 							.removeRole(role)
 							.then(() => {
-								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", roleName + " role successfully removed " + peepoHappy);
+								let message = new Discord.RichEmbed().setColor(embedColour).addField("Done!", roleName.toLowerCase() + " role successfully removed " + peepoHappy);
 								msg.channel.send(message);
 							})
 							.catch(error => {
@@ -597,7 +597,7 @@ client.on("message", msg => {
 								msg.channel.send(message);
 							});
 					} else {
-						let message = new Discord.RichEmbed().setColor(embedColour).addField("You don't have the " + roleName + " role", monkaThink);
+						let message = new Discord.RichEmbed().setColor(embedColour).addField("You don't have the " + roleName.toLowerCase() + " role", monkaThink);
 						msg.channel.send(message);
 						return;
 					}
