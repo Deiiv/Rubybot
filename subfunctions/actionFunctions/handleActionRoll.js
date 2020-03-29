@@ -3,10 +3,10 @@ const Discord = require("discord.js");
 var handleActionRoll = function(msg) {
 	var messageContent = msg.content.split(" ");
 	var numbers = [];
-	const minX = process.env.rollMinX;
-	const maxX = process.env.rollMaxX;
-	const minY = process.env.rollMinY;
-	const maxY = process.env.rollMaxY;
+	const minX = parseInt(process.env.rollMinX, 10);
+	const maxX = parseInt(process.env.rollMaxX, 10);
+	const minY = parseInt(process.env.rollMinY, 10);
+	const maxY = parseInt(process.env.rollMaxY, 10);
 	if (messageContent[1]) {
 		let x = messageContent[1].split("d")[0];
 		let y = messageContent[1].split("d")[1];

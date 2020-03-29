@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const getValidGuilds = require("./subActionFunctions/getValidGuilds.js");
+const getValidRoles = require("./subActionFunctions/getValidRoles.js");
 
 var handleActionSetRole = function(msg) {
 	let guild = "Ruby";

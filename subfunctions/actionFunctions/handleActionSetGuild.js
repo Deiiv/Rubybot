@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const getValidGuilds = require("./subActionFunctions/getValidGuilds.js");
+const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 
 var handleActionSetGuild = function(msg) {
 	getValidGuilds()

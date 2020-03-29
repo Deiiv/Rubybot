@@ -14,7 +14,7 @@ var handleActionContact = function(msg) {
 				message: msg.content.substring(9),
 				discordid: msg.author.username + "#" + msg.author.discriminator
 			};
-			sendToApi(message, "member-message", function(response, error) {
+			sendToApi(message, "/member-message", function(response, error) {
 				if (error) {
 					return reject(error);
 				} else {
