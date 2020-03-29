@@ -12,7 +12,6 @@ const handleActionRemoveRole = require("./actionFunctions/handleActionRemoveRole
 const handleActionRolelist = require("./actionFunctions/handleActionRolelist.js");
 const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
-const handleActionSubmit = require("./actionFunctions/handleActionSubmit.js");
 
 var handleOnMessage = function(msg) {
 	if (msg.author.bot) return;
@@ -50,8 +49,5 @@ var handleOnMessage = function(msg) {
 
 	//contacts discord admins in guild discord
 	if (msg.content.startsWith("!contact")) handleActionContact(msg);
-
-	//contacts discord admins in alliance discord
-	if (msg.content.startsWith("!submit")) handleActionSubmit(msg);
 };
 module.exports = handleOnMessage;

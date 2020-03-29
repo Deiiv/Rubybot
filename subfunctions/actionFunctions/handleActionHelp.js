@@ -6,7 +6,6 @@ var handleActionHelp = function(msg) {
 		.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 		.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 		.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
-		.addField(":mailbox_with_mail: To contact the alliance leadership:", "!submit YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 		.addField(":blue_book: For viewing bot information:", "!info")
 		.addField(":pencil2: To set your guild as a role:", "!setguild Guild")
 		.addField(":pencil2: To set a misc. role:", "!setrole ROLE\n!removerole ROLE")
