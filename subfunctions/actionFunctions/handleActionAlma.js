@@ -16,12 +16,12 @@ var handleActionAlma = function(msg) {
 		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Sending the request!", "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
 		msg.channel.send(message);
 		let guild = msg.member.guild.name;
-		let message = {
+
+		let data = {
 			month: messageContent[1],
 			origin: guild
 		};
-
-		sendToApi(message, "/discordwebhookmonthalma", function(response, error) {
+		sendToApi(data, "/discordwebhookmonthalma", function(response, error) {
 			if (error) {
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);

@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
+const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
 
 var handleActionView = function(msg) {
 	let messageContent = msg.content.split(" ");
@@ -87,7 +88,8 @@ var handleActionView = function(msg) {
 				let params = {
 					action: "getProf",
 					prof: prof,
-					level: level
+					level: level,
+					limit: 20
 				};
 				handleProfEvent(params)
 					.then(response => {
