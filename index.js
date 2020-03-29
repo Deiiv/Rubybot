@@ -22,12 +22,12 @@ client.on("ready", () => {
 
 //someone new joined the server
 client.on("guildMemberAdd", member => {
-	handleOnGuildMemberAdd(Discord, member);
+	handleOnGuildMemberAdd(member);
 });
 
 //message event
 client.on("message", msg => {
-	handleOnMessage(Discord, msg);
+	handleOnMessage(msg);
 });
 
 //login the bot client

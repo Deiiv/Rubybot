@@ -8,7 +8,8 @@ var handleProfEvent = function(data) {
 			action: data.action,
 			prof: data.prof,
 			level: data.level || "0",
-			guild: data.guild
+			guild: data.guild,
+			limit: data.limit || 25
 		};
 
 		sendToApi(message, "/prof", function(response, error) {

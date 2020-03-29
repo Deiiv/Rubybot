@@ -201,17 +201,20 @@ exports.handler = function(event, context, callback) {
 				});
 
 				let profString = "";
+				let limit = parseInt(event.limit);
+				let count = 0;
 
 				data.forEach(function(item) {
-					let levelInt = parseInt(item[event.prof]);
-					let eventLevelInt = parseInt(event.level);
+					let levelInt = parseInt(item[event.prof], 10);
+					let eventLevelInt = parseInt(event.level, 10);
 					if (levelInt >= eventLevelInt) {
 						if (profString != "") profString += "\n";
 						let guild = "";
 						if (item.Guild) {
 							guild = " - " + item.Guild;
 						}
-						profString += item[event.prof] + " - " + item.UserName + guild;
+						if (count < limit) profString += item[event.prof] + " - " + item.UserName + guild;
+						count++;
 					}
 				});
 
