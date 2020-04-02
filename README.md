@@ -1,2 +1,3 @@
 # rubybot
-JS ruby discord bot
+
+NodeJs discord bot, built for Ruby discord server
