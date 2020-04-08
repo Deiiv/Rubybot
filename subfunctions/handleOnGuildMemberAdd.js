@@ -13,21 +13,8 @@ var handleOnGuildMemberAdd = function(member) {
 		message = "please set your role with '!setguild Silk Road'";
 	} else {
 		let infoChannel = member.guild.channels.find(ch => ch.name === "information");
-		let bioChannel = member.guild.channels.find(ch => ch.name === "bio");
-		if (infoChannel && bioChannel) {
-			message =
-				"please check out our rules/info: " +
-				infoChannel.toString() +
-				" " +
-				process.env.pepoG +
-				"\nMeet our members over at: " +
-				bioChannel.toString() +
-				" " +
-				process.env.peepoHappy +
-				"\nSet your guild with: '!setguild Ruby' " +
-				process.env.pepeRuby +
-				"\nAnd set some fun roles (changes your colour) with '!setrole Lemon' (or Blueberry/Strawberry/etc. " +
-				process.env.hypers;
+		if (infoChannel) {
+			message = "please check out our rules/info: " + infoChannel.toString() + " " + process.env.pepoG + "\nSet your guild role with: '!setguild Ruby' " + process.env.peepoHappy;
 		} else {
 			message = "please check out our rules/info in the appropriate info channel " + process.env.hypers;
 		}
