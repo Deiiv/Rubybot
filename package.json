@@ -1,31 +1,31 @@
 {
-  "name": "rubybot",
-  "version": "1.0.0",
-  "description": "Bot for discord",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Deiiv/rubybot.git"
-  },
-  "author": "Deiv",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Deiiv/rubybot/issues"
-  },
-  "homepage": "https://github.com/Deiiv/rubybot#readme",
-  "dependencies": {
-    "@discordjs/uws": "^10.149.0",
-    "bufferutil": "^4.0.1",
-    "discord.js": "^11.5.1",
-    "dotenv": "^8.0.0",
-    "erlpack": "github:discordapp/erlpack",
-    "libsodium-wrappers": "^0.7.4",
-    "node-fetch": "^2.6.0",
-    "node-opus": "^0.2.9",
-    "opusscript": "0.0.6",
-    "sodium": "^2.0.3"
-  }
+	"name": "rubybot",
+	"version": "1.0.0",
+	"description": "Bot for discord",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Deiiv/rubybot.git"
+	},
+	"author": "Deiv",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Deiiv/rubybot/issues"
+	},
+	"homepage": "https://github.com/Deiiv/rubybot#readme",
+	"dependencies": {
+		"@discordjs/uws": "^10.149.0",
+		"bufferutil": "^4.0.1",
+		"discord.js": "^11.5.1",
+		"dotenv": "^8.0.0",
+		"erlpack": "github:discordapp/erlpack",
+		"libsodium-wrappers": "^0.7.4",
+		"node-fetch": "^2.6.0",
+		"node-opus": "^0.2.9",
+		"opusscript": "0.0.6",
+		"sodium": "^2.0.3"
+	}
 }

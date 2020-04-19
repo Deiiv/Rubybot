@@ -16,7 +16,26 @@ var handleMessageReaction = function (reaction, user, type) {
 		// asking to add but already have, ignore
 		if (reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 			console.log(`Role ${reactionName} already set`);
-			return;
+			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
+			reaction.message.author.send(message);
+			// if the role is "ruby" then udpate user in db with ruby as guild
+			if (reactionName.toLowerCase() === "ruby") {
+				let params = {
+					username: reaction.message.member.displayName,
+					userid: reaction.message.author.id,
+					action: "updateuser",
+					guild: "Ruby",
+				};
+				handleProfEvent(params)
+					.then(() => {
+						console.log("Done updating user in db");
+						return;
+					})
+					.catch((error) => {
+						console.log(error);
+						return;
+					});
+			} else return;
 		}
 
 		let role = reaction.message.guild.roles.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
@@ -29,6 +48,9 @@ var handleMessageReaction = function (reaction, user, type) {
 			.addRole(role)
 			.then(() => {
 				console.log(`Set role ${reactionName} to user ${reaction.message.member.displayName}`);
+
+				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
+				reaction.message.author.send(message);
 				// if the role is "ruby" then udpate user in db with ruby as guild
 				if (reactionName.toLowerCase() === "ruby") {
 					let params = {
@@ -45,8 +67,6 @@ var handleMessageReaction = function (reaction, user, type) {
 							console.log(error);
 						});
 				}
-				// let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done!", reactionName.toLowerCase() + " role successfully set " + process.env.peepoHappy);
-				// reaction.message.channel.send(message);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -55,6 +75,8 @@ var handleMessageReaction = function (reaction, user, type) {
 		// asking to remove but it's already gone, ignore
 		if (!reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 			console.log(`Role ${reactionName} already removed, ignoring`);
+			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done removing role!", reactionName + " role successfully removed in the Ruby discord server");
+			reaction.message.author.send(message);
 			return;
 		}
 
@@ -68,8 +90,8 @@ var handleMessageReaction = function (reaction, user, type) {
 			.removeRole(role)
 			.then(() => {
 				console.log(`Removed role ${reactionName} from user ${reaction.message.member.displayName}`);
-				// let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done!", reactionName.toLowerCase() + " role successfully set " + process.env.peepoHappy);
-				// reaction.message.channel.send(message);
+				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done removing role!", reactionName + " role successfully removed in the Ruby discord server");
+				reaction.message.author.send(message);
 			})
 			.catch((error) => {
 				console.log(error);
