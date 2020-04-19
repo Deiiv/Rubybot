@@ -15,7 +15,9 @@ var handleMessageReaction = function (reaction, user, type) {
 	if (type === "add") {
 		// asking to add but already have, ignore
 		if (reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
-			console.log(`Role ${reactionName} already set`);
+			console.log(`Role ${reactionName} already set for user ${user.username}`);
+			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
+			user.send(message);
 			// if the role is "ruby" then udpate user in db with ruby as guild
 			if (reactionName.toLowerCase() === "ruby") {
 				let params = {
@@ -42,7 +44,10 @@ var handleMessageReaction = function (reaction, user, type) {
 				.member(user)
 				.addRole(role)
 				.then(() => {
-					console.log(`Set role ${reactionName} to user ${reaction.message.member.displayName}`);
+					console.log(`Set role ${reactionName} to user ${user.username}`);
+
+					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
+					user.send(message);
 					// if the role is "ruby" then udpate user in db with ruby as guild
 					if (reactionName.toLowerCase() === "ruby") {
 						let params = {
@@ -67,7 +72,9 @@ var handleMessageReaction = function (reaction, user, type) {
 	} else if (type === "remove") {
 		// asking to remove but it's already gone, ignore
 		if (!reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
-			console.log(`Role ${reactionName} already removed, ignoring`);
+			console.log(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
+			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done removing role!", reactionName + " role successfully removed in the Ruby discord server");
+			user.send(message);
 		} else {
 			let role = reaction.message.guild.roles.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
 			if (!role) {
@@ -78,7 +85,9 @@ var handleMessageReaction = function (reaction, user, type) {
 				.member(user)
 				.removeRole(role)
 				.then(() => {
-					console.log(`Removed role ${reactionName} from user ${reaction.message.member.displayName}`);
+					console.log(`Removed role ${reactionName} from user ${user.username}`);
+					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done removing role!", reactionName + " role successfully removed in the Ruby discord server");
+					user.send(message);
 				})
 				.catch((error) => {
 					console.log(error);

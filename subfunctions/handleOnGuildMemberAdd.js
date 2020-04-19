@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
-var handleOnGuildMemberAdd = function(member) {
-	const channel = member.guild.channels.find(ch => ch.name.includes("welcome"));
+var handleOnGuildMemberAdd = function (member) {
+	const channel = member.guild.channels.find((ch) => ch.name.includes("welcome"));
 	if (!channel) return;
 
 	// let message = "Welcome to the server, <@" + member.id + ">! " + process.env.pepeRuby;
@@ -12,9 +12,9 @@ var handleOnGuildMemberAdd = function(member) {
 	} else if (member.guild.name === "Silk Road") {
 		message = "please set your role with '!setguild Silk Road'";
 	} else {
-		let infoChannel = member.guild.channels.find(ch => ch.name === "information");
+		let infoChannel = member.guild.channels.find((ch) => ch.name === "information");
 		if (infoChannel) {
-			message = "please check out our rules/info: " + infoChannel.toString() + " " + process.env.pepoG + "\nSet your guild role with: '!setguild Ruby' " + process.env.peepoHappy;
+			message = "please check out our rules/info and how to set roles here: " + infoChannel.toString() + " " + process.env.pepoG;
 		} else {
 			message = "please check out our rules/info in the appropriate info channel " + process.env.hypers;
 		}
