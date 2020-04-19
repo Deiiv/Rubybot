@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const handleProfEvent = require("./actionfunctions/subActionFunctions/handleProfEvent.js");
+const handleProfEvent = require("./actionFunctions/subActionFunctions/handleProfEvent.js");
 
 var handleMessageReaction = function (reaction, user, type) {
 	// ignore invalid messages
