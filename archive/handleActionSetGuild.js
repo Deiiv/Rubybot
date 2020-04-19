@@ -1,20 +1,36 @@
+/*
+
+
+
+
+
+ARCHIVED
+
+Not in user
+
+
+
+
+
+*/
+
 const Discord = require("discord.js");
 const getValidGuilds = require("./subActionFunctions/getValidGuilds.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 
-var handleActionSetGuild = function(msg) {
+var handleActionSetGuild = function (msg) {
 	getValidGuilds()
-		.then(validGuilds => {
+		.then((validGuilds) => {
 			let guild = msg.content.substring(10);
 			var text = "";
 
 			if (guild && validGuilds.includes(guild)) {
-				if (msg.member.roles.find(r => r.name === guild)) {
+				if (msg.member.roles.find((r) => r.name === guild)) {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("You already have the " + guild + " role, but I'll set the entry again for !view", process.env.monkaThink);
 					msg.channel.send(message);
 
 					//if in alliance disc (Ally role exists) set it
-					let allyRole = msg.guild.roles.find(role => role.name === "Ally");
+					let allyRole = msg.guild.roles.find((role) => role.name === "Ally");
 					if (allyRole) {
 						console.log("Setting Ally role");
 						msg.member
@@ -22,7 +38,7 @@ var handleActionSetGuild = function(msg) {
 							.then(() => {
 								console.log("Ally role set");
 							})
-							.catch(error => {
+							.catch((error) => {
 								console.log(error);
 							});
 					}
@@ -31,28 +47,28 @@ var handleActionSetGuild = function(msg) {
 						username: msg.member.displayName,
 						userid: msg.author.id,
 						action: "updateuser",
-						guild: guild
+						guild: guild,
 					};
 					handleProfEvent(params)
 						.then(() => {
 							console.log("Done updating user in db");
 						})
-						.catch(error => {
+						.catch((error) => {
 							console.log(error);
 						});
 					return;
 				}
 
-				let shortList = validGuilds.filter(item => item !== guild);
-				shortList.forEach(function(guildRole) {
-					if (msg.member.roles.find(r => r.name === guildRole)) {
-						let oldRole = msg.guild.roles.find(role => role.name === guildRole);
+				let shortList = validGuilds.filter((item) => item !== guild);
+				shortList.forEach(function (guildRole) {
+					if (msg.member.roles.find((r) => r.name === guildRole)) {
+						let oldRole = msg.guild.roles.find((role) => role.name === guildRole);
 						msg.member
 							.removeRole(oldRole)
 							.then(() => {
 								text += "Removed previous role for guild " + guildRole + " " + process.env.pepeCry + "\n";
 							})
-							.catch(error => {
+							.catch((error) => {
 								console.log(error);
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 								msg.channel.send(message);
@@ -60,13 +76,13 @@ var handleActionSetGuild = function(msg) {
 					}
 				});
 
-				let role = msg.guild.roles.find(role => role.name === guild);
+				let role = msg.guild.roles.find((role) => role.name === guild);
 				if (!role) {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Role for guild " + guild + " not found", ":interrobang:");
 					msg.channel.send(message);
 				} else {
 					//if in alliance disc (Ally role exists) set it
-					let allyRole = msg.guild.roles.find(role => role.name === "Ally");
+					let allyRole = msg.guild.roles.find((role) => role.name === "Ally");
 					if (allyRole) {
 						console.log("Setting Ally role");
 						msg.member
@@ -74,7 +90,7 @@ var handleActionSetGuild = function(msg) {
 							.then(() => {
 								console.log("Ally role set");
 							})
-							.catch(error => {
+							.catch((error) => {
 								console.log(error);
 							});
 					}
@@ -88,17 +104,17 @@ var handleActionSetGuild = function(msg) {
 								username: msg.member.displayName,
 								userid: msg.author.id,
 								action: "updateuser",
-								guild: guild
+								guild: guild,
 							};
 							handleProfEvent(params)
 								.then(() => {
 									console.log("Done updating user in db");
 								})
-								.catch(error => {
+								.catch((error) => {
 									console.log(error);
 								});
 						})
-						.catch(error => {
+						.catch((error) => {
 							console.log(error);
 							let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 							msg.channel.send(message);
@@ -109,7 +125,7 @@ var handleActionSetGuild = function(msg) {
 				msg.channel.send(message);
 			}
 		})
-		.catch(error => {
+		.catch((error) => {
 			console.log(error);
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 			msg.channel.send(message);

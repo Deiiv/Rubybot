@@ -1,10 +1,26 @@
+/*
+
+
+
+
+
+ARCHIVED
+
+Not in user
+
+
+
+
+
+*/
+
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
 const getValidRoles = require("./subActionFunctions/getValidRoles.js");
 
-var handleActionRolelist = function(msg) {
+var handleActionRolelist = function (msg) {
 	//check that a valid user is calling the command
-	if (msg.member.roles.find(r => r.name === "BotAdmin")) {
+	if (msg.member.roles.find((r) => r.name === "BotAdmin")) {
 		let messageContent = msg.content.split(" ");
 		//get current list of valid guilds
 		let guild = "Ruby";
@@ -18,11 +34,11 @@ var handleActionRolelist = function(msg) {
 		}
 		if (messageContent[1] === "view") {
 			getValidRoles(guild)
-				.then(validRoles => {
+				.then((validRoles) => {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Current list of valid roles:", validRoles.toString());
 					msg.channel.send(message);
 				})
-				.catch(error => {
+				.catch((error) => {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);
 				});
@@ -39,7 +55,7 @@ var handleActionRolelist = function(msg) {
 				return;
 			}
 			getValidRoles(guild)
-				.then(validRoles => {
+				.then((validRoles) => {
 					if (validRoles.includes(roleToAdd)) {
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Role " + roleToAdd + " is already in role list", process.env.monkaThink);
 						msg.channel.send(message);
@@ -52,9 +68,9 @@ var handleActionRolelist = function(msg) {
 							action: "update",
 							value: validRoles.toString(),
 							type: "roles",
-							guild: guild
+							guild: guild,
 						};
-						sendToApi(message, "/admin/rolelist", function(response, error) {
+						sendToApi(message, "/admin/rolelist", function (response, error) {
 							if (error) {
 								console.log(error);
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
@@ -66,7 +82,7 @@ var handleActionRolelist = function(msg) {
 						});
 					}
 				})
-				.catch(error => {
+				.catch((error) => {
 					console.log(error);
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);
@@ -84,7 +100,7 @@ var handleActionRolelist = function(msg) {
 				return;
 			}
 			getValidRoles(guild)
-				.then(validRoles => {
+				.then((validRoles) => {
 					if (validRoles.includes(roleToRemove)) {
 						console.log("Old roleList : " + validRoles.toString());
 						validRoles.splice(validRoles.indexOf(roleToRemove), 1);
@@ -94,9 +110,9 @@ var handleActionRolelist = function(msg) {
 							action: "update",
 							value: validRoles.toString(),
 							type: "roles",
-							guild: guild
+							guild: guild,
 						};
-						sendToApi(message, "/admin/rolelist", function(response, error) {
+						sendToApi(message, "/admin/rolelist", function (response, error) {
 							if (error) {
 								console.log(error);
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
@@ -112,7 +128,7 @@ var handleActionRolelist = function(msg) {
 						msg.channel.send(message);
 					}
 				})
-				.catch(error => {
+				.catch((error) => {
 					console.log(error);
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);

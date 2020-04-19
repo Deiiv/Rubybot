@@ -1,6 +1,22 @@
+/*
+
+
+
+
+
+ARCHIVED
+
+Not in use
+
+
+
+
+
+*/
+
 const Discord = require("discord.js");
 
-var handleActionAdmin = function(msg) {
+var handleActionAdmin = function (msg) {
 	const adminEmbed = new Discord.RichEmbed()
 		.setColor(process.env.embedColour)
 		.addField("View/edit list of valid guilds for roles (only for bot internal list, doesn't affect discord available roles):", "!guildlist view\n!guildlist add GUILD\n!guildlist remove GUILD")
