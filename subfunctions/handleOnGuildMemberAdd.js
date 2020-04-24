@@ -14,7 +14,7 @@ var handleOnGuildMemberAdd = function (member) {
 	} else {
 		let infoChannel = member.guild.channels.find((ch) => ch.name === "information");
 		if (infoChannel) {
-			message = "please check out our rules/info and how to set roles here: " + infoChannel.toString() + " " + process.env.pepoG;
+			message = "please check out our rules/info and how to set roles here: " + infoChannel.toString() + " " + process.env.pogpeach;
 		} else {
 			message = "please check out our rules/info in the appropriate info channel " + process.env.hypers;
 		}
