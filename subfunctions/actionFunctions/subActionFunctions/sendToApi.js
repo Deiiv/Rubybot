@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const logger = require("./../../logger");
 
 var sendToApi = function (message, path, callback) {
 	let url = process.env.rubybotApi + path;
@@ -10,7 +11,7 @@ var sendToApi = function (message, path, callback) {
 			"x-api-key": process.env.rubybotApiKey,
 		},
 	};
-	console.log("Calling url : " + url + " | with message : " + JSON.stringify(message));
+	logger.info("Calling url : " + url + " | with message : " + JSON.stringify(message));
 
 	function checkStatus(res) {
 		if (res.ok) {
@@ -25,12 +26,12 @@ var sendToApi = function (message, path, callback) {
 		.then(checkStatus)
 		.then((res) => res.text())
 		.then((data) => {
-			console.log("Response : " + data);
+			logger.info("Response : " + data);
 			let json = JSON.parse(data);
 			return callback(json.body);
 		})
 		.catch((err) => {
-			console.log("Error in fetch", err);
+			logger.info("Error in fetch", err);
 			return callback(null, err);
 		});
 };

@@ -1,13 +1,14 @@
+const logger = require("./logger");
+
 var handleOnReady = function (client) {
-	console.log("Logged in as:");
-	console.log(client.user.username + " " + client.user.id);
-	console.log("\nConnected to the following servers:");
+	logger.info("Logged in as:");
+	logger.info(client.user.username + " " + client.user.id);
+	logger.info("Connected to the following servers:");
 	client.guilds.forEach(function (guild) {
-		console.log(guild.name + " " + guild.id);
+		logger.info(guild.name + " " + guild.id);
 		// if(guild.name === "x") guild.leave();
 	});
-	console.log("------------------------------\n");
-
+	logger.info("------------------------------");
 	process.env.hypers = client.emojis.find((emoji) => emoji.name === "hypers") || "";
 	process.env.pepeRuby = client.emojis.find((emoji) => emoji.name === "pepeRuby") || "";
 	process.env.monkaThink = client.emojis.find((emoji) => emoji.name === "monkaThink") || "";

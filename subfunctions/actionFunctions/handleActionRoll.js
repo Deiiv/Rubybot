@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-var handleActionRoll = function(msg) {
+var handleActionRoll = function (msg) {
 	var messageContent = msg.content.split(" ");
 	var numbers = [];
 	const minX = parseInt(process.env.rollMinX, 10);
@@ -21,7 +21,6 @@ var handleActionRoll = function(msg) {
 			for (let i = 0; i < x; i++) {
 				numbers.push(Math.floor(Math.random() * y) + 1).toString();
 			}
-
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField(":game_die: " + messageContent[1], numbers.join(" | "));
 			msg.channel.send(message);
 		}

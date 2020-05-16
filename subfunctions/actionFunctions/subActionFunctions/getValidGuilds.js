@@ -1,12 +1,12 @@
 const sendToApi = require("./sendToApi.js");
 
-var getValidGuilds = function() {
+var getValidGuilds = function () {
 	return new Promise((resolve, reject) => {
 		let message = {
 			action: "get",
-			type: "guilds"
+			type: "guilds",
 		};
-		sendToApi(message, "/admin/guildlist", function(response, error) {
+		sendToApi(message, "/admin/guildlist", function (response, error) {
 			if (error) {
 				return reject(error);
 			} else {

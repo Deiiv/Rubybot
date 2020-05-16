@@ -1,17 +1,18 @@
 const Discord = require("discord.js");
+const logger = require("./../logger");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
 
-var handleActionView = function(msg) {
+var handleActionView = function (msg) {
 	let messageContent = msg.content.split(" ");
 	if (messageContent.length === 1) {
 		let userid = msg.author.id;
 		let params = {
 			userid: userid,
-			action: "view"
+			action: "view",
 		};
 		handleProfEvent(params)
-			.then(response => {
+			.then((response) => {
 				let data = JSON.parse(response);
 				if (!data.guild) {
 					data.guild = "None (use !setguild to set this value)";
@@ -26,8 +27,8 @@ var handleActionView = function(msg) {
 					.addField(":hammer_pick: " + data.username + "'s Professions:", data.profList);
 				msg.channel.send(message);
 			})
-			.catch(error => {
-				console.log(error);
+			.catch((error) => {
+				logger.info(error);
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
 			});
@@ -38,10 +39,10 @@ var handleActionView = function(msg) {
 			let username = messageContent[2];
 			let params = {
 				username: username,
-				action: "view"
+				action: "view",
 			};
 			handleProfEvent(params)
-				.then(response => {
+				.then((response) => {
 					if (response === "NONE") {
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("User " + username + " doesn't exist in our records!", process.env.pepoG);
 						msg.channel.send(message);
@@ -61,8 +62,8 @@ var handleActionView = function(msg) {
 						msg.channel.send(message);
 					}
 				})
-				.catch(error => {
-					console.log(error);
+				.catch((error) => {
+					logger.info(error);
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);
 				});
@@ -89,10 +90,10 @@ var handleActionView = function(msg) {
 					action: "getProf",
 					prof: prof,
 					level: level,
-					limit: 20
+					limit: 20,
 				};
 				handleProfEvent(params)
-					.then(response => {
+					.then((response) => {
 						var levelMessage = "";
 						if (messageContent[2]) {
 							levelMessage = " >= " + level;
@@ -109,8 +110,8 @@ var handleActionView = function(msg) {
 							msg.channel.send(message);
 						}
 					})
-					.catch(error => {
-						console.log(error);
+					.catch((error) => {
+						logger.info(error);
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
