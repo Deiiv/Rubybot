@@ -7,14 +7,16 @@ var handleActionHelp = function (msg) {
 		.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 		.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 		.addField(":blue_book: For viewing bot information:", "!info")
-		.addField(":game_die: To roll a die:", "!roll XdY\nEx: !roll 1d6\nX must be between " + process.env.rollMinX + " and " + process.env.rollMaxX + "\nY must be between " + process.env.rollMinY + " and " + process.env.rollMaxY);
+		.addField(":game_die: To roll a die:", "!roll XdY\nEx: !roll 1d6\nX must be between " + process.env.rollMinX + " and " + process.env.rollMaxX + "\nY must be between " + process.env.rollMinY + " and " + process.env.rollMaxY)
+		.addField("For any other issues, reach out to " + process.env.Author, process.env.adminUserTag);
 
 	const helpProfEmbed = new Discord.RichEmbed()
 		.setColor(process.env.embedColour)
 		.addField(":tools: To add or update a profession level you have:", "!add PROFESSION LEVEL")
 		.addField(":mag_right: To view users with a profession:", "!view PROFESSION\n!view PROFESSION MIN_LEVEL")
 		.addField(":eyes: To view your stats:", "!view")
-		.addField(":eyes: To view a specific users stats:", "!view user IGN");
+		.addField(":eyes: To view a specific users stats:", "!view user IGN")
+		.addField(process.env.pepoG + " To set your guild:", "!setguild GUILD");
 
 	let messageContent = msg.content.split(" ");
 	if (messageContent[1] && messageContent[1] === "prof") {
