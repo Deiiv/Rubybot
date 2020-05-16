@@ -1,16 +1,16 @@
 const fetch = require("node-fetch");
 
-var sendToApi = function(message, path, callback) {
+var sendToApi = function (message, path, callback) {
 	let url = process.env.rubybotApi + path;
 	let msg = {
 		method: "post",
 		body: JSON.stringify(message),
 		headers: {
 			"Content-Type": "application/json",
-			"x-api-key": process.env.rubybotApiKey
-		}
+			"x-api-key": process.env.rubybotApiKey,
+		},
 	};
-	console.log("Calling url : " + url + " | with message : " + JSON.stringify(msg));
+	console.log("Calling url : " + url + " | with message : " + JSON.stringify(message));
 
 	function checkStatus(res) {
 		if (res.ok) {
@@ -23,13 +23,13 @@ var sendToApi = function(message, path, callback) {
 
 	fetch(url, msg)
 		.then(checkStatus)
-		.then(res => res.text())
-		.then(data => {
+		.then((res) => res.text())
+		.then((data) => {
 			console.log("Response : " + data);
 			let json = JSON.parse(data);
 			return callback(json.body);
 		})
-		.catch(err => {
+		.catch((err) => {
 			console.log("Error in fetch", err);
 			return callback(null, err);
 		});
