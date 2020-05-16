@@ -11,6 +11,8 @@ var handleMessageReaction = function (reaction, user, type) {
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
 
+	console.log(`Reaction ${reactionName} Type ${type} User ${user}`);
+
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
 		if (type === "add") {
 			// asking to add but already have, ignore
