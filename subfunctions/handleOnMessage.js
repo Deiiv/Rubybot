@@ -4,7 +4,7 @@ const handleActionHelp = require("./actionFunctions/handleActionHelp.js");
 const handleActionRoll = require("./actionFunctions/handleActionRoll.js");
 const handleActionAlma = require("./actionFunctions/handleActionAlma.js");
 const handleActionView = require("./actionFunctions/handleActionView.js");
-const handleActionSetguild = require("./actionFunctions/handleActionSetguild.js");
+const handleActionSetGuild = require("./actionFunctions/handleActionSetGuild.js");
 const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
 
@@ -35,7 +35,7 @@ var handleOnMessage = function (msg) {
 			break;
 		// set guild in db for user
 		case "!setguild":
-			handleActionSetguild(msg);
+			handleActionSetGuild(msg);
 			break;
 		// add prof actions
 		case "!add":
