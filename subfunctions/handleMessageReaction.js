@@ -21,7 +21,7 @@ var handleMessageReaction = function (reaction, user, type) {
 				logger.info(`Role ${reactionName} already set for user ${user.username}`);
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
 				user.send(message);
-				throw new Error("something bad");
+
 				// if the role is "ruby" then udpate user in db with ruby as guild
 				if (reactionName.toLowerCase() === "ruby") {
 					const member = reaction.message.guild.members.find((m) => m.id === user.id);
