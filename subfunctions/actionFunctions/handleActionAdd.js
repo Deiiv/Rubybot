@@ -1,8 +1,9 @@
 const Discord = require("discord.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
+const logger = require("./../logger");
 
-var handleActionAdd = function(msg) {
+var handleActionAdd = function (msg) {
 	let messageContent = msg.content.split(" ");
 
 	if (messageContent.length < 3) {
@@ -25,17 +26,17 @@ var handleActionAdd = function(msg) {
 					userid: userid,
 					action: "updateprof",
 					prof: prof,
-					level: level
+					level: level,
 				};
 
 				handleProfEvent(params)
 					.then(() => {
-						console.log("Done updating user in db");
+						logger.info("Done updating user in db");
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Profession " + prof + " set to level " + level + " for user " + username, process.env.peepoHappy);
 						msg.channel.send(message);
 					})
-					.catch(error => {
-						console.log(error);
+					.catch((error) => {
+						logger.info(error);
 					});
 			} else {
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid profession level!", "Level must be between 1-200 (inclusive)");

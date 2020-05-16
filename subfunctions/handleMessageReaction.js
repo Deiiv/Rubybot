@@ -1,25 +1,27 @@
 const Discord = require("discord.js");
 const handleProfEvent = require("./actionFunctions/subActionFunctions/handleProfEvent.js");
+const logger = require("./logger");
 
 var handleMessageReaction = function (reaction, user, type) {
 	// ignore invalid messages
 	if (!user) return;
 	if (user.bot) return;
-	if (!reaction.message.channel.guild) return;
+	if (!reaction || !reaction.message.channel.guild) return;
 	if (reaction.message.channel.guild != "Deiv's Dev Corner" && reaction.message.channel.guild != "Ruby") return;
 
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
 
-	console.log(`Reaction ${reactionName} Type ${type} User ${user}`);
+	logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
 
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
 		if (type === "add") {
 			// asking to add but already have, ignore
 			if (reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
-				console.log(`Role ${reactionName} already set for user ${user.username}`);
+				logger.info(`Role ${reactionName} already set for user ${user.username}`);
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
 				user.send(message);
+				throw new Error("something bad");
 				// if the role is "ruby" then udpate user in db with ruby as guild
 				if (reactionName.toLowerCase() === "ruby") {
 					const member = reaction.message.guild.members.find((m) => m.id === user.id);
@@ -31,23 +33,23 @@ var handleMessageReaction = function (reaction, user, type) {
 					};
 					handleProfEvent(params)
 						.then(() => {
-							console.log("Done updating user in db");
+							logger.info("Done updating user in db");
 						})
 						.catch((error) => {
-							console.log(error);
+							logger.info(error);
 						});
 				}
 			} else {
 				let role = reaction.message.guild.roles.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
 				if (!role) {
-					console.log(`Invalid role reaction : ${reactionName}`);
+					logger.info(`Invalid role reaction : ${reactionName}`);
 					return;
 				}
 				reaction.message.guild
 					.member(user)
 					.addRole(role)
 					.then(() => {
-						console.log(`Set role ${reactionName} to user ${user.username}`);
+						logger.info(`Set role ${reactionName} to user ${user.username}`);
 
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done adding role!", reactionName + " role successfully set in the Ruby discord server");
 						user.send(message);
@@ -63,39 +65,39 @@ var handleMessageReaction = function (reaction, user, type) {
 							};
 							handleProfEvent(params)
 								.then(() => {
-									console.log("Done updating user in db");
+									logger.info("Done updating user in db");
 								})
 								.catch((error) => {
-									console.log(error);
+									logger.info(error);
 								});
 						}
 					})
 					.catch((error) => {
-						console.log(error);
+						logger.info(error);
 					});
 			}
 		} else if (type === "remove") {
 			// asking to remove but it's already gone, ignore
 			if (!reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
-				console.log(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
+				logger.info(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done removing role!", reactionName + " role successfully removed in the Ruby discord server");
 				user.send(message);
 			} else {
 				let role = reaction.message.guild.roles.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
 				if (!role) {
-					console.log(`Invalid role reaction : ${reactionName}`);
+					logger.info(`Invalid role reaction : ${reactionName}`);
 					return;
 				}
 				reaction.message.guild
 					.member(user)
 					.removeRole(role)
 					.then(() => {
-						console.log(`Removed role ${reactionName} from user ${user.username}`);
+						logger.info(`Removed role ${reactionName} from user ${user.username}`);
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done removing role!", reactionName + " role successfully removed in the Ruby discord server");
 						user.send(message);
 					})
 					.catch((error) => {
-						console.log(error);
+						logger.info(error);
 					});
 			}
 		}

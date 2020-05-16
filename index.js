@@ -1,4 +1,5 @@
 require("dotenv").config();
+const logger = require("./subfunctions/logger");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const handleOnReady = require("./subfunctions/handleOnReady.js");
@@ -19,30 +20,54 @@ add nickname instead of username (maybe setnickname command)
 
 //client initiated and is ready
 client.on("ready", () => {
-	handleOnReady(client);
+	try {
+		handleOnReady(client);
+	} catch (err) {
+		logger.info(err);
+	}
 });
 
 //someone new joined the server
 client.on("guildMemberAdd", (member) => {
-	handleOnGuildMemberAdd(member);
+	try {
+		handleOnGuildMemberAdd(member);
+	} catch (err) {
+		logger.info(err);
+	}
 });
 
 //message event
 client.on("message", (msg) => {
-	handleOnMessage(msg);
+	try {
+		handleOnMessage(msg);
+	} catch (err) {
+		logger.info(err);
+	}
 });
 
 // required for emitting reactions on an old message for messageReactionAdd and messageReactionRemove
 client.on("raw", (packet) => {
-	handleRaw(client, packet);
+	try {
+		handleRaw(client, packet);
+	} catch (err) {
+		logger.info(err);
+	}
 });
 
 client.on("messageReactionAdd", (reaction, user) => {
-	handleMessageReaction(reaction, user, "add");
+	try {
+		handleMessageReaction(reaction, user, "add");
+	} catch (err) {
+		logger.info(err);
+	}
 });
 
 client.on("messageReactionRemove", (reaction, user) => {
-	handleMessageReaction(reaction, user, "remove");
+	try {
+		handleMessageReaction(reaction, user, "remove");
+	} catch (err) {
+		logger.info(err);
+	}
 });
 
 //login the bot client

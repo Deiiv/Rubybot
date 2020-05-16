@@ -1,14 +1,15 @@
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
+const logger = require("./../logger");
 
-var handleActionAlma = function(msg) {
+var handleActionAlma = function (msg) {
 	let messageContent = msg.content.split(" ");
 	if (messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13) {
 		let almaChannel = "";
 		try {
-			almaChannel = msg.member.guild.channels.find(ch => ch.name.includes("almanax"));
+			almaChannel = msg.member.guild.channels.find((ch) => ch.name.includes("almanax"));
 		} catch (err) {
-			console.log(err);
+			logger.info(err);
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 			msg.channel.send(message);
 			return;
@@ -19,9 +20,9 @@ var handleActionAlma = function(msg) {
 
 		let data = {
 			month: messageContent[1],
-			origin: guild
+			origin: guild,
 		};
-		sendToApi(data, "/discordwebhookmonthalma", function(response, error) {
+		sendToApi(data, "/discordwebhookmonthalma", function (response, error) {
 			if (error) {
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
