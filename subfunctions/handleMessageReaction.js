@@ -12,9 +12,8 @@ var handleMessageReaction = function (reaction, user, type) {
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
 
-	logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
-
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
+		logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
 		if (type === "add") {
 			// asking to add but already have, ignore
 			if (reaction.message.guild.member(user).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
