@@ -75,11 +75,18 @@ client.login(process.env.clientkey);
 
 // healthcheck
 
-require("http")
-	.createServer(function (req, res) {
-		res.writeHead(200);
-		res.end();
-	})
-	.listen(7);
+// require("http")
+// 	.createServer(function (req, res) {
+// 		res.writeHead(200);
+// 		res.end();
+// 	})
+// 	.listen(7);
 // process.setgid('nobody');
 // process.setuid('nobody');
+
+// log any shard errors
+
+client.on("shardError", (error) => {
+	logger.info("A websocket connection encountered an error (shardError)");
+	logger.info(err);
+});
