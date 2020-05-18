@@ -72,3 +72,14 @@ client.on("messageReactionRemove", (reaction, user) => {
 
 //login the bot client
 client.login(process.env.clientkey);
+
+// healthcheck
+
+require("http")
+	.createServer(function (req, res) {
+		res.writeHead(200);
+		res.end();
+	})
+	.listen(7);
+// process.setgid('nobody');
+// process.setuid('nobody');
