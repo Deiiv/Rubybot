@@ -86,7 +86,7 @@ client.login(process.env.clientkey);
 
 // log any shard errors
 
-client.on("shardError", (error) => {
-	logger.info("A websocket connection encountered an error (shardError)");
-	logger.info(err);
-});
+// client.on("shardError", (error) => {
+// 	logger.info("A websocket connection encountered an error (shardError)");
+// 	logger.info(err);
+// });
