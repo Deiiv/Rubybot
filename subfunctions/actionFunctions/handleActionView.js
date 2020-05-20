@@ -21,7 +21,7 @@ var handleActionView = function (msg) {
 					data.profList = "None (add a prof with !add, see !prof help for details)";
 				}
 
-				let message = new Discord.RichEmbed()
+				let message = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.addField(":shield: " + data.username + "'s Guild:", data.guild)
 					.addField(":hammer_pick: " + data.username + "'s Professions:", data.profList);
@@ -29,7 +29,7 @@ var handleActionView = function (msg) {
 			})
 			.catch((error) => {
 				logger.info(error);
-				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
 			});
 	}
@@ -44,7 +44,7 @@ var handleActionView = function (msg) {
 			handleProfEvent(params)
 				.then((response) => {
 					if (response === "NONE") {
-						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("User " + username + " doesn't exist in our records!", process.env.pepoG);
+						let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("User " + username + " doesn't exist in our records!", process.env.pepoG);
 						msg.channel.send(message);
 					} else {
 						let data = JSON.parse(response);
@@ -55,7 +55,7 @@ var handleActionView = function (msg) {
 							data.profList = "None (add a prof with !add, see !prof help for details)";
 						}
 
-						let message = new Discord.RichEmbed()
+						let message = new Discord.MessageEmbed()
 							.setColor(process.env.embedColour)
 							.addField(":shield: " + username + "'s Guild:", data.guild)
 							.addField(":hammer_pick: " + username + "'s Professions:", data.profList);
@@ -64,11 +64,11 @@ var handleActionView = function (msg) {
 				})
 				.catch((error) => {
 					logger.info(error);
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 					msg.channel.send(message);
 				});
 		} else {
-			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
+			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 			msg.channel.send(message);
 		}
 	}
@@ -79,7 +79,7 @@ var handleActionView = function (msg) {
 			let prof = messageContent[1].charAt(0).toUpperCase() + messageContent[1].slice(1);
 			if (profList.includes(prof)) {
 				if (messageContent[2] && (messageContent[2] < 1 || messageContent[2] > 200)) {
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
+					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 					msg.channel.send(message);
 					return;
 				}
@@ -99,28 +99,28 @@ var handleActionView = function (msg) {
 							levelMessage = " >= " + level;
 						}
 						if (response === "NONE") {
-							let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField(process.env.pepoG + " Users with " + prof + levelMessage, "None!");
+							let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField(process.env.pepoG + " Users with " + prof + levelMessage, "None!");
 							msg.channel.send(message);
 						} else {
 							let data = JSON.parse(response);
 							if (data.string === "") {
 								data.string = "None!";
 							}
-							let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField(process.env.pepoG + " List of users with " + prof + " profession" + levelMessage, data.string);
+							let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField(process.env.pepoG + " List of users with " + prof + " profession" + levelMessage, data.string);
 							msg.channel.send(message);
 						}
 					})
 					.catch((error) => {
 						logger.info(error);
-						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+						let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 						msg.channel.send(message);
 					});
 			} else {
-				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid profession! List of valid professions:", profList.toString());
+				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid profession! List of valid professions:", profList.toString());
 				msg.channel.send(message);
 			}
 		} else {
-			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
+			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
 			msg.channel.send(message);
 		}
 	}

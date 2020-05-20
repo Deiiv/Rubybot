@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 var handleActionHelp = function (msg) {
-	const helpEmbed = new Discord.RichEmbed()
+	const helpEmbed = new Discord.MessageEmbed()
 		.setColor(process.env.embedColour)
 		.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 		.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
@@ -10,7 +10,7 @@ var handleActionHelp = function (msg) {
 		.addField(":game_die: To roll a die:", "!roll XdY\nEx: !roll 1d6\nX must be between " + process.env.rollMinX + " and " + process.env.rollMaxX + "\nY must be between " + process.env.rollMinY + " and " + process.env.rollMaxY)
 		.addField("For any other issues, reach out to " + process.env.Author, process.env.adminUserTag);
 
-	const helpProfEmbed = new Discord.RichEmbed()
+	const helpProfEmbed = new Discord.MessageEmbed()
 		.setColor(process.env.embedColour)
 		.addField(":tools: To add or update a profession level you have:", "!add PROFESSION LEVEL")
 		.addField(":mag_right: To view users with a profession:", "!view PROFESSION\n!view PROFESSION MIN_LEVEL")

@@ -10,11 +10,11 @@ var handleActionAlma = function (msg) {
 			almaChannel = msg.member.guild.channels.find((ch) => ch.name.includes("almanax"));
 		} catch (err) {
 			logger.info(err);
-			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
+			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
 			msg.channel.send(message);
 			return;
 		}
-		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Sending the request!", "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
+		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Sending the request!", "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
 		msg.channel.send(message);
 		let guild = msg.member.guild.name;
 
@@ -24,17 +24,17 @@ var handleActionAlma = function (msg) {
 		};
 		sendToApi(data, "/discordwebhookmonthalma", function (response, error) {
 			if (error) {
-				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
 				msg.channel.send(message);
 			} else {
 				if (response === "INVALID_ORIGIN") {
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("This functionality isn't supported in this server", process.env.pepeCry);
+					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("This functionality isn't supported in this server", process.env.pepeCry);
 					msg.channel.send(message);
 				}
 			}
 		});
 	} else {
-		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "Proper usage: !alma MM\nExamples: !alma 4, !alma 11");
+		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid input!", "Proper usage: !alma MM\nExamples: !alma 4, !alma 11");
 		msg.channel.send(message);
 	}
 };
