@@ -1,13 +1,13 @@
 const sendToApi = require("./sendToApi.js");
 
-var getValidRoles = function(guild) {
+var getValidRoles = function (guild) {
 	return new Promise((resolve, reject) => {
 		let message = {
 			action: "get",
 			type: "roles",
-			guild: guild
+			guild: guild,
 		};
-		sendToApi(message, "/admin/rolelist", function(response, error) {
+		sendToApi(message, "/admin/rolelist", function (response, error) {
 			if (error) {
 				return reject(error);
 			} else {

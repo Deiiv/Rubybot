@@ -20,7 +20,7 @@ var handleOnGuildMemberAdd = function (member) {
 		}
 	}
 
-	let welcomeMessageEmbed = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Welcome! " + process.env.pepeRuby, "<@" + member.id + ">, " + message);
+	let welcomeMessageEmbed = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Welcome! " + process.env.pepeRuby, "<@" + member.id + ">, " + message);
 
 	channel.send(welcomeMessageEmbed);
 };
