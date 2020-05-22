@@ -1,3 +1,19 @@
+/*
+
+
+
+
+
+ARCHIVED
+
+Not in use, discord.js v 12+ solves this using partials
+
+
+
+
+
+*/
+
 var handleRaw = function (client, packet) {
 	// ignore unrelated
 	if (!["MESSAGE_REACTION_ADD", "MESSAGE_REACTION_REMOVE"].includes(packet.t)) return;

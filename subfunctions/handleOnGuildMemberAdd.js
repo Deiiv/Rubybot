@@ -7,16 +7,19 @@ var handleOnGuildMemberAdd = function (member) {
 	// let message = "Welcome to the server, <@" + member.id + ">! " + process.env.pepeRuby;
 	let message;
 
-	if (member.guild.name === "POP") {
-		message = "please set your role with '!setguild Guild' " + process.env.hypers; // + "\nWhere Guild is one of the following:\n" + validGuilds.toString();
-	} else if (member.guild.name === "Silk Road") {
-		message = "please set your role with '!setguild Silk Road'";
-	} else {
+	if (member.guild.name === "Ruby") {
 		let infoChannel = member.guild.channels.find((ch) => ch.name === "information");
 		if (infoChannel) {
 			message = "please head over to " + infoChannel.toString() + " to read our rules/info and set the Ruby role (required for viewing channels) " + process.env.pogpeach;
 		} else {
 			message = "please check out our rules/info in the appropriate info channel " + process.env.hypers;
+		}
+	} else {
+		let infoChannel = member.guild.channels.find((ch) => ch.name === "information");
+		if (infoChannel) {
+			message = "please head over to " + infoChannel.toString() + " to read our rules/info";
+		} else {
+			message = "please check out our rules/info in the appropriate info channel";
 		}
 	}
 

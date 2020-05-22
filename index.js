@@ -5,7 +5,6 @@ const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"]
 const handleOnReady = require("./subfunctions/handleOnReady.js");
 const handleOnGuildMemberAdd = require("./subfunctions/handleOnGuildMemberAdd.js");
 const handleOnMessage = require("./subfunctions/handleOnMessage.js");
-const handleRaw = require("./subfunctions/handleRaw.js");
 const handleMessageReaction = require("./subfunctions/handleMessageReaction.js");
 
 /*
@@ -45,15 +44,6 @@ client.on("message", (msg) => {
 	}
 });
 
-// required for emitting reactions on an old message for messageReactionAdd and messageReactionRemove
-// client.on("raw", (packet) => {
-// 	try {
-// 		handleRaw(client, packet);
-// 	} catch (err) {
-// 		logger.info(err);
-// 	}
-// });
-
 client.on("messageReactionAdd", (reaction, user) => {
 	try {
 		handleMessageReaction(reaction, user, "add");
@@ -84,9 +74,9 @@ client.login(process.env.clientkey);
 // process.setgid('nobody');
 // process.setuid('nobody');
 
-// log any shard errors
+// log any shard errors (connection should automatically retry as of discord.js v12+)
 
-// client.on("shardError", (error) => {
-// 	logger.info("A websocket connection encountered an error (shardError)");
-// 	logger.info(err);
-// });
+client.on("shardError", (error) => {
+	logger.info("A websocket connection encountered an error (shardError)");
+	logger.info(err);
+});
