@@ -45,6 +45,15 @@ var handleOnMessage = function (msg) {
 		case "!contact":
 			handleActionContact(msg);
 			break;
+		case "!test":
+			let message = "Head over to xyz to read our rules/info and set the Ruby role (required for viewing channels) " + process.env.pogpeach;
+			// let welcomeMessageEmbed = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Welcome <@" + msg.author.id + ">, " + process.env.pepeRuby, "<@" + msg.author.id + ">, " + message);
+			let welcomeMessageEmbed = new Discord.MessageEmbed()
+				.setColor(process.env.embedColour)
+				.setTitle(`Welcome ${msg.member.displayName}! ` + process.env.pepeRuby)
+				.setDescription(message);
+			msg.channel.send(welcomeMessageEmbed);
+			break;
 		default:
 			break;
 	}
