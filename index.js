@@ -1,11 +1,10 @@
 require("dotenv").config();
 const logger = require("./subfunctions/logger");
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
 const handleOnReady = require("./subfunctions/handleOnReady.js");
 const handleOnGuildMemberAdd = require("./subfunctions/handleOnGuildMemberAdd.js");
 const handleOnMessage = require("./subfunctions/handleOnMessage.js");
-const handleRaw = require("./subfunctions/handleRaw.js");
 const handleMessageReaction = require("./subfunctions/handleMessageReaction.js");
 
 /*
@@ -45,15 +44,6 @@ client.on("message", (msg) => {
 	}
 });
 
-// required for emitting reactions on an old message for messageReactionAdd and messageReactionRemove
-client.on("raw", (packet) => {
-	try {
-		handleRaw(client, packet);
-	} catch (err) {
-		logger.info(err);
-	}
-});
-
 client.on("messageReactionAdd", (reaction, user) => {
 	try {
 		handleMessageReaction(reaction, user, "add");
@@ -73,20 +63,17 @@ client.on("messageReactionRemove", (reaction, user) => {
 //login the bot client
 client.login(process.env.clientkey);
 
-// healthcheck
+// log any shard errors (connection should automatically retry as of discord.js v12+)
 
-// require("http")
-// 	.createServer(function (req, res) {
-// 		res.writeHead(200);
-// 		res.end();
-// 	})
-// 	.listen(7);
-// process.setgid('nobody');
-// process.setuid('nobody');
+client.on("shardError", (error) => {
+	logger.info("A websocket connection encountered an error (shardError)");
+	logger.info(err);
+});
 
-// log any shard errors
+client.on("shardReconnecting", (id) => {
+	logger.info(`Shard with ID ${id} reconnected.`);
+});
 
-// client.on("shardError", (error) => {
-// 	logger.info("A websocket connection encountered an error (shardError)");
-// 	logger.info(err);
-// });
+client.on("shardDisconnect", (event, shardID) => {
+	logger.info(`Shard with ID ${shardID} disconnected.`);
+});
