@@ -34,7 +34,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 				let message = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.setTitle("Done adding role!")
-					.setDescription(reactionName + " role successfully added in the Ruby discord server");
+					.setDescription(`${reactionName} role successfully added in the Ruby discord server for your user (${member.displayName})`);
 				user.send(message);
 
 				// if the role is "ruby" then udpate user in db with ruby as guild
@@ -69,7 +69,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						let message = new Discord.MessageEmbed()
 							.setColor(process.env.embedColour)
 							.setTitle("Done adding role!")
-							.setDescription(reactionName + " role successfully added in the Ruby discord server");
+							.setDescription(`${reactionName} role successfully added in the Ruby discord server for your user (${member.displayName})`);
 						user.send(message);
 
 						// if the role is "ruby" then udpate user in db with ruby as guild
@@ -101,7 +101,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 				let message = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.setTitle("Done removing role!")
-					.setDescription(reactionName + " role successfully removed in the Ruby discord server");
+					.setDescription(`${reactionName} role successfully removed in the Ruby discord server for your user (${member.displayName})`);
 				user.send(message);
 			} else {
 				let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
@@ -117,7 +117,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						let message = new Discord.MessageEmbed()
 							.setColor(process.env.embedColour)
 							.setTitle("Done removing role!")
-							.setDescription(reactionName + " role successfully removed in the Ruby discord server");
+							.setDescription(`${reactionName} role successfully removed in the Ruby discord server for your user (${member.displayName})`);
 						user.send(message);
 					})
 					.catch((error) => {
