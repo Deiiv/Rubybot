@@ -16,5 +16,6 @@ var handleOnReady = function (client) {
 	process.env.peepoHappy = client.emojis.cache.find((emoji) => emoji.name === "peepoHappy") || "";
 	process.env.pepoG = client.emojis.cache.find((emoji) => emoji.name === "pepoG") || "";
 	process.env.pogpeach = client.emojis.cache.find((emoji) => emoji.name === "pogpeach") || "";
+	process.env.ruby = client.emojis.cache.find((emoji) => emoji.name === "ruby") || "";
 };
 module.exports = handleOnReady;
