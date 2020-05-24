@@ -27,6 +27,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
 		logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
+		const member = reaction.message.guild.members.find((m) => m.id === user.id);
 		if (type === "add") {
 			// asking to add but already have, ignore
 			if (reaction.message.guild.member(user).roles.cache.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
@@ -39,7 +40,6 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 				// if the role is "ruby" then udpate user in db with ruby as guild
 				if (reactionName.toLowerCase() === "ruby") {
-					const member = reaction.message.guild.members.find((m) => m.id === user.id);
 					let params = {
 						username: member.displayName,
 						userid: user.id,
