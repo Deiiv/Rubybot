@@ -65,18 +65,24 @@ client.login(process.env.clientkey);
 
 // healthcheck
 
-// require("http")
-// 	.createServer(function (req, res) {
-// 		res.writeHead(200);
-// 		res.end();
-// 	})
-// 	.listen(7);
-// process.setgid('nobody');
-// process.setuid('nobody');
+require("http")
+	.createServer(function (req, res) {
+		res.writeHead(200);
+		res.end();
+	})
+	.listen(7);
 
 // log any shard errors (connection should automatically retry as of discord.js v12+)
 
 client.on("shardError", (error) => {
 	logger.info("A websocket connection encountered an error (shardError)");
 	logger.info(err);
+});
+
+client.on("shardReconnecting", (id) => {
+	logger.info(`Shard with ID ${id} reconnected.`);
+});
+
+client.on("shardDisconnect", (event, shardID) => {
+	logger.info(`Shard with ID ${shardID} disconnected.`);
 });
