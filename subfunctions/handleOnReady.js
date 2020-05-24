@@ -17,14 +17,5 @@ var handleOnReady = function (client) {
 	process.env.pepoG = client.emojis.cache.find((emoji) => emoji.name === "pepoG") || "";
 	process.env.pogpeach = client.emojis.cache.find((emoji) => emoji.name === "pogpeach") || "";
 	process.env.ruby = client.emojis.cache.find((emoji) => emoji.name === "ruby") || "";
-
-	// healthcheck
-
-	require("http")
-		.createServer(function (req, res) {
-			res.writeHead(200);
-			res.end();
-		})
-		.listen(8080);
 };
 module.exports = handleOnReady;

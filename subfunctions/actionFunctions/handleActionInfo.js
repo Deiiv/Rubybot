@@ -5,7 +5,7 @@ var handleActionInfo = function (msg) {
 		.setColor(process.env.embedColour)
 		.setTitle(`Rubybot :robot:`)
 		.setDescription("Created for various functionality in discord, including Dofus specific features")
-		.addField("Version:", process.env.version)
+		.addField("Version:", process.env.botversion)
 		.addField("Runtime:", process.env.runtime)
 		.addField("Hosted on:", process.env.host)
 		.addField("Developed by:", process.env.adminUserTag);
