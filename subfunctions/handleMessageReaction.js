@@ -63,7 +63,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 									});
 							}
 						} else {
-							let role = userRoles.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
+							let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
 							if (!role) {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
