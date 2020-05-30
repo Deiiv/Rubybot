@@ -33,7 +33,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 				logger.info("member(user):" + reaction.message.guild.member(user));
 				logger.info("member(user).roles:" + reaction.message.guild.member(user).roles);
 				logger.info("member(user).roles.cache:" + reaction.message.guild.member(user).roles.cache);
-				if (reaction.message.guild.member(user).roles.cache.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
+				if (reaction.message.guild.fetchMember(user).roles.cache.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 					logger.info(`Role ${reactionName} already set for user ${user.username}`);
 					let message = new Discord.MessageEmbed()
 						.setColor(process.env.embedColour)
@@ -65,7 +65,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						return;
 					}
 					reaction.message.guild
-						.member(user)
+						.fetchMember(user)
 						.roles.add(role)
 						.then(() => {
 							logger.info(`Set role ${reactionName} to user ${user.username}`);
@@ -78,7 +78,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 							// if the role is "ruby" then udpate user in db with ruby as guild
 							if (reactionName.toLowerCase() === "ruby") {
-								const member = reaction.message.guild.members.cache.find((m) => m.id === user.id);
+								const member = reaction.message.guild.fetchMember(user);
+								//reaction.message.guild.members.cache.find((m) => m.id === user.id);
 								let params = {
 									username: member.displayName,
 									userid: user.id,
@@ -100,7 +101,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 				}
 			} else if (type === "remove") {
 				// asking to remove but it's already gone, ignore
-				if (!reaction.message.guild.member(user).roles.cache.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
+				if (!reaction.message.guild.fetchMember(user).roles.cache.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 					logger.info(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
 					let message = new Discord.MessageEmbed()
 						.setColor(process.env.embedColour)
@@ -114,7 +115,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						return;
 					}
 					reaction.message.guild
-						.member(user)
+						.fetchMember(user)
 						.roles.remove(role)
 						.then(() => {
 							logger.info(`Removed role ${reactionName} from user ${user.username}`);
