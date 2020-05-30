@@ -106,7 +106,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						}
 					} else if (type === "remove") {
 						// asking to remove but it's already gone, ignore
-						if (!userRoles.roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
+						if (!userRoles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 							logger.info(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
 							let message = new Discord.MessageEmbed()
 								.setColor(process.env.embedColour)
