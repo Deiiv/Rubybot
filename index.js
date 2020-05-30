@@ -67,7 +67,7 @@ client.login(process.env.clientkey);
 
 client.on("shardError", (error) => {
 	logger.info("A websocket connection encountered an error (shardError)");
-	logger.info(err);
+	logger.info(error);
 });
 
 client.on("shardReconnecting", (id) => {
