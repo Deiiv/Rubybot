@@ -32,7 +32,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 			.fetch(user.id)
 			.then((guildMember) => {
 				var userRoles = guildMember.roles.cache;
-				logger.info("Got user roles : ", Array.from(userRoles.values()));
+				logger.info("Got user roles : " + userRoles.toString());
 				try {
 					if (type === "add") {
 						// asking to add but already have, ignore
