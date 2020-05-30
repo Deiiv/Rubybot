@@ -30,10 +30,9 @@ var handleMessageReaction = async (reaction, user, type) => {
 		logger.info("Getting user roles, if any");
 		reaction.message.guild.members
 			.fetch(user.id)
-			.then((result) => {
-				var userRoles = result.roles.cache;
+			.then((guildMember) => {
+				var userRoles = guildMember.roles.cache;
 				logger.info("Got user roles : ", userRoles);
-
 				try {
 					if (type === "add") {
 						// asking to add but already have, ignore
@@ -119,9 +118,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							reaction.message.guild.members
-								.fetch(user.id)
-								.roles.remove(role)
+							guildMember.roles
+								.remove(role)
 								.then(() => {
 									logger.info(`Removed role ${reactionName} from user ${user.username}`);
 									let message = new Discord.MessageEmbed()
