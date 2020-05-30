@@ -27,58 +27,18 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
 		logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
-		try {
-			reaction.message.guild.members
-				.fetch(user.id)
-				.then((result) => {
-					logger.info("Got result" + JSON.stringify(result));
-					logger.info("Result.roles" + result.roles);
-				})
-				.catch((err) => {
-					logger.info("ERRORRRRR");
-					logger.info(err);
-				});
+		logger.info("Getting user roles, if any");
+		reaction.message.guild.members
+			.fetch(user.id)
+			.then((result) => {
+				var userRoles = result.roles;
+				logger.info("Got user roles : " + userRoles.toString());
 
-			if (type === "add") {
-				// asking to add but already have, ignore
-				if (reaction.message.guild.members.fetch(user.id).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
-					logger.info(`Role ${reactionName} already set for user ${user.username}`);
-					let message = new Discord.MessageEmbed()
-						.setColor(process.env.embedColour)
-						.setTitle("Done adding role!")
-						.setDescription(`${reactionName} role successfully added in the Ruby discord server for your user (${user.username})`);
-					user.send(message);
-
-					// if the role is "ruby" then udpate user in db with ruby as guild
-					if (reactionName.toLowerCase() === "ruby") {
-						const member = reaction.message.guild.members.fetch(user.id);
-						// const member = reaction.message.guild.members.cache.find((m) => m.id === user.id);
-						let params = {
-							username: member.displayName,
-							userid: user.id,
-							action: "updateuser",
-							guild: "Ruby",
-						};
-						handleProfEvent(params)
-							.then(() => {
-								logger.info("Done updating user in db");
-							})
-							.catch((error) => {
-								logger.info(error);
-							});
-					}
-				} else {
-					let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
-					if (!role) {
-						logger.info(`Invalid role reaction : ${reactionName}`);
-						return;
-					}
-					reaction.message.guild.members
-						.fetch(user.id)
-						.roles.add(role)
-						.then(() => {
-							logger.info(`Set role ${reactionName} to user ${user.username}`);
-
+				try {
+					if (type === "add") {
+						// asking to add but already have, ignore
+						if (userRoles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
+							logger.info(`Role ${reactionName} already set for user ${user.username}`);
 							let message = new Discord.MessageEmbed()
 								.setColor(process.env.embedColour)
 								.setTitle("Done adding role!")
@@ -88,7 +48,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 							// if the role is "ruby" then udpate user in db with ruby as guild
 							if (reactionName.toLowerCase() === "ruby") {
 								const member = reaction.message.guild.members.fetch(user.id);
-								//reaction.message.guild.members.cache.find((m) => m.id === user.id);
+								// const member = reaction.message.guild.members.cache.find((m) => m.id === user.id);
 								let params = {
 									username: member.displayName,
 									userid: user.id,
@@ -103,46 +63,87 @@ var handleMessageReaction = async (reaction, user, type) => {
 										logger.info(error);
 									});
 							}
-						})
-						.catch((error) => {
-							logger.info(error);
-						});
-				}
-			} else if (type === "remove") {
-				// asking to remove but it's already gone, ignore
-				if (!reaction.message.guild.members.fetch(user.id).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
-					logger.info(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
-					let message = new Discord.MessageEmbed()
-						.setColor(process.env.embedColour)
-						.setTitle("Done removing role!")
-						.setDescription(`${reactionName} role successfully removed in the Ruby discord server for your user (${user.username})`);
-					user.send(message);
-				} else {
-					let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
-					if (!role) {
-						logger.info(`Invalid role reaction : ${reactionName}`);
-						return;
-					}
-					reaction.message.guild.members
-						.fetch(user.id)
-						.roles.remove(role)
-						.then(() => {
-							logger.info(`Removed role ${reactionName} from user ${user.username}`);
+						} else {
+							let role = userRoles.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
+							if (!role) {
+								logger.info(`Invalid role reaction : ${reactionName}`);
+								return;
+							}
+							reaction.message.guild.members
+								.fetch(user.id)
+								.roles.add(role)
+								.then(() => {
+									logger.info(`Set role ${reactionName} to user ${user.username}`);
+
+									let message = new Discord.MessageEmbed()
+										.setColor(process.env.embedColour)
+										.setTitle("Done adding role!")
+										.setDescription(`${reactionName} role successfully added in the Ruby discord server for your user (${user.username})`);
+									user.send(message);
+
+									// if the role is "ruby" then udpate user in db with ruby as guild
+									if (reactionName.toLowerCase() === "ruby") {
+										const member = reaction.message.guild.members.fetch(user.id);
+										//reaction.message.guild.members.cache.find((m) => m.id === user.id);
+										let params = {
+											username: member.displayName,
+											userid: user.id,
+											action: "updateuser",
+											guild: "Ruby",
+										};
+										handleProfEvent(params)
+											.then(() => {
+												logger.info("Done updating user in db");
+											})
+											.catch((error) => {
+												logger.info(error);
+											});
+									}
+								})
+								.catch((error) => {
+									logger.info(error);
+								});
+						}
+					} else if (type === "remove") {
+						// asking to remove but it's already gone, ignore
+						if (!userRoles.roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
+							logger.info(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
 							let message = new Discord.MessageEmbed()
 								.setColor(process.env.embedColour)
 								.setTitle("Done removing role!")
 								.setDescription(`${reactionName} role successfully removed in the Ruby discord server for your user (${user.username})`);
 							user.send(message);
-						})
-						.catch((error) => {
-							logger.info(error);
-						});
+						} else {
+							let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
+							if (!role) {
+								logger.info(`Invalid role reaction : ${reactionName}`);
+								return;
+							}
+							reaction.message.guild.members
+								.fetch(user.id)
+								.roles.remove(role)
+								.then(() => {
+									logger.info(`Removed role ${reactionName} from user ${user.username}`);
+									let message = new Discord.MessageEmbed()
+										.setColor(process.env.embedColour)
+										.setTitle("Done removing role!")
+										.setDescription(`${reactionName} role successfully removed in the Ruby discord server for your user (${user.username})`);
+									user.send(message);
+								})
+								.catch((error) => {
+									logger.info(error);
+								});
+						}
+					}
+				} catch (err) {
+					logger.info("Error when adding/removing role");
+					logger.info(err);
 				}
-			}
-		} catch (err) {
-			logger.info("Error when adding/removing role");
-			logger.info(err);
-		}
+			})
+			.catch((err) => {
+				logger.info("Error at members.fetch()");
+				logger.info(err);
+			});
 	} else return;
 };
 module.exports = handleMessageReaction;
