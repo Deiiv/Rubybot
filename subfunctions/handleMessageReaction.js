@@ -32,7 +32,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 			.fetch(user.id)
 			.then((guildMember) => {
 				var userRoles = guildMember.roles.cache;
-				logger.info("Got user roles : " + Array.from(userRoles.mapValues((role) => role.name).values()).toString());
+				logger.info("Got current user roles : " + Array.from(userRoles.mapValues((role) => role.name).values()).toString());
 				try {
 					if (type === "add") {
 						// asking to add but already have, ignore
@@ -72,7 +72,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 								.member(user)
 								.roles.add(role)
 								.then(() => {
-									logger.info(`Set role ${reactionName} to user ${user.username}`);
+									logger.info(`Added role ${reactionName} to user ${user.username}`);
 
 									let message = new Discord.MessageEmbed()
 										.setColor(process.env.embedColour)
