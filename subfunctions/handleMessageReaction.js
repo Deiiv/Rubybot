@@ -68,8 +68,9 @@ var handleMessageReaction = async (reaction, user, type) => {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							guildMember.roles
-								.add(role)
+							reaction.message.guild
+								.member(user)
+								.roles.add(role)
 								.then(() => {
 									logger.info(`Set role ${reactionName} to user ${user.username}`);
 
@@ -117,8 +118,9 @@ var handleMessageReaction = async (reaction, user, type) => {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							guildMember.roles
-								.remove(role)
+							reaction.message.guild
+								.member(user)
+								.roles.remove(role)
 								.then(() => {
 									logger.info(`Removed role ${reactionName} from user ${user.username}`);
 									let message = new Discord.MessageEmbed()
