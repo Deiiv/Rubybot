@@ -32,6 +32,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 				// asking to add but already have, ignore
 				logger.info("member(user):" + reaction.message.guild.member(user));
 				logger.info("member(user).roles:" + reaction.message.guild.member(user).roles);
+				logger.info("member(user).roles.cache:" + reaction.message.guild.member(user).roles.cache);
 				if (reaction.message.guild.member(user).roles.cache.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 					logger.info(`Role ${reactionName} already set for user ${user.username}`);
 					let message = new Discord.MessageEmbed()
