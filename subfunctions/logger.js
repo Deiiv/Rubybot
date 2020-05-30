@@ -19,8 +19,8 @@ module.exports = winston.createLogger({
 			filename: "logs/rubybot-%DATE%.log",
 			datePattern: "YYYY-MM-DD-HH",
 			timestamp: true,
-			maxSize: "20m",
-			maxFiles: "14d",
+			maxSize: "10m",
+			maxFiles: "5d",
 		}),
 	],
 });
