@@ -28,6 +28,17 @@ var handleMessageReaction = async (reaction, user, type) => {
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
 		logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
 		try {
+			reaction.message.guild.members
+				.fetch(user.id)
+				.then((result) => {
+					logger.info("Got result" + JSON.stringify(result));
+					logger.info("Result.roles" + result.roles);
+				})
+				.catch((err) => {
+					logger.info("ERRORRRRR");
+					logger.info(err);
+				});
+
 			if (type === "add") {
 				// asking to add but already have, ignore
 				if (reaction.message.guild.members.fetch(user.id).roles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
