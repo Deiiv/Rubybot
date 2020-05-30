@@ -31,7 +31,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 		reaction.message.guild.members
 			.fetch(user.id)
 			.then((result) => {
-				var userRoles = result.roles;
+				var userRoles = result.roles.cache;
 				logger.info("Got user roles : ", userRoles);
 
 				try {
