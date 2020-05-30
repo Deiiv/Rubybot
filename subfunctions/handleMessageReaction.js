@@ -68,9 +68,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							reaction.message.guild.members
-								.fetch(user.id)
-								.roles.add(role)
+							guildMember.roles
+								.add(role)
 								.then(() => {
 									logger.info(`Set role ${reactionName} to user ${user.username}`);
 
