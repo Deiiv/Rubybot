@@ -26,8 +26,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 	reactionName = reactionName.replace("_role", "");
 
 	if (reaction.message.channel.name === "information" || reaction.message.channel.name === "roles") {
-		logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user}`);
-		logger.info("Getting user roles, if any");
+		logger.info(`Reaction ${reactionName} Type ${type} User ${user.username} UserId ${user} | Getting current user roles`);
 		reaction.message.guild.members
 			.fetch(user.id)
 			.then((guildMember) => {
