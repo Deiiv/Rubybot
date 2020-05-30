@@ -32,7 +32,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 			.fetch(user.id)
 			.then((result) => {
 				var userRoles = result.roles;
-				logger.info("Got user roles : " + userRoles.toString());
+				logger.info("Got user roles : ", userRoles);
 
 				try {
 					if (type === "add") {
