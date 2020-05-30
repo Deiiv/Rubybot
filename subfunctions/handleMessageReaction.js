@@ -131,7 +131,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 			}
 		} catch (err) {
 			logger.info("Error when adding/removing role");
-			logger.info(error);
+			logger.info(err);
 		}
 	} else return;
 };
