@@ -45,11 +45,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 							// if the role is "ruby" then udpate user in db with ruby as guild
 							if (reactionName.toLowerCase() === "ruby") {
-								logger.info(member);
-								const member = reaction.message.guild.members.fetch(user.id);
-								// const member = reaction.message.guild.members.cache.find((m) => m.id === user.id);
 								let params = {
-									username: member.displayName,
+									username: guildMember.displayName,
 									userid: user.id,
 									action: "updateuser",
 									guild: "Ruby",
@@ -82,11 +79,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 									// if the role is "ruby" then udpate user in db with ruby as guild
 									if (reactionName.toLowerCase() === "ruby") {
-										const member = reaction.message.guild.members.fetch(user.id);
-										logger.info(member);
-										//reaction.message.guild.members.cache.find((m) => m.id === user.id);
 										let params = {
-											username: member.displayName,
+											username: guildMember.displayName,
 											userid: user.id,
 											action: "updateuser",
 											guild: "Ruby",
