@@ -20,13 +20,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 	}
 
 	if (!reaction.message.channel.guild) return;
-	logger.info(`Reaction event is in ${reaction.message.channel.guild} ${reaction.message.channel.id}`);
-	/*
-	Deiv's Dev Corner: 588849917636771842
-	Ruby: 375519838166319104
-	The Sanctuary: 739877094003048518
-	*/
-	if (reaction.message.channel.guild.id != "588849917636771842" && reaction.message.channel.guild.id != "375519838166319104" && reaction.message.channel.guild.id != "739876844274450452") return;
+	if (reaction.message.channel.guild.name != "Deiv's Dev Corner" && reaction.message.channel.guild.name != "Ruby" && reaction.message.channel.guild.name != "The Sanctuary") return;
 
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
