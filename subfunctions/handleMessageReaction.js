@@ -20,7 +20,9 @@ var handleMessageReaction = async (reaction, user, type) => {
 	}
 
 	if (!reaction.message.channel.guild) return;
-	if (reaction.message.channel.guild.name != "Deiv's Dev Corner" && reaction.message.channel.guild.name != "Ruby") return;
+	logger.info(reaction.message.channel.guild);
+	logger.info(reaction.message.channel.id);
+	if (reaction.message.channel.guild.name != "Deiv's Dev Corner" && reaction.message.channel.guild.name != "Ruby" && reaction.message.channel.guild.id != "739876844274450452") return;
 
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
