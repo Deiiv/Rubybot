@@ -21,7 +21,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 	if (!reaction.message.channel.guild) return;
 	var serverName = reaction.message.channel.guild.name;
-	if (serverName != "Deiv's Dev Corner" && serverName != "Ruby" && serverName != "The Sanctuary") return;
+	if (serverName != "Deiv's Dev Corner" && serverName != "Ruby" && serverName != "Aurora") return;
 
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
