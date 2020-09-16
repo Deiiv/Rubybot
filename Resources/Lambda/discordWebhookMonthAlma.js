@@ -3,9 +3,7 @@ const http = require("http");
 const promise = require("promise");
 const cheerio = require("cheerio");
 const moment = require("moment-timezone");
-const webhookRuby = "https://discordapp.com/api/webhooks/525705143044276231/SnI07iJo7sa5gSRrC7b2kiUjG-NyAp-DA-Dkwf3MoZ39sdm65afe3JaKBXk9QJALwRtB";
-// const webhookAlliance = "https://discordapp.com/api/webhooks/583455481557942292/v-GptkOFZgNgAsZWhFFNBxoozy1AmdMo_2I0Oia5X2bEtE4k5xEvEkDx-YcI6gvnx63r";
-// const webhookSR = "https://discordapp.com/api/webhooks/610176759479926784/okulBTWWtSjX5FETKKN7JMaW6yN1JyEtrtSaRvPemnHrdsfH5vxX_zKLQfum4EYpRP0I";
+const webhookRuby = "";
 var almaItems;
 
 exports.handler = function(event, context, callback) {
