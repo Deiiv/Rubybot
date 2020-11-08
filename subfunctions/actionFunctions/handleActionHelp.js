@@ -12,7 +12,7 @@ var handleActionHelp = function (msg) {
 			":game_die: To roll a die:",
 			"!roll XdY\nEx: !roll 1d6\nX must be between " + process.env.rollMinX + " and " + process.env.rollMaxX + "\nY must be between " + process.env.rollMinY + " and " + process.env.rollMaxY
 		)
-		.addField("For any other issues, reach out to " + process.env.Author, process.env.adminUserTag);
+		.addField("For any other issues, reach out to " + process.env.author, process.env.adminUserTag);
 
 	const helpProfEmbed = new Discord.MessageEmbed()
 		.setColor(process.env.embedColour)
