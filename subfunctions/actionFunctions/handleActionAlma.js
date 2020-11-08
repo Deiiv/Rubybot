@@ -31,7 +31,10 @@ var handleActionAlma = function (msg) {
 				msg.channel.send(message);
 			} else {
 				if (response === "INVALID_ORIGIN") {
-					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Unable to send !alma response, this functionality isn't supported in this server").setDescription(process.env.pepeCry);
+					let message = new Discord.MessageEmbed()
+						.setColor(process.env.embedColour)
+						.setTitle("Unable to send !alma response, this functionality isn't supported in this server")
+						.setDescription(process.env.pepeCry);
 					msg.channel.send(message);
 				}
 			}

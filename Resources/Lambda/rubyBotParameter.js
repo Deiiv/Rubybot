@@ -1,27 +1,27 @@
 var AWS = require("aws-sdk");
 var ssm = new AWS.SSM();
 
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
 	console.log("Event : " + JSON.stringify(event));
 	if (event.type === "guilds") {
 		if (event.action === "get") {
 			console.log("Get action.");
 			let ssmParams = {
-				Name: "/rubybot/guildlist"
+				Name: "/rubybot/guildlist",
 			};
 			console.log("Calling SSM getParameter with params : " + JSON.stringify(ssmParams));
 			ssm
 				.getParameter(ssmParams)
 				.promise()
-				.then(data => {
+				.then((data) => {
 					console.log("Data : " + JSON.stringify(data));
 					const response = {
 						statusCode: 200,
-						body: data.Parameter.Value || ""
+						body: data.Parameter.Value || "",
 					};
 					callback(null, response);
 				})
-				.catch(err => {
+				.catch((err) => {
 					console.log(err);
 					callback(err);
 				});
@@ -31,21 +31,21 @@ exports.handler = function(event, context, callback) {
 				Name: "/rubybot/guildlist",
 				Value: event.value,
 				Type: "StringList",
-				Overwrite: true
+				Overwrite: true,
 			};
 			console.log("Calling SSM putParameter with params : " + JSON.stringify(ssmParams));
 			ssm
 				.putParameter(ssmParams)
 				.promise()
-				.then(data => {
+				.then((data) => {
 					console.log("Data : " + JSON.stringify(data));
 					const response = {
 						statusCode: 200,
-						body: "Parameter updated"
+						body: "Parameter updated",
 					};
 					callback(null, response);
 				})
-				.catch(err => {
+				.catch((err) => {
 					console.log(err);
 					callback(err);
 				});
@@ -58,26 +58,26 @@ exports.handler = function(event, context, callback) {
 		if (event.action === "get" && guild) {
 			console.log("Get action.");
 			let ssmParams = {
-				Name: "/rubybot/roles/" + guild + "/list"
+				Name: "/rubybot/roles/" + guild + "/list",
 			};
 			console.log("Calling SSM getParameter with params : " + JSON.stringify(ssmParams));
 			ssm
 				.getParameter(ssmParams)
 				.promise()
-				.then(data => {
+				.then((data) => {
 					console.log("Data : " + JSON.stringify(data));
 					const response = {
 						statusCode: 200,
-						body: data.Parameter.Value || ""
+						body: data.Parameter.Value || "",
 					};
 					callback(null, response);
 				})
-				.catch(err => {
+				.catch((err) => {
 					if (err.code === "ParameterNotFound") {
 						console.log("Param not found");
 						const response = {
 							statusCode: 200,
-							body: ""
+							body: "",
 						};
 						callback(null, response);
 					} else {
@@ -91,21 +91,21 @@ exports.handler = function(event, context, callback) {
 				Name: "/rubybot/roles/" + guild + "/list",
 				Value: event.value,
 				Type: "StringList",
-				Overwrite: true
+				Overwrite: true,
 			};
 			console.log("Calling SSM putParameter with params : " + JSON.stringify(ssmParams));
 			ssm
 				.putParameter(ssmParams)
 				.promise()
-				.then(data => {
+				.then((data) => {
 					console.log("Data : " + JSON.stringify(data));
 					const response = {
 						statusCode: 200,
-						body: "Parameter updated"
+						body: "Parameter updated",
 					};
 					callback(null, response);
 				})
-				.catch(err => {
+				.catch((err) => {
 					console.log(err);
 					callback(err);
 				});

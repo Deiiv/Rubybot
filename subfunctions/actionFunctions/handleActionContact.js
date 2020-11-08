@@ -7,7 +7,10 @@ var handleActionContact = function (msg) {
 			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input! Please include a message").setDescription("View proper usage by calling !help");
 			msg.channel.send(message);
 		} else if (msg.content.length > 1024) {
-			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Your message is too long!").setDescription("Please shorten your message, you can also send multiple messages instead of one.");
+			let message = new Discord.MessageEmbed()
+				.setColor(process.env.embedColour)
+				.setTitle("Your message is too long!")
+				.setDescription("Please shorten your message, you can also send multiple messages instead of one.");
 			msg.channel.send(message);
 		} else {
 			let message = {

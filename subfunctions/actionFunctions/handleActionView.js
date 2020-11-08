@@ -1,7 +1,27 @@
 const Discord = require("discord.js");
 const logger = require("./../logger");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
-const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
+const profList = [
+	"Alchemist",
+	"Farmer",
+	"Fisherman",
+	"Hunter",
+	"Lumberjack",
+	"Miner",
+	"Artificer",
+	"Carver",
+	"Handyman",
+	"Jeweller",
+	"Shoemaker",
+	"Smith",
+	"Tailor",
+	"Craftmagus",
+	"Carvmagus",
+	"Costumagus",
+	"Jewelmagus",
+	"Shoemagus",
+	"Smithmagus",
+];
 
 var handleActionView = function (msg) {
 	let messageContent = msg.content.split(" ");
@@ -21,7 +41,11 @@ var handleActionView = function (msg) {
 					data.profList = "None (add a prof with !add, see !prof help for details)";
 				}
 
-				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`:tools: ${data.username}'s Professions :hammer_pick:`).setDescription(data.profList).addField(`:shield: Guild :shield:`, data.guild);
+				let message = new Discord.MessageEmbed()
+					.setColor(process.env.embedColour)
+					.setTitle(`:tools: ${data.username}'s Professions :hammer_pick:`)
+					.setDescription(data.profList)
+					.addField(`:shield: Guild :shield:`, data.guild);
 				msg.channel.send(message);
 			})
 			.catch((error) => {
@@ -55,7 +79,11 @@ var handleActionView = function (msg) {
 							data.profList = "None (add a prof with !add, see !prof help for details)";
 						}
 
-						let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`:tools: ${username}'s Professions :hammer_pick:`).setDescription(data.profList).addField(`:shield: Guild :shield:`, data.guild);
+						let message = new Discord.MessageEmbed()
+							.setColor(process.env.embedColour)
+							.setTitle(`:tools: ${username}'s Professions :hammer_pick:`)
+							.setDescription(data.profList)
+							.addField(`:shield: Guild :shield:`, data.guild);
 						msg.channel.send(message);
 					}
 				})

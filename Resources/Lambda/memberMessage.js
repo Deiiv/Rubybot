@@ -1,8 +1,8 @@
 const fetch = require("node-fetch");
-const guildWebhookUrl = "https://discordapp.com/api/webhooks/630524976960897052/J1i3PpHXpdgLGZv1FsKQ91wPYpi7ksPH1s24GRRCH-ZlECUvZxWiz1MXrA0WevXTr_0M";
-// const allianceWebhookUrl = "https://discordapp.com/api/webhooks/632340149564604469/LStOHI8kOc1QwPda_NTyUhxUoJKYIKyWE8R-tb89IUVNcQnLlkOG5wo_Z67P2QPAKagW";
+const guildWebhookUrl = "https://discordapp.com/api/webhooks/";
+// const allianceWebhookUrl = "https://discordapp.com/api/webhooks/";
 
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
 	console.log("Event : " + JSON.stringify(event));
 	console.log("Context : " + JSON.stringify(context));
 
@@ -18,11 +18,11 @@ exports.handler = function(event, context, callback) {
 				fields: [
 					{
 						name: event.discordid + " sent the following message:",
-						value: event.message
-					}
-				]
-			}
-		]
+						value: event.message,
+					},
+				],
+			},
+		],
 	};
 
 	console.log("Embed data : " + JSON.stringify(embedData));
@@ -30,13 +30,13 @@ exports.handler = function(event, context, callback) {
 	fetch(url, {
 		method: "post",
 		body: JSON.stringify(embedData),
-		headers: { "Content-Type": "application/json" }
+		headers: { "Content-Type": "application/json" },
 	})
-		.then(res => {
+		.then((res) => {
 			console.log("Done", res);
 			callback(null, res);
 		})
-		.catch(err => {
+		.catch((err) => {
 			console.log("Error in sending data to webhook : ", err);
 			callback(err);
 		});
