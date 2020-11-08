@@ -16,7 +16,6 @@ var handleActionPortals = function (msg) {
 
 			var count = 0;
 			portalList.forEach((portal, i) => {
-				console.log("portal ", i);
 				let $ = cheerio.load(portal, {
 					decodeEntities: false,
 				});
@@ -24,11 +23,7 @@ var handleActionPortals = function (msg) {
 					.find("div > div > div > h3")
 					.toArray()
 					.map((element) => $(element).text());
-				console.log(portalInfo);
-				count++;
-				if (count === portalList.length) {
-					console.log(list);
-				}
+				console.log("portal ", i, portalInfo);
 			});
 
 			// .find("div > div > div > h3")
