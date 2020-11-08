@@ -45,6 +45,10 @@ var handleOnMessage = function (msg) {
 		case "!contact":
 			handleActionContact(msg);
 			break;
+		// gets current dimension portals
+		case "!portals":
+			handleActionPortals(msg);
+			break;
 		default:
 			break;
 	}
