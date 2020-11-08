@@ -18,7 +18,6 @@ var getSiteData = function (host, path) {
 				});
 			})
 			.on("error", function (err) {
-				console.log("Error in http get : " + err.message);
 				return reject(err);
 			});
 	});

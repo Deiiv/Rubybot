@@ -4,52 +4,54 @@ const logger = require("../logger");
 const cheerio = require("cheerio");
 
 var handleActionPortals = function (msg) {
-	console.log("portals action");
+	let messageContent = msg.content.split(" ");
+	var specificPortal;
+	if (messageContent[1]) {
+		if (messageContent[1].toLowerCase().startsWith("enu")) specificPortal = "Enurado";
+		else if (messageContent[1].toLowerCase().startsWith("sram")) specificPortal = "Srambad";
+		else if (messageContent[1].toLowerCase().startsWith("xel")) specificPortal = "Xelorium";
+		else if (messageContent[1].toLowerCase().startsWith("eca")) specificPortal = "Ecaflipus";
+	}
 	getSiteData("dofus-portals.fr", "/portails/66")
 		.then((siteData) => {
-			console.log("Got siteData : " + JSON.stringify(siteData));
 			let $ = cheerio.load(siteData, {
 				decodeEntities: false,
 			});
 
-			const portalList = $(".portal").toArray();
+			var portalList = $(".portal").toArray();
 
-			var count = 0;
 			portalList.forEach((portal, i) => {
 				let $ = cheerio.load(portal, {
 					decodeEntities: false,
 				});
+				var dimensionName = $(".portal")
+					.find("div > div > div > h2")
+					.toArray()
+					.map((element) => $(element).text())[0];
+				if (dimensionName === "Enutrosor") dimensionName = "Enurado";
+				if (specificPortal && specificPortal != dimensionName) return;
+
 				var portalInfo = $(".portal")
 					.find("div > div > div > h3")
 					.toArray()
 					.map((element) => $(element).text());
 
-				let text = `portal #${i} pos |${portalInfo[0]}| utilization |${portalInfo[1]}| last updated |${portalInfo[3]}|`;
-				console.log(text);
-				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(text);
+				var attachment = new Discord.MessageAttachment(`./images/${dimensionName}.png`, `${dimensionName}.png`);
+
+				if (portalInfo[1]) text = `Pos: ${portalInfo[0]}\nUses: ${portalInfo[1].split(" ")[1]}\nLast updated ${portalInfo[3]} ago`;
+				else text = `Unknown! ${process.env.pepeCry}`;
+				let message = new Discord.MessageEmbed()
+					.setColor(process.env.embedColour)
+					.setTitle(`${dimensionName} Portal Info`)
+					.setDescription(text)
+					.attachFiles(attachment)
+					.setThumbnail(`attachment://${dimensionName}.png`);
 				msg.channel.send(message);
 			});
-
-			/*
-			portal #0 pos |[-33,-63]| utilization |Utilisations 76 | last updated | 1 h 52 min|
-			portal #1 pos |[-18,39]| utilization |Utilisations 80 | last updated |2 min|
-			portal #2 pos |[-51,5]| utilization |Utilisations 126 | last updated |46 min|
-			portal #3 pos |Actions entravées| utilization |undefined| last updated |undefined|
-
-			^^^^^ if undefined, then it's unknown
-
-
-			*/
-
-			// .find("div > div > div > h3")
-			// .toArray()
-			// .map((element) => $(element).text());
-
-			// return resolve();
 		})
 		.catch((err) => {
-			console.log("Error in getSiteData");
-			console.log(err);
+			logger.info("Error in getSiteData");
+			logger.info(err);
 		});
 };
 module.exports = handleActionPortals;
