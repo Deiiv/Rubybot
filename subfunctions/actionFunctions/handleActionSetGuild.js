@@ -25,7 +25,10 @@ var handleActionSetGuild = function (msg) {
 							logger.info(error);
 						});
 				} else {
-					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid guild!").setDescription(`Please send one of the following: ${validGuilds.toString()}.\nIf your guild is not in this list, please reach out to ${process.env.adminUserTag}`);
+					let message = new Discord.MessageEmbed()
+						.setColor(process.env.embedColour)
+						.setTitle("Invalid guild!")
+						.setDescription(`Please send one of the following: ${validGuilds.toString()}.\nIf your guild is not in this list, please reach out to ${process.env.adminUserTag}`);
 					msg.channel.send(message);
 				}
 			})

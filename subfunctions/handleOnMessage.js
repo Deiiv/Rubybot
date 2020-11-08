@@ -7,6 +7,7 @@ const handleActionView = require("./actionFunctions/handleActionView.js");
 const handleActionSetGuild = require("./actionFunctions/handleActionSetGuild.js");
 const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
+const handleActionPortals = require("./actionFunctions/handleActionPortals.js");
 
 var handleOnMessage = function (msg) {
 	// ignore bot messages

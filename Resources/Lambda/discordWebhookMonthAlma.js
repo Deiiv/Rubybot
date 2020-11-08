@@ -6,7 +6,7 @@ const moment = require("moment-timezone");
 const webhookRuby = "";
 var almaItems;
 
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
 	var url = "";
 
 	console.log("Event : " + JSON.stringify(event));
@@ -21,7 +21,7 @@ exports.handler = function(event, context, callback) {
 		url = webhookRuby;
 		let response = {
 			statusCode: "200",
-			body: "Request received."
+			body: "Request received.",
 		};
 		callback(null, response);
 	}
@@ -44,7 +44,7 @@ exports.handler = function(event, context, callback) {
 		console.log("Invalid Origin");
 		let response = {
 			statusCode: "200",
-			body: "INVALID_ORIGIN"
+			body: "INVALID_ORIGIN",
 		};
 		callback(null, response);
 		return;
@@ -66,23 +66,23 @@ exports.handler = function(event, context, callback) {
 			console.log("Alma items : " + almaItems.toString());
 
 			sendDataToWebhook(url, month)
-				.then(response => {
+				.then((response) => {
 					console.log("Data sent successfully. Returned response : " + JSON.stringify(response));
 					return;
 				})
-				.catch(err => {
+				.catch((err) => {
 					console.log("Error in sendDataToWebhook : " + JSON.stringify(err));
 					return err;
 				});
 		})
-		.catch(err => {
+		.catch((err) => {
 			console.log("Error in getAlmaDataForDay : " + JSON.stringify(err));
 			return err;
 		});
 };
 
 function getAlmaDataForDay(month, day) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		if (month.length == 1) {
 			month = "0" + month;
 		}
@@ -93,29 +93,29 @@ function getAlmaDataForDay(month, day) {
 		let options = {
 			host: "www.krosmoz.com",
 			port: 80,
-			path: "/en/almanax/2020-" + month + "-" + day
+			path: "/en/almanax/2020-" + month + "-" + day,
 		};
 
 		http
-			.get(options, function(res) {
+			.get(options, function (res) {
 				let almaSiteBody = "";
-				res.on("data", function(data) {
+				res.on("data", function (data) {
 					almaSiteBody += data;
 				});
-				res.on("end", function() {
+				res.on("end", function () {
 					getDataFrom(almaSiteBody)
-						.then(result => {
+						.then((result) => {
 							console.log("Data from alma for day " + day + " in month " + month + " : " + JSON.stringify(result));
 							almaItems[day - 1] = result;
 							return resolve();
 						})
-						.catch(err => {
+						.catch((err) => {
 							console.log("Error in getDataFrom : " + JSON.stringify(err));
 							return reject(err);
 						});
 				});
 			})
-			.on("error", function(err) {
+			.on("error", function (err) {
 				console.log("Error in http get : " + err.message);
 				return reject(err);
 			});
@@ -123,9 +123,9 @@ function getAlmaDataForDay(month, day) {
 }
 
 function getDataFrom(almSiteBody) {
-	return new Promise(function(resolve) {
+	return new Promise(function (resolve) {
 		let $ = cheerio.load(almSiteBody, {
-			decodeEntities: false
+			decodeEntities: false,
 		});
 
 		let offering = $(".more-infos-content").toString();
@@ -140,7 +140,7 @@ function getDataFrom(almSiteBody) {
 }
 
 function sendDataToWebhook(webhookUrl, month) {
-	return new Promise(function(resolve) {
+	return new Promise(function (resolve) {
 		console.log("Url : " + webhookUrl);
 
 		var almaItemsString = almaItems.toString();
@@ -159,11 +159,11 @@ function sendDataToWebhook(webhookUrl, month) {
 					fields: [
 						{
 							name: "All resources needed for Almanax during the month of " + moment(month, "MM").format("MMMM"),
-							value: almaItemsString
-						}
-					]
-				}
-			]
+							value: almaItemsString,
+						},
+					],
+				},
+			],
 		};
 
 		console.log("Embed data : " + JSON.stringify(embedData));
@@ -171,10 +171,10 @@ function sendDataToWebhook(webhookUrl, month) {
 		fetch(webhookUrl, {
 			method: "post",
 			body: JSON.stringify(embedData),
-			headers: { "Content-Type": "application/json" }
+			headers: { "Content-Type": "application/json" },
 		})
-			.then(res => res.json())
-			.then(json => {
+			.then((res) => res.json())
+			.then((json) => {
 				resolve(json);
 			});
 	});

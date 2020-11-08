@@ -1,6 +1,26 @@
 const Discord = require("discord.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
-const profList = ["Alchemist", "Farmer", "Fisherman", "Hunter", "Lumberjack", "Miner", "Artificer", "Carver", "Handyman", "Jeweller", "Shoemaker", "Smith", "Tailor", "Craftmagus", "Carvmagus", "Costumagus", "Jewelmagus", "Shoemagus", "Smithmagus"];
+const profList = [
+	"Alchemist",
+	"Farmer",
+	"Fisherman",
+	"Hunter",
+	"Lumberjack",
+	"Miner",
+	"Artificer",
+	"Carver",
+	"Handyman",
+	"Jeweller",
+	"Shoemaker",
+	"Smith",
+	"Tailor",
+	"Craftmagus",
+	"Carvmagus",
+	"Costumagus",
+	"Jewelmagus",
+	"Shoemagus",
+	"Smithmagus",
+];
 const logger = require("./../logger");
 
 var handleActionAdd = function (msg) {

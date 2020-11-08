@@ -1,7 +1,7 @@
 var AWS = require("aws-sdk");
 var dynamodb = new AWS.DynamoDB();
 
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
 	console.log(event);
 
 	if (event.action === "view") {
@@ -10,17 +10,17 @@ exports.handler = function(event, context, callback) {
 			let scanParams = {
 				ExpressionAttributeValues: {
 					":username": {
-						S: event.username
-					}
+						S: event.username,
+					},
 				},
 				FilterExpression: "UserName = :username",
-				TableName: "Dofus-user-data"
+				TableName: "Dofus-user-data",
 			};
 			console.log("Scan params", scanParams);
 			dynamodb
 				.scan(scanParams)
 				.promise()
-				.then(result => {
+				.then((result) => {
 					console.log(result);
 					var data = AWS.DynamoDB.Converter.unmarshall(result.Items[0]);
 					console.log(data);
@@ -28,7 +28,7 @@ exports.handler = function(event, context, callback) {
 					if (Object.entries(data).length === 0 && data.constructor === Object) {
 						let response = {
 							statusCode: 200,
-							body: "NONE"
+							body: "NONE",
 						};
 						callback(null, response);
 					}
@@ -43,19 +43,19 @@ exports.handler = function(event, context, callback) {
 							} else {
 								profList.push({
 									prof: item,
-									level: data[item]
+									level: data[item],
 								});
 							}
 						}
 					}
 
-					profList = profList.sort(function(a, b) {
+					profList = profList.sort(function (a, b) {
 						return b.level - a.level;
 					});
 
 					let profString = "";
 
-					profList.forEach(function(prof) {
+					profList.forEach(function (prof) {
 						if (profString != "") profString += "\n";
 						profString += prof.prof + " - " + prof.level;
 					});
@@ -64,7 +64,7 @@ exports.handler = function(event, context, callback) {
 
 					var body = JSON.stringify({
 						guild: guild,
-						profList: profString
+						profList: profString,
 					});
 
 					if (Object.entries(data).length === 0 && data.constructor === Object) {
@@ -73,15 +73,15 @@ exports.handler = function(event, context, callback) {
 
 					let response = {
 						statusCode: 200,
-						body: body
+						body: body,
 					};
 					callback(null, response);
 				})
-				.catch(error => {
+				.catch((error) => {
 					console.log(error);
 					let response = {
 						statusCode: 200,
-						body: error.message
+						body: error.message,
 					};
 					callback(null, response);
 				});
@@ -91,16 +91,16 @@ exports.handler = function(event, context, callback) {
 			let getParams = {
 				Key: {
 					UserId: {
-						S: event.id
-					}
+						S: event.id,
+					},
 				},
-				TableName: "Dofus-user-data"
+				TableName: "Dofus-user-data",
 			};
 
 			dynamodb
 				.getItem(getParams)
 				.promise()
-				.then(result => {
+				.then((result) => {
 					console.log(result);
 					var data = AWS.DynamoDB.Converter.unmarshall(result.Item);
 					console.log(data);
@@ -119,19 +119,19 @@ exports.handler = function(event, context, callback) {
 							} else {
 								profList.push({
 									prof: item,
-									level: data[item]
+									level: data[item],
 								});
 							}
 						}
 					}
 
-					profList = profList.sort(function(a, b) {
+					profList = profList.sort(function (a, b) {
 						return b.level - a.level;
 					});
 
 					let profString = "";
 
-					profList.forEach(function(prof) {
+					profList.forEach(function (prof) {
 						if (profString != "") profString += "\n";
 						profString += prof.prof + " - " + prof.level;
 					});
@@ -141,7 +141,7 @@ exports.handler = function(event, context, callback) {
 					var body = JSON.stringify({
 						guild: guild,
 						profList: profString,
-						username: username
+						username: username,
 					});
 
 					if (Object.entries(data).length === 0 && data.constructor === Object) {
@@ -150,15 +150,15 @@ exports.handler = function(event, context, callback) {
 
 					let response = {
 						statusCode: 200,
-						body: body
+						body: body,
 					};
 					callback(null, response);
 				})
-				.catch(error => {
+				.catch((error) => {
 					console.log(error);
 					let response = {
 						statusCode: 200,
-						body: error.message
+						body: error.message,
 					};
 					callback(null, response);
 				});
@@ -172,18 +172,18 @@ exports.handler = function(event, context, callback) {
 			ExpressionAttributeNames: {
 				"#PROF": event.prof,
 				"#USERNAME": "UserName",
-				"#GUILD": "Guild"
+				"#GUILD": "Guild",
 			},
-			ProjectionExpression: "#PROF, #USERNAME, #GUILD"
+			ProjectionExpression: "#PROF, #USERNAME, #GUILD",
 		};
 		console.log("Scan params", scanParams);
 		dynamodb
 			.scan(scanParams)
 			.promise()
-			.then(result => {
+			.then((result) => {
 				console.log(result);
 				var data = [];
-				result.Items.forEach(function(item) {
+				result.Items.forEach(function (item) {
 					data.push(AWS.DynamoDB.Converter.unmarshall(item));
 				});
 				console.log(data);
@@ -191,12 +191,12 @@ exports.handler = function(event, context, callback) {
 				if (data.length === 0) {
 					let response = {
 						statusCode: 200,
-						body: "NONE"
+						body: "NONE",
 					};
 					callback(null, response);
 				}
 
-				data = data.sort(function(a, b) {
+				data = data.sort(function (a, b) {
 					return b[event.prof] - a[event.prof];
 				});
 
@@ -204,7 +204,7 @@ exports.handler = function(event, context, callback) {
 				let limit = parseInt(event.limit);
 				let count = 0;
 
-				data.forEach(function(item) {
+				data.forEach(function (item) {
 					let levelInt = parseInt(item[event.prof], 10);
 					let eventLevelInt = parseInt(event.level, 10);
 					if (levelInt >= eventLevelInt) {
@@ -221,20 +221,20 @@ exports.handler = function(event, context, callback) {
 				console.log("Sorted string: " + profString);
 
 				var body = JSON.stringify({
-					string: profString
+					string: profString,
 				});
 
 				let response = {
 					statusCode: 200,
-					body: body
+					body: body,
 				};
 				callback(null, response);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error);
 				let response = {
 					statusCode: 200,
-					body: error.message
+					body: error.message,
 				};
 				callback(null, response);
 			});
@@ -244,7 +244,7 @@ exports.handler = function(event, context, callback) {
 		if (!event.id || !event.username) {
 			let response = {
 				statusCode: 200,
-				body: "Missing some fields"
+				body: "Missing some fields",
 			};
 			callback(null, response);
 		}
@@ -252,24 +252,24 @@ exports.handler = function(event, context, callback) {
 		let updateParams = {
 			ExpressionAttributeNames: {
 				"#NAME": "UserName",
-				"#GUILD": "Guild"
+				"#GUILD": "Guild",
 			},
 			ExpressionAttributeValues: {
 				":NAME": {
-					S: event.username
+					S: event.username,
 				},
 				":GUILD": {
-					S: event.guild || "None"
-				}
+					S: event.guild || "None",
+				},
 			},
 			Key: {
 				UserId: {
-					S: event.id
-				}
+					S: event.id,
+				},
 			},
 			ReturnValues: "ALL_NEW",
 			TableName: "Dofus-user-data",
-			UpdateExpression: "SET #NAME = :NAME, #GUILD = :GUILD"
+			UpdateExpression: "SET #NAME = :NAME, #GUILD = :GUILD",
 		};
 
 		console.log("Calling DynamoDB with params : " + JSON.stringify(updateParams));
@@ -277,19 +277,19 @@ exports.handler = function(event, context, callback) {
 		dynamodb
 			.updateItem(updateParams)
 			.promise()
-			.then(result => {
+			.then((result) => {
 				console.log("Updated data for " + event.username);
 				let response = {
 					statusCode: 200,
-					body: "Updated data for " + event.username
+					body: "Updated data for " + event.username,
 				};
 				callback(null, response);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error);
 				let response = {
 					statusCode: 200,
-					body: error.message
+					body: error.message,
 				};
 				callback(null, response);
 			});
@@ -299,7 +299,7 @@ exports.handler = function(event, context, callback) {
 		if (!event.id || !event.username || !event.prof || !event.level) {
 			let response = {
 				statusCode: 200,
-				body: "Missing some fields"
+				body: "Missing some fields",
 			};
 			callback(null, response);
 		}
@@ -307,24 +307,24 @@ exports.handler = function(event, context, callback) {
 		let updateParams = {
 			ExpressionAttributeNames: {
 				"#NAME": "UserName",
-				"#PROF": event.prof
+				"#PROF": event.prof,
 			},
 			ExpressionAttributeValues: {
 				":NAME": {
-					S: event.username
+					S: event.username,
 				},
 				":PROF": {
-					S: event.level
-				}
+					S: event.level,
+				},
 			},
 			Key: {
 				UserId: {
-					S: event.id
-				}
+					S: event.id,
+				},
 			},
 			ReturnValues: "ALL_NEW",
 			TableName: "Dofus-user-data",
-			UpdateExpression: "SET #NAME = :NAME, #PROF = :PROF"
+			UpdateExpression: "SET #NAME = :NAME, #PROF = :PROF",
 		};
 
 		console.log("Calling DynamoDB with params : " + JSON.stringify(updateParams));
@@ -332,19 +332,19 @@ exports.handler = function(event, context, callback) {
 		dynamodb
 			.updateItem(updateParams)
 			.promise()
-			.then(result => {
+			.then((result) => {
 				console.log("Updated data : " + JSON.stringify(result));
 				let response = {
 					statusCode: 200,
-					body: "Updated data for " + event.username
+					body: "Updated data for " + event.username,
 				};
 				callback(null, response);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error);
 				let response = {
 					statusCode: 200,
-					body: error.message
+					body: error.message,
 				};
 				callback(null, response);
 			});

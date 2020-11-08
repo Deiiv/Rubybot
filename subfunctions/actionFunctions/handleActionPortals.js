@@ -1,44 +1,48 @@
 const Discord = require("discord.js");
-const sendToApi = require("./subActionFunctions/sendToApi.js");
+const getSiteData = require("./subActionFunctions/getSiteData.js");
+const logger = require("../logger");
+const cheerio = require("cheerio");
 
-var handleActionAlma = function (msg) {
-	let messageContent = msg.content.split(" ");
-	if (messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13) {
-		let almaChannel = "";
-		try {
-			almaChannel = msg.member.guild.channels.find((ch) => ch.name.includes("almanax"));
-		} catch (err) {
-			console.log(err);
-			let message = new Discord.RichEmbed()
-				.setColor(process.env.embedColour)
-				.addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
-			msg.channel.send(message);
-			return;
-		}
-		let message = new Discord.RichEmbed()
-			.setColor(process.env.embedColour)
-			.addField("Sending the request!", "Please wait a few seconds, the result will be sent as a webhook call in the " + (almaChannel.toString() || "#almanax") + " channel");
-		msg.channel.send(message);
-		let guild = msg.member.guild.name;
+var handleActionPortals = function (msg) {
+	console.log("portals action");
+	getSiteData("dofus-portals.fr", "/portails/66")
+		.then((siteData) => {
+			console.log("Got siteData : " + JSON.stringify(siteData));
+			let $ = cheerio.load(siteData, {
+				decodeEntities: false,
+			});
 
-		let data = {
-			month: messageContent[1],
-			origin: guild,
-		};
-		sendToApi(data, "/discordwebhookmonthalma", function (response, error) {
-			if (error) {
-				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-				msg.channel.send(message);
-			} else {
-				if (response === "INVALID_ORIGIN") {
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("This functionality isn't supported in this server", process.env.pepeCry);
-					msg.channel.send(message);
+			const portalList = $(".portal").toArray();
+
+			var count = 0;
+			portalList.forEach((portal, i) => {
+				console.log("portal ", i);
+				let $ = cheerio.load(portal, {
+					decodeEntities: false,
+				});
+				var portalInfo = $(".portal")
+					.find("div > div > div > h3")
+					.toArray()
+					.map((element) => $(element).text());
+				console.log(portalInfo);
+				count++;
+				if (count === portalList.length) {
+					console.log(list);
 				}
-			}
+			});
+
+			// .find("div > div > div > h3")
+			// .toArray()
+			// .map((element) => $(element).text());
+
+			// return resolve();
+		})
+		.catch((err) => {
+			console.log("Error in getSiteData");
+			console.log(err);
 		});
-	} else {
-		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "Proper usage: !alma MM\nExamples: !alma 4, !alma 11");
-		msg.channel.send(message);
-	}
+
+	let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("something something portals");
+	msg.channel.send(message);
 };
-module.exports = handleActionAlma;
+module.exports = handleActionPortals;
