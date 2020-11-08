@@ -23,8 +23,23 @@ var handleActionPortals = function (msg) {
 					.find("div > div > div > h3")
 					.toArray()
 					.map((element) => $(element).text());
-				console.log("portal ", i, portalInfo);
+
+				let text = `portal #${i} pos |${portalInfo[0]}| utilization |${portalInfo[1]}| last updated |${portalInfo[3]}|`;
+				console.log(text);
+				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(text);
+				msg.channel.send(message);
 			});
+
+			/*
+			portal #0 pos |[-33,-63]| utilization |Utilisations 76 | last updated | 1 h 52 min|
+			portal #1 pos |[-18,39]| utilization |Utilisations 80 | last updated |2 min|
+			portal #2 pos |[-51,5]| utilization |Utilisations 126 | last updated |46 min|
+			portal #3 pos |Actions entravées| utilization |undefined| last updated |undefined|
+
+			^^^^^ if undefined, then it's unknown
+
+
+			*/
 
 			// .find("div > div > div > h3")
 			// .toArray()
@@ -36,8 +51,5 @@ var handleActionPortals = function (msg) {
 			console.log("Error in getSiteData");
 			console.log(err);
 		});
-
-	let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("something something portals");
-	msg.channel.send(message);
 };
 module.exports = handleActionPortals;
