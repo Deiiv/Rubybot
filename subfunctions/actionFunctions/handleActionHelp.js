@@ -5,6 +5,7 @@ var handleActionHelp = function (msg) {
 		.setColor(process.env.embedColour)
 		.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
 		.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
+		.addField(":blue_circle: For viewing portals:", "!portals\n!portals DIMENSION_NAME (ex. !portals enu, !portals enurado")
 		.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 		.addField(":blue_book: For viewing bot information:", "!info")
 		.addField(
