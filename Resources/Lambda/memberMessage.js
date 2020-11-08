@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const guildWebhookUrl = process.env.webhookUrlMemberMessage;
+const guildWebhookUrl = "https://discordapp.com/api/webhooks/";
 // const allianceWebhookUrl = "https://discordapp.com/api/webhooks/";
 
 exports.handler = function (event, context, callback) {
