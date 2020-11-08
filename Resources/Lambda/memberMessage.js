@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
-const guildWebhookUrl = "https://discordapp.com/api/webhooks/630524976960897052/J1i3PpHXpdgLGZv1FsKQ91wPYpi7ksPH1s24GRRCH-ZlECUvZxWiz1MXrA0WevXTr_0M";
-// const allianceWebhookUrl = "https://discordapp.com/api/webhooks/632340149564604469/LStOHI8kOc1QwPda_NTyUhxUoJKYIKyWE8R-tb89IUVNcQnLlkOG5wo_Z67P2QPAKagW";
+const guildWebhookUrl = process.env.webhookUrlMemberMessage;
+// const allianceWebhookUrl = "https://discordapp.com/api/webhooks/";
 
 exports.handler = function (event, context, callback) {
 	console.log("Event : " + JSON.stringify(event));
