@@ -24,28 +24,22 @@ var handleActionPortals = function (msg) {
 				let $ = cheerio.load(portal, {
 					decodeEntities: false,
 				});
-				var dimensionName = $(".portal")
+				let dimensionName = $(".portal")
 					.find("div > div > div > h2")
 					.toArray()
 					.map((element) => $(element).text())[0];
+				let thumbnail = `https://dofus-portals.fr/images/portals/${dimensionName}.png`;
 				if (dimensionName === "Enutrosor") dimensionName = "Enurado";
 				if (specificPortal && specificPortal != dimensionName) return;
 
-				var portalInfo = $(".portal")
+				let portalInfo = $(".portal")
 					.find("div > div > div > h3")
 					.toArray()
 					.map((element) => $(element).text());
 
-				var attachment = new Discord.MessageAttachment(`./images/${dimensionName}.png`, `${dimensionName}.png`);
-
 				if (portalInfo[1]) text = `Pos: ${portalInfo[0]}\nUses: ${portalInfo[1].split(" ")[1]}\nLast updated ${portalInfo[3]} ago`;
 				else text = `Unknown! ${process.env.pepeCry}`;
-				let message = new Discord.MessageEmbed()
-					.setColor(process.env.embedColour)
-					.setTitle(`${dimensionName} Portal Info`)
-					.setDescription(text)
-					.attachFiles(attachment)
-					.setThumbnail(`attachment://${dimensionName}.png`);
+				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`${dimensionName} Portal Info`).setDescription(text).setThumbnail(thumbnail);
 				msg.channel.send(message);
 			});
 		})
