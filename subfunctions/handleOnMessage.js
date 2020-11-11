@@ -15,7 +15,7 @@ var handleOnMessage = function (msg) {
 	if (msg.author.bot) return;
 
 	if (validCommands.includes(msg.content.split(" ")[0])) {
-		if (msg.channel.name === "talk-to-rubybot") {
+		if (msg.channel.name === "talk-to-rubybot" || msg.channel.name === "professions") {
 			switch (msg.content.split(" ")[0]) {
 				// view bot info
 				case "!info":
