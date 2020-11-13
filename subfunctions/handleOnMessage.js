@@ -8,7 +8,7 @@ const handleActionSetGuild = require("./actionFunctions/handleActionSetGuild.js"
 const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
 const handleActionPortals = require("./actionFunctions/handleActionPortals.js");
-const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals"];
+const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal"];
 
 var handleOnMessage = function (msg) {
 	// ignore bot messages
@@ -51,6 +51,7 @@ var handleOnMessage = function (msg) {
 					break;
 				// gets current dimension portals
 				case "!portals":
+				case "!portal":
 					handleActionPortals(msg);
 					break;
 				default:
