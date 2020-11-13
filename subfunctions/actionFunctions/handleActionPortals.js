@@ -12,6 +12,7 @@ var handleActionPortals = function (msg) {
 		else if (messageContent[1].toLowerCase().startsWith("xel")) specificPortal = "Xelorium";
 		else if (messageContent[1].toLowerCase().startsWith("eca")) specificPortal = "Ecaflipus";
 	}
+	if (messageContent[0] === "portal" && !messageContent[1]) return;
 	getSiteData("dofus-portals.fr", "/portails/66")
 		.then((siteData) => {
 			let $ = cheerio.load(siteData, {

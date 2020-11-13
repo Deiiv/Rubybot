@@ -53,6 +53,9 @@ var handleOnMessage = function (msg) {
 				case "!portals":
 					handleActionPortals(msg);
 					break;
+				case "!portal":
+					handleActionPortals(msg);
+					break;
 				default:
 					break;
 			}
