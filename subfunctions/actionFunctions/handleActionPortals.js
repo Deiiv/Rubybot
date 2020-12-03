@@ -12,7 +12,15 @@ var handleActionPortals = function (msg) {
 		else if (messageContent[1].toLowerCase().startsWith("xel")) specificPortal = "Xelorium";
 		else if (messageContent[1].toLowerCase().startsWith("eca")) specificPortal = "Ecaflipus";
 	} else if (messageContent[0] === "!portal") return;
-	getSiteData("dofus-portals.fr", "/portails/66")
+	var server = {
+		code: 66, // ilyzaelle
+		name: "Ilyzaelle",
+	};
+	// jahash, for !portal enu j
+	if (messageContent[2] && messageContent[2].toLowerCase().startsWith("j")) server = { code: 84, name: "Jahash" };
+	// jahash, for !portals j
+	else if (messageContent[1] && messageContent[1].toLowerCase().startsWith("j")) server = { code: 84, name: "Jahash" };
+	getSiteData("dofus-portals.fr", `/portails/${server.code}`)
 		.then((siteData) => {
 			let $ = cheerio.load(siteData, {
 				decodeEntities: false,
@@ -37,9 +45,9 @@ var handleActionPortals = function (msg) {
 					.toArray()
 					.map((element) => $(element).text());
 
-				if (portalInfo[1]) text = `Pos: ${portalInfo[0]}\nUses: ${portalInfo[1].split(" ")[1]}\nLast updated ${portalInfo[3]} ago`;
+				if (portalInfo[1]) text = `Position: ${portalInfo[0]}\nUses left: ${portalInfo[1].split(" ")[1]}\nLast updated ${portalInfo[3]} ago`;
 				else text = `Unknown! ${process.env.pepeCry}`;
-				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`${dimensionName} Portal Info`).setDescription(text).setThumbnail(thumbnail);
+				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`${dimensionName} Portal Info - ${server.name}`).setDescription(text).setThumbnail(thumbnail);
 				msg.channel.send(message);
 			});
 		})

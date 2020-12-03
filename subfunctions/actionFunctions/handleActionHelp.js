@@ -7,7 +7,7 @@ var handleActionHelp = function (msg) {
 		.addField(":calendar_spiral: To view Almanax for a full month:", "!alma MM")
 		.addField(
 			":blue_circle: For viewing portals:",
-			"!portals (shows all portals)\n!portals DIMENSION_NAME OR !portal DIMENSION_NAME (shows specific portal, ex. !portals enu, !portals enurado, !portal enu, !portal enurado)"
+			"!portals (shows all portals)\n!portals DIMENSION_NAME OR !portal DIMENSION_NAME (shows specific portal, ex. !portals enu, !portals enurado, !portal enu, !portal enurado)\nNote: default server is Ilyzaelle. For Jahash, add j (ex. !portal enu j, !portals j)"
 		)
 		.addField(":mailbox_with_mail: To contact the guild leadership:", "!contact YOUR MESSAGE HERE\nNOTE: This can only be used in direct pm with the bot")
 		.addField(":blue_book: For viewing bot information:", "!info")
