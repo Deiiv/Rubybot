@@ -16,10 +16,8 @@ var handleActionPortals = function (msg) {
 		code: 66, // ilyzaelle
 		name: "Ilyzaelle",
 	};
-	// jahash, for !portal enu j
-	if (messageContent[2] && messageContent[2].toLowerCase().startsWith("j")) server = { code: 84, name: "Jahash" };
-	// jahash, for !portals j
-	else if (messageContent[1] && messageContent[1].toLowerCase().startsWith("j")) server = { code: 84, name: "Jahash" };
+	// jahash, for !portals j OR !portal enu j
+	if ((messageContent[1] && messageContent[1].toLowerCase().startsWith("j")) || (messageContent[2] && messageContent[2].toLowerCase().startsWith("j"))) server = { code: 84, name: "Jahash" };
 	getSiteData("dofus-portals.fr", `/portails/${server.code}`)
 		.then((siteData) => {
 			let $ = cheerio.load(siteData, {
