@@ -45,10 +45,6 @@ var handleOnMessage = function (msg) {
 				case "!add":
 					handleActionAdd(msg);
 					break;
-				// contacts discord admins in guild discord
-				case "!contact":
-					handleActionContact(msg);
-					break;
 				// gets current dimension portals
 				case "!portals":
 				case "!portal":
@@ -57,7 +53,33 @@ var handleOnMessage = function (msg) {
 				default:
 					break;
 			}
-		} else {
+		}
+		// private message
+		else if(msg.guild === null){
+			switch (msg.content.split(" ")[0]) {
+				// contacts discord admins in guild discord
+				case "!contact":
+					handleActionContact(msg);
+					break;
+				// view help menu
+				case "!help":
+					handleActionHelp(msg);
+					break;
+				// view profession details
+				case "!view":
+					handleActionView(msg);
+					break;
+				// view bot info
+				case "!info":
+					handleActionInfo(msg);
+					break;
+				default:
+					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Only !contact, !help, !info, and !view will work here`).setDescription(process.env.peepoHappy);
+					msg.channel.send(message);
+					break;
+			}
+		}
+		else {
 			let talkToRubybotChannel = msg.guild.channels.cache.find((ch) => ch.name === "talk-to-rubybot");
 			var text = "Please create a channel named 'talk-to-rubybot' to send your commands.";
 			if (talkToRubybotChannel) text = `Please send your commands in ${talkToRubybotChannel.toString()}`;
