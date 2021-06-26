@@ -5,12 +5,19 @@ const backup = require("discord-backup");
 const backupPath = __dirname + "/../../discord-server-backups/";
 backup.setStorageFolder(backupPath);
 const AWS = require("aws-sdk");
+const logger = require("../logger");
 const s3 = new AWS.S3();
 const bucketName = "rubybot";
 
 var handleActionBackup = function (msg) {
 	var messageContent = msg.content.split(" ");
 	var message;
+
+	if (msg.author.id != "140904638084808705") {
+		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("You're not allowed to use this command!").setDescription(process.env.pepeCry);
+		msg.channel.send(message);
+		return;
+	}
 
 	if (!messageContent[1]) {
 		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("Proper usage: !backup create OR !backup list OR !backup info X :floppy_disk:");
@@ -27,7 +34,7 @@ var handleActionBackup = function (msg) {
 				jsonBeautify: true,
 				saveImages: "base64"
 			}).then((backupData) => {
-				console.log(backupData);
+				logger.info("Backup has been created successfully");
 				var date = new Date(backupData.createdTimestamp);
 				var yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString();
 				var formatedDate = `${yyyy}/${(mm[1] ? mm : "0" + mm[0])}/${(dd[1] ? dd : "0" + dd[0])}`;
@@ -40,24 +47,26 @@ var handleActionBackup = function (msg) {
 					.addField("Size", `${prettyBytes(size)}`, false)
 					.addField("Created at", formatedDate, false);
 				msg.channel.send(message);
-				// message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup will now be uploaded to S3...").setDescription(process.env.pepoG);
-				// msg.channel.send(message);
 				var params = {
-					Body: "test",
+					Body: JSON.stringify(backupData),
 					Bucket: bucketName,
-					Key: `discord-server-backups/${backupData.id}`
+					Key: `discord-server-backups/${backupData.id}.json`
 				};
-				console.log("Uploading to S3 with params : " + JSON.stringify(params));
+				logger.info(`Uploading to S3 to bucket ${params.Bucket} with key ${params.Key}`);
 				s3.putObject(params).promise()
 					.then(data => {
-						console.log(data);
-						// message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Backup has been uploaded to S3!`).setDescription(process.env.peepoHappy);
-						// msg.channel.send(message);
+						logger.info("Response from s3 : " + JSON.stringify(data));
 					})
 					.catch(err => {
-						console.log(err);
-						// message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup failed to upload to S3").setDescription(process.env.pepeCry);
-						// msg.channel.send(message);
+						logger.info(err);
+					})
+				logger.info("Removing local backup file");
+				fs.remove(`${backupPath}${backupData.id}.json`)
+					.then(() => {
+						logger.info("File removed");
+					})
+					.catch(err => {
+						logger.info(err);
 					})
 			});
 			break;
