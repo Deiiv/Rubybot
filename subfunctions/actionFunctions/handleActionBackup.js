@@ -42,23 +42,23 @@ var handleActionBackup = function (msg) {
 				msg.channel.send(message);
 				// message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup will now be uploaded to S3...").setDescription(process.env.pepoG);
 				// msg.channel.send(message);
-				// var params = {
-				// 	Body: "test",
-				// 	Bucket: bucketName,
-				// 	Key: `discord-server-backups/${backupData.id}`
-				// };
-				// console.log("Uploading to S3 with params : " + JSON.stringify(params));
-				// s3.putObject(params).promise()
-				// 	.then(data => {
-				// 		console.log(data);
-				// 		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Backup has been uploaded to S3!`).setDescription(process.env.peepoHappy);
-				// 		msg.channel.send(message);
-				// 	})
-				// 	.catch(err => {
-				// 		console.log(err);
-				// 		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup failed to upload to S3").setDescription(process.env.pepeCry);
-				// 		msg.channel.send(message);
-				// 	})
+				var params = {
+					Body: "test",
+					Bucket: bucketName,
+					Key: `discord-server-backups/${backupData.id}`
+				};
+				console.log("Uploading to S3 with params : " + JSON.stringify(params));
+				s3.putObject(params).promise()
+					.then(data => {
+						console.log(data);
+						// message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Backup has been uploaded to S3!`).setDescription(process.env.peepoHappy);
+						// msg.channel.send(message);
+					})
+					.catch(err => {
+						console.log(err);
+						// message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup failed to upload to S3").setDescription(process.env.pepeCry);
+						// msg.channel.send(message);
+					})
 			});
 			break;
 		// list backups
