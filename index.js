@@ -11,9 +11,12 @@ const handleMessageReaction = require("./subfunctions/handleMessageReaction.js")
 
 -------------------- TODO --------------------
 
-add nickname instead of username (maybe setnickname command)
+total lvl for profs
+	score board (top 10/20)]
 
-!portals
+maybe add a counter for other statistics, who uses the most commands? total command counter?
+
+integrate with slash commands
 
 */
 
