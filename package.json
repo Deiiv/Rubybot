@@ -17,10 +17,14 @@
 	},
 	"homepage": "https://github.com/Deiiv/rubybot#readme",
 	"dependencies": {
-		"cheerio": "1.0.0-rc.3",
+		"aws-sdk": "^2.935.0",
+		"cheerio": "^1.0.0-rc.10",
+		"discord-backup": "^2.5.0",
 		"discord.js": "12.2.0",
 		"dotenv": "8.2.0",
+		"fs-extra": "^10.0.0",
 		"node-fetch": "2.6.1",
+		"pretty-bytes": "^5.6.0",
 		"winston": "3.2.1",
 		"winston-daily-rotate-file": "4.4.2"
 	}

@@ -8,7 +8,8 @@ const handleActionSetGuild = require("./actionFunctions/handleActionSetGuild.js"
 const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
 const handleActionPortals = require("./actionFunctions/handleActionPortals.js");
-const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal"];
+const handleActionBackup = require("./actionFunctions/handleActionBackup.js");
+const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal", "!backup"];
 
 var handleOnMessage = function (msg) {
 	// ignore bot messages
@@ -54,8 +55,19 @@ var handleOnMessage = function (msg) {
 					break;
 			}
 		}
+		// admin commands
+		else if (msg.channel.name === "discord-admins") {
+			switch (msg.content.split(" ")[0]) {
+				// discord server backup
+				case "!backup":
+					handleActionBackup(msg);
+					break;
+				default:
+					break;
+			}
+		}
 		// private message
-		else if(msg.guild === null){
+		else if (msg.guild === null) {
 			switch (msg.content.split(" ")[0]) {
 				// contacts discord admins in guild discord
 				case "!contact":
