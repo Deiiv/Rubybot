@@ -13,19 +13,19 @@ Veteran Ruby member that qualifies for the role *
 ``````ini
 [Craftsman]
 
-Have every profs level 200 **
+Have every profession level 200 **
 ``````ini
 [Reservist]
 
-Have every gatherers level 200 (Alchemist, Farmer, Fisher) **
+Have every gathering profession level 200 (Alchemist, Farmer, Fisher) **
 ``````ini
 [Guard]
 
-Have every magus level 200 **
+Have every magus profession level 200 **
 ``````ini
 [Scout]
 
-Have every crafters level 200 **
+Have every crafting profession level 200 **
 ``````ini
 [Diplomat]
 
@@ -135,4 +135,4 @@ Joined the guild
 ** Must be willing to craft/mage for guild mates without charging them, but you can accept tips!
 NOTE: all ranks are only available for members that have been in the discord server for at least 2 weeks
 ```
-Apply for the ranks over at #dofus-guild-rank-application!
+Apply for the ranks over at #dofus-guild-rank-application! Make sure to include your in-game name, the rank you want, and a screenshot for proof of meeting the requirement (include your character tab (c) and the achievement (u))!
