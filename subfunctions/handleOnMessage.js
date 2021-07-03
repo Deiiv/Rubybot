@@ -52,6 +52,8 @@ var handleOnMessage = function (msg) {
 					handleActionPortals(msg);
 					break;
 				default:
+					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`).setDescription(process.env.peepoHappy);
+					msg.channel.send(message);
 					break;
 			}
 		}
