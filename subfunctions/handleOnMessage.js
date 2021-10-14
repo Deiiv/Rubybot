@@ -52,10 +52,7 @@ var handleOnMessage = function (msg) {
 					handleActionPortals(msg);
 					break;
 				case "!contact":
-					var message = new Discord.MessageEmbed()
-						.setColor(process.env.embedColour)
-						.setTitle(`This can only be used in direct pm with the bot (me ${process.env.peepoHappy})`)
-						.setDescription(process.env.peepoHappy);
+					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`This can only be used in direct pm with the bot (me)`).setDescription(process.env.peepoHappy);
 					msg.channel.send(message);
 					break;
 				default:
