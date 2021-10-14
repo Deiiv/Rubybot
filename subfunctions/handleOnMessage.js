@@ -16,7 +16,7 @@ var handleOnMessage = function (msg) {
 	if (msg.author.bot) return;
 
 	if (validCommands.includes(msg.content.split(" ")[0])) {
-		if (msg.channel.name === "talk-to-rubybot" || msg.channel.name === "professions") {
+		if (msg.channel.name === "talk-to-rubybot" || msg.channel.name === "professions" || msg.channel.name === "development" || msg.channel.name === "test") {
 			switch (msg.content.split(" ")[0]) {
 				// view bot info
 				case "!info":
@@ -51,8 +51,18 @@ var handleOnMessage = function (msg) {
 				case "!portal":
 					handleActionPortals(msg);
 					break;
+				case "!contact":
+					var message = new Discord.MessageEmbed()
+						.setColor(process.env.embedColour)
+						.setTitle(`This can only be used in direct pm with the bot (me ${process.env.peepoHappy})`)
+						.setDescription(process.env.peepoHappy);
+					msg.channel.send(message);
+					break;
 				default:
-					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`).setDescription(process.env.peepoHappy);
+					var message = new Discord.MessageEmbed()
+						.setColor(process.env.embedColour)
+						.setTitle(`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`)
+						.setDescription(process.env.peepoHappy);
 					msg.channel.send(message);
 					break;
 			}
@@ -92,8 +102,7 @@ var handleOnMessage = function (msg) {
 					msg.channel.send(message);
 					break;
 			}
-		}
-		else {
+		} else {
 			let talkToRubybotChannel = msg.guild.channels.cache.find((ch) => ch.name === "talk-to-rubybot");
 			var text = "Please create a channel named 'talk-to-rubybot' to send your commands.";
 			if (talkToRubybotChannel) text = `Please send your commands in ${talkToRubybotChannel.toString()}`;
