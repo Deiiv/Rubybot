@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const http = require("http");
+const https = require("https");
 const promise = require("promise");
 const cheerio = require("cheerio");
 const moment = require("moment-timezone");
@@ -11,11 +11,11 @@ exports.handler = function (event, context) {
 
 	var options = {
 		host: "www.krosmoz.com",
-		port: 80,
+		port: 443,
 		path: "/en/almanax",
 	};
 
-	http
+	https
 		.get(options, function (res) {
 			var almaSiteBody = "";
 			res.on("data", function (data) {
