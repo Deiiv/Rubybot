@@ -53,14 +53,14 @@ var handleOnMessage = function (msg) {
 					break;
 				case "!contact":
 					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`This can only be used in direct pm with the bot (me)`).setDescription(process.env.peepoHappy);
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 					break;
 				default:
 					var message = new Discord.MessageEmbed()
 						.setColor(process.env.embedColour)
 						.setTitle(`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`)
 						.setDescription(process.env.peepoHappy);
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 					break;
 			}
 		}
@@ -96,7 +96,7 @@ var handleOnMessage = function (msg) {
 					break;
 				default:
 					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Only !contact, !help, !info, and !view will work here`).setDescription(process.env.peepoHappy);
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 					break;
 			}
 		} else {
@@ -104,7 +104,7 @@ var handleOnMessage = function (msg) {
 			var text = "Please create a channel named 'talk-to-rubybot' to send your commands.";
 			if (talkToRubybotChannel) text = `Please send your commands in ${talkToRubybotChannel.toString()}`;
 			var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Wrong channel! ${process.env.monkaO}`).setDescription(text);
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		}
 	}
 };

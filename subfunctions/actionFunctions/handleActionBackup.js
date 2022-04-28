@@ -15,13 +15,13 @@ var handleActionBackup = function (msg) {
 
 	if (msg.author.id != "140904638084808705") {
 		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("You're not allowed to use this command!").setDescription(process.env.pepeCry);
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 		return;
 	}
 
 	if (!messageContent[1]) {
 		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("Proper usage: !backup create OR !backup list OR !backup info X :floppy_disk:");
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 		return;
 	}
 
@@ -29,7 +29,7 @@ var handleActionBackup = function (msg) {
 		// create backup
 		case "create":
 			message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup creation process starting...").setDescription(process.env.pepoG);
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 			backup.create(msg.guild, {
 				jsonBeautify: true,
 				saveImages: "base64"
@@ -46,7 +46,7 @@ var handleActionBackup = function (msg) {
 					.addField("Server ID", backupData.guildID, false)
 					.addField("Size", `${prettyBytes(size)}`, false)
 					.addField("Created at", formatedDate, false);
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 				var params = {
 					Body: JSON.stringify(backupData),
 					Bucket: bucketName,
@@ -73,17 +73,17 @@ var handleActionBackup = function (msg) {
 		// list backups
 		case "list":
 			message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup list command is temporarily disabled!").setDescription(process.env.pepeCry);
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 			break;
 		// get info of a backup
 		case "info":
 			if (!messageContent[2]) {
 				message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input! Proper usage: !backup create OR !backup list OR !backup info X").setDescription(process.env.pepeCry);
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			}
 			else {
 				message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup info command is temporarily disabled!").setDescription(process.env.pepeCry);
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			}
 			break;
 		default:

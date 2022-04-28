@@ -46,7 +46,7 @@ var handleActionPortals = function (msg) {
 				if (portalInfo[1]) text = `Is at ${portalInfo[0]}\nHas ${portalInfo[1].split(" ")[1]} uses left\nWas last updated ${portalInfo[3]} ago`;
 				else text = `Unknown! ${process.env.pepeCry}`;
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`${dimensionName} Portal Info - ${server.name}`).setDescription(text).setThumbnail(thumbnail);
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			});
 		})
 		.catch((err) => {

@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-var handleActionHelp = function (msg) {
+var handleActionHelp = function (msg, interactionBool) {
 	const helpEmbed = new Discord.MessageEmbed()
 		.setColor(process.env.embedColour)
 		.addField(":closed_book: For help with adding and viewing professions:", "!help prof")
@@ -25,11 +25,14 @@ var handleActionHelp = function (msg) {
 		.addField(":eyes: To view a specific users stats:", "!view user IGN")
 		.addField(process.env.pepoG + " To set your guild:", "!setguild GUILD");
 
-	let messageContent = msg.content.split(" ");
-	if (messageContent[1] && messageContent[1] === "prof") {
-		msg.channel.send(helpProfEmbed);
-	} else {
-		msg.channel.send(helpEmbed);
+	if (interactionBool) msg.reply({ embeds: [helpEmbed] });
+	else {
+		let messageContent = msg.content.split(" ");
+		if (messageContent[1] && messageContent[1] === "prof") {
+			msg.channel.send({ embeds: [helpProfEmbed] });
+		} else {
+			msg.channel.send({ embeds: [helpEmbed] });
+		}
 	}
 };
 module.exports = handleActionHelp;

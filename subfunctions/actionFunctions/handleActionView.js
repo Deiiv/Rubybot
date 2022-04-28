@@ -46,12 +46,12 @@ var handleActionView = function (msg) {
 					.setTitle(`:tools: ${data.username}'s Professions :hammer_pick:`)
 					.setDescription(data.profList)
 					.addField(`:shield: Guild :shield:`, data.guild);
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			})
 			.catch((error) => {
 				logger.info(error);
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			});
 	}
 	//view user by IGN !view user IGN
@@ -69,7 +69,7 @@ var handleActionView = function (msg) {
 							.setColor(process.env.embedColour)
 							.setTitle("User " + username + " doesn't exist in our records!")
 							.setDescription(process.env.pepoG);
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					} else {
 						let data = JSON.parse(response);
 						if (!data.guild) {
@@ -84,17 +84,17 @@ var handleActionView = function (msg) {
 							.setTitle(`:tools: ${username}'s Professions :hammer_pick:`)
 							.setDescription(data.profList)
 							.addField(`:shield: Guild :shield:`, data.guild);
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					}
 				})
 				.catch((error) => {
 					logger.info(error);
 					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else {
 			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("View proper usage by calling !help prof");
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		}
 	}
 	//view profs !view prof OR !view prof level
@@ -105,7 +105,7 @@ var handleActionView = function (msg) {
 			if (profList.includes(prof)) {
 				if (messageContent[2] && (messageContent[2] < 1 || messageContent[2] > 200)) {
 					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("View proper usage by calling !help prof");
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 					return;
 				}
 
@@ -128,7 +128,7 @@ var handleActionView = function (msg) {
 								.setColor(process.env.embedColour)
 								.setTitle(process.env.pepoG + " Users with " + prof + levelMessage)
 								.setDescription("None!");
-							msg.channel.send(message);
+							msg.channel.send({ embeds: [message] });
 						} else {
 							let data = JSON.parse(response);
 							if (data.string === "") {
@@ -138,21 +138,21 @@ var handleActionView = function (msg) {
 								.setColor(process.env.embedColour)
 								.setTitle(process.env.pepoG + " List of users with " + prof + " profession" + levelMessage)
 								.setDescription(data.string);
-							msg.channel.send(message);
+							msg.channel.send({ embeds: [message] });
 						}
 					})
 					.catch((error) => {
 						logger.info(error);
 						let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					});
 			} else {
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid profession! List of valid professions:").setDescription(profList.toString());
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			}
 		} else {
 			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("View proper usage by calling !help prof");
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		}
 	}
 };
