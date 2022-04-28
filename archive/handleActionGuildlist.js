@@ -27,11 +27,11 @@ var handleActionGuildlist = function (msg) {
 			getValidGuilds()
 				.then((validGuilds) => {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Current list of valid guilds:", validGuilds.toString());
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				})
 				.catch((error) => {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else if (messageContent[1] === "add") {
 			let guildToAdd = messageContent.splice(2).join(" ");
@@ -41,7 +41,7 @@ var handleActionGuildlist = function (msg) {
 				.then((validGuilds) => {
 					if (validGuilds.includes(guildToAdd)) {
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Guild " + guildToAdd + " is already in guild list", process.env.monkaThink);
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					} else {
 						console.log("Old guildList : " + validGuilds.toString());
 						validGuilds.push(guildToAdd);
@@ -56,10 +56,10 @@ var handleActionGuildlist = function (msg) {
 							if (error) {
 								console.log(error);
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-								msg.channel.send(message);
+								msg.channel.send({ embeds: [message] });
 							} else {
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Guild list updated, new list: ", validGuilds.toString());
-								msg.channel.send(message);
+								msg.channel.send({ embeds: [message] });
 							}
 						});
 					}
@@ -67,7 +67,7 @@ var handleActionGuildlist = function (msg) {
 				.catch((error) => {
 					console.log(error);
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else if (messageContent[1] === "remove") {
 			let guildToRemove = messageContent.splice(2).join(" ");
@@ -89,30 +89,30 @@ var handleActionGuildlist = function (msg) {
 							if (error) {
 								console.log(error);
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-								msg.channel.send(message);
+								msg.channel.send({ embeds: [message] });
 							} else {
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Guild list updated, new list: ", validGuilds.toString());
-								msg.channel.send(message);
+								msg.channel.send({ embeds: [message] });
 							}
 						});
 					} else {
 						console.log("Guild trying to remove is not in current list");
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("The guild " + guildToRemove + " is not in the current list, so can't remove it.", "" + process.env.pepoG);
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					}
 				})
 				.catch((error) => {
 					console.log(error);
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else {
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !admin");
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		}
 	} else {
 		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Only members with the correct role can use this option", process.env.pepoG);
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 	}
 };
 module.exports = handleActionGuildlist;

@@ -27,9 +27,9 @@ var handleActionHelp = function (msg) {
 
 	let messageContent = msg.content.split(" ");
 	if (messageContent[1] && messageContent[1] === "prof") {
-		msg.channel.send(helpProfEmbed);
+		msg.channel.send({ embeds: [helpProfEmbed] });
 	} else {
-		msg.channel.send(helpEmbed);
+		msg.channel.send({ embeds: [helpEmbed] });
 	}
 };
 module.exports = handleActionHelp;

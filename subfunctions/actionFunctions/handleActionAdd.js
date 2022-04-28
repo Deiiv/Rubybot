@@ -28,7 +28,7 @@ var handleActionAdd = function (msg) {
 
 	if (messageContent.length < 3) {
 		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 		return;
 	}
 
@@ -53,22 +53,22 @@ var handleActionAdd = function (msg) {
 					.then(() => {
 						logger.info("Done updating user in db");
 						let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Profession " + prof + " set to level " + level + " for user " + username, process.env.peepoHappy);
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					})
 					.catch((error) => {
 						logger.info(error);
 					});
 			} else {
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid profession level!", "Level must be between 1-200 (inclusive)");
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			}
 		} else {
 			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid profession! List of valid professions:", profList.toString());
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		}
 	} else {
 		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !help prof");
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 	}
 };
 module.exports = handleActionAdd;

@@ -9,6 +9,6 @@ var handleActionInfo = function (msg) {
 		.addField("Runtime:", process.env.runtime)
 		.addField("Hosted on:", process.env.host)
 		.addField("Developed by:", process.env.adminUserTag);
-	msg.channel.send(infoEmbed);
+	msg.channel.send({ embeds: [infoEmbed] });
 };
 module.exports = handleActionInfo;

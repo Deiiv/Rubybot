@@ -1,7 +1,7 @@
 require("dotenv").config();
 const logger = require("./subfunctions/logger");
-const Discord = require("discord.js");
-const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
+const { Discord, Client, Intents } = require('discord.js');
+const client = new Client({ intents: new Intents(32767), partials: ["MESSAGE", "CHANNEL", "REACTION"] });
 const handleOnReady = require("./subfunctions/handleOnReady.js");
 const handleOnGuildMemberAdd = require("./subfunctions/handleOnGuildMemberAdd.js");
 const handleOnMessage = require("./subfunctions/handleOnMessage.js");
