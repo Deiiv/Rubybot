@@ -1,4 +1,5 @@
 const logger = require("./logger");
+const deployCommands = require("./deployCommands");
 
 var handleOnReady = function (client) {
 	logger.info("Logged in as:");
@@ -7,6 +8,9 @@ var handleOnReady = function (client) {
 	client.guilds.cache.forEach(function (guild) {
 		logger.info(guild.name + " " + guild.id);
 		// if(guild.name === "x") guild.leave();
+
+		// deploy commands in each server
+		deployCommands(client.user.id, guild.id, guild.name);
 	});
 	logger.info("------------------------------");
 	process.env.hypers = client.emojis.cache.find((emoji) => emoji.name === "hypers") || "";

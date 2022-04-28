@@ -6,6 +6,7 @@ const handleOnReady = require("./subfunctions/handleOnReady.js");
 const handleOnGuildMemberAdd = require("./subfunctions/handleOnGuildMemberAdd.js");
 const handleOnMessage = require("./subfunctions/handleOnMessage.js");
 const handleMessageReaction = require("./subfunctions/handleMessageReaction.js");
+const handleOnInteraction = require("./subfunctions/handleOnInteraction");
 
 /*
 
@@ -42,6 +43,17 @@ client.on("guildMemberAdd", (member) => {
 client.on("message", (msg) => {
 	try {
 		handleOnMessage(msg);
+	} catch (err) {
+		logger.info(err);
+	}
+});
+
+//interaction created event (slash commands)
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	try {
+		await handleOnInteraction(interaction);
 	} catch (err) {
 		logger.info(err);
 	}
