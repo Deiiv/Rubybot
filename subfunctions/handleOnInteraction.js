@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");
+const handleActionUptime = require("./actionFunctions/handleActionUptime.js");
 const handleActionRoll = require("./actionFunctions/handleActionRoll.js");
 const handleActionAlma = require("./actionFunctions/handleActionAlma.js");
 const handleActionView = require("./actionFunctions/handleActionView.js");
@@ -18,6 +19,8 @@ var handleOnInteraction = async function (interaction) {
 			handleActionInfo(interaction, true);
 		} else if (commandName === 'help') {
 			handleActionHelp(interaction, true);
+		} else if (commandName === 'uptime') {
+			handleActionUptime(interaction);
 		}
 		// else if (commandName === 'roll') {
 		// 	handleActionRoll(interaction, true);
