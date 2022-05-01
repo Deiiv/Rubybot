@@ -13,3 +13,5 @@ portal command
 
 add total level for professions
 scoreboard for total levels
+
+move to own account, integrate with a pipeline from github to auto restart

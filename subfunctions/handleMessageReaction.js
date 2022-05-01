@@ -42,7 +42,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 								.setColor(process.env.embedColour)
 								.setTitle("Done adding role!")
 								.setDescription(`${reactionName} role successfully added in the ${serverName} discord server for your user (${user.username})`);
-							user.send(message);
+							user.send({ embeds: [message] });
 
 							// if the role is "ruby" then udpate user in db with ruby as guild
 							if (reactionName.toLowerCase() === "ruby") {
@@ -66,9 +66,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							reaction.message.guild
-								.member(user)
-								.roles.add(role)
+							guildMember.roles.add(role)
 								.then(() => {
 									logger.info(`Added role ${reactionName} to user ${user.username}`);
 
@@ -76,7 +74,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 										.setColor(process.env.embedColour)
 										.setTitle("Done adding role!")
 										.setDescription(`${reactionName} role successfully added in the ${serverName} discord server for your user (${user.username})`);
-									user.send(message);
+									user.send({ embeds: [message] });
+
 
 									// if the role is "ruby" then udpate user in db with ruby as guild
 									if (reactionName.toLowerCase() === "ruby") {
@@ -107,23 +106,21 @@ var handleMessageReaction = async (reaction, user, type) => {
 								.setColor(process.env.embedColour)
 								.setTitle("Done removing role!")
 								.setDescription(`${reactionName} role successfully removed in the ${serverName} discord server for your user (${user.username})`);
-							user.send(message);
+							user.send({ embeds: [message] });
 						} else {
 							let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
 							if (!role) {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							reaction.message.guild
-								.member(user)
-								.roles.remove(role)
+							guildMember.roles.remove(role)
 								.then(() => {
 									logger.info(`Removed role ${reactionName} from user ${user.username}`);
 									let message = new Discord.MessageEmbed()
 										.setColor(process.env.embedColour)
 										.setTitle("Done removing role!")
 										.setDescription(`${reactionName} role successfully removed in the ${serverName} discord server for your user (${user.username})`);
-									user.send(message);
+									user.send({ embeds: [message] });
 								})
 								.catch((error) => {
 									logger.info(error);
