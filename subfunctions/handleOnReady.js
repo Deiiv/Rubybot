@@ -1,5 +1,7 @@
 const logger = require("./logger");
 const deployCommands = require("./deployCommands");
+const scanMembers = require("./scanMembers.js");
+const cron = require('node-cron');
 
 var handleOnReady = function (client) {
 	logger.info("Logged in as:");
@@ -7,7 +9,25 @@ var handleOnReady = function (client) {
 	logger.info("Connected to the following servers:");
 	client.guilds.cache.forEach(function (guild) {
 		logger.info(guild.name + " " + guild.id);
+
 		// if(guild.name === "x") guild.leave();
+
+		/*
+			Setting up a cron job to run every minute
+
+			The function called searches through members in guild and removes those that have the same name as certain people
+
+			It should also send a notification of the removal in an admin channel
+
+			Currently only runs for a specific server
+		*/
+		if (guild.id === process.env.rubyServerID) {
+
+			// cron.schedule('* * * * *', () => {
+			// 	console.log('running a task every minute');
+			scanMembers(guild);
+			// });
+		}
 
 		// deploy commands in each server
 		deployCommands(client.user.id, guild.id, guild.name);
@@ -28,7 +48,7 @@ var handleOnReady = function (client) {
 	// these are defined here so that .env can be hidden, but still have customizable values stored in git
 	process.env.adminUserTag = "<@140904638084808705>";
 	process.env.embedColour = "#FEC6C7";
-	process.env.botversion = 10.03;
+	process.env.botversion = 10.04;
 	process.env.runtime = "Node.Js 16.x | Discord.Js 13.x";
 	process.env.host = "AWS";
 	process.env.author = "Deiv";
