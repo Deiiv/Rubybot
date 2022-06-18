@@ -11,17 +11,20 @@ var handleOnReady = function (client) {
 
 		// deploy commands in each server
 		deployCommands(client.user.id, guild.id, guild.name);
+
+		// adding emojis if not found in other servers
+		if (!process.env.hypers) process.env.hypers = guild.emojis.cache.find((emoji) => emoji.name === "hypers") || "";
+		if (!process.env.pepeRuby) process.env.pepeRuby = guild.emojis.cache.find((emoji) => emoji.name === "pepeRuby") || "";
+		if (!process.env.monkaThink) process.env.monkaThink = guild.emojis.cache.find((emoji) => emoji.name === "monkaThink") || "";
+		if (!process.env.pepeCry) process.env.pepeCry = guild.emojis.cache.find((emoji) => emoji.name === "pepeCry") || "";
+		if (!process.env.peepoHappy) process.env.peepoHappy = guild.emojis.cache.find((emoji) => emoji.name === "peepoHappy") || "";
+		if (!process.env.pepoG) process.env.pepoG = guild.emojis.cache.find((emoji) => emoji.name === "pepoG") || "";
+		if (!process.env.pogpeach) process.env.pogpeach = guild.emojis.cache.find((emoji) => emoji.name === "pogpeach") || "";
+		if (!process.env.ruby) process.env.ruby = guild.emojis.cache.find((emoji) => emoji.name === "ruby") || "";
+		if (!process.env.monkaO) process.env.monkaO = guild.emojis.cache.find((emoji) => emoji.name === "monkaO") || "";
+		if (!process.env.phoebepog) process.env.phoebepog = guild.emojis.cache.find((emoji) => emoji.name === "PhoebePog") || "";
 	});
 	logger.info("------------------------------");
-	process.env.hypers = client.emojis.cache.find((emoji) => emoji.name === "hypers") || "";
-	process.env.pepeRuby = client.emojis.cache.find((emoji) => emoji.name === "pepeRuby") || "";
-	process.env.monkaThink = client.emojis.cache.find((emoji) => emoji.name === "monkaThink") || "";
-	process.env.pepeCry = client.emojis.cache.find((emoji) => emoji.name === "pepeCry") || "";
-	process.env.peepoHappy = client.emojis.cache.find((emoji) => emoji.name === "peepoHappy") || "";
-	process.env.pepoG = client.emojis.cache.find((emoji) => emoji.name === "pepoG") || "";
-	process.env.pogpeach = client.emojis.cache.find((emoji) => emoji.name === "pogpeach") || "";
-	process.env.ruby = client.emojis.cache.find((emoji) => emoji.name === "ruby") || "";
-	process.env.monkaO = client.emojis.cache.find((emoji) => emoji.name === "monkaO") || "";
 	// these are defined here so that .env can be hidden, but still have customizable values stored in git
 	process.env.adminUserTag = "<@140904638084808705>";
 	process.env.embedColour = "#FEC6C7";

@@ -40,7 +40,7 @@ client.on("guildMemberAdd", (member) => {
 });
 
 //message event
-client.on("message", (msg) => {
+client.on("messageCreate", (msg) => {
 	try {
 		handleOnMessage(msg);
 	} catch (err) {
