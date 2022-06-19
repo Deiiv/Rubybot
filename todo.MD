@@ -9,9 +9,9 @@ const root : HTMLElement | TextNode  = parse(html);
             return string;
         }
 
-portal command
-
+view command should include more info (date joined server?)
 add total level for professions
 scoreboard for total levels
 
 move to own account, integrate with a pipeline from github to auto restart
+    - this would be a good way to reset user data, and add some sort of confirmation that the info is still valid (send a monthly notice?)
