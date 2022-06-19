@@ -1,3 +1,13 @@
+/*
+
+Entry point for the Discord bot
+
+Details:
+- Discord bot login is handled here
+- All incoming Discord events are handled here initially (messages, server joins, reactions, etc.)
+
+*/
+
 require("dotenv").config();
 const logger = require("./subfunctions/logger");
 const { Discord, Client, Intents } = require('discord.js');

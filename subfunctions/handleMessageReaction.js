@@ -1,3 +1,14 @@
+/*
+
+Handles message reaction events
+
+Details:
+- Used to add roles for users based on specific reactions
+- Only works in specific channels (to avoid adding/removing roles from usersfor reacting in other channels)
+- Initializes a users data in the backend database if it's a new user
+
+*/
+
 const Discord = require("discord.js");
 const handleProfEvent = require("./actionFunctions/subActionFunctions/handleProfEvent.js");
 const logger = require("./logger");

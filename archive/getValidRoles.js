@@ -1,3 +1,19 @@
+/*
+
+
+
+
+
+ARCHIVED
+
+Not in use
+
+
+
+
+
+*/
+
 const sendToApi = require("./sendToApi.js");
 
 var getValidRoles = function (guild) {

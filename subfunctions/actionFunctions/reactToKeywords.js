@@ -1,3 +1,14 @@
+/*
+
+Function used to react to specific key words in a message
+
+Details:
+- If a message contains keyWords.key it would react with keyWords.reaction
+- Handles all keyWords in the list
+- Order is not gauranteed because forEach is async
+
+*/
+
 const logger = require("../logger");
 
 const keyWords = [

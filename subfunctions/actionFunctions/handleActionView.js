@@ -1,3 +1,12 @@
+/*
+
+Handles the "view" action, which allows users to view their own profession details, another users, or list of a specific profession
+
+Details:
+- Gets the data through handleProfEvent function which calls the AWS hosted API
+
+*/
+
 const Discord = require("discord.js");
 const logger = require("./../logger");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");

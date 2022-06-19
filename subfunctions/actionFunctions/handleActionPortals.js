@@ -1,3 +1,15 @@
+/*
+
+Handles the "portals" action, which provides the user with the location of a specific portal (or all portals)
+
+Details:
+- The portals listed are for the Ilyzaelle Dofus server
+- Data is pulled from a 3rd party website not managed by us, dofus-portals.fr
+- Uses getSiteData to pull the site data (and gets it back as a string)
+- Uses cheerio to parse the site data
+
+*/
+
 const Discord = require("discord.js");
 const getSiteData = require("./subActionFunctions/getSiteData.js");
 const logger = require("../logger");

@@ -1,3 +1,12 @@
+/*
+
+Pulls all site data from a provided host and path
+
+Details:
+- Returns a string containing the website content
+
+*/
+
 const http = require("http");
 
 var getSiteData = function (host, path) {

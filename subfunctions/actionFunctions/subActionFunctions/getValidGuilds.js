@@ -1,3 +1,12 @@
+/*
+
+Provides a list of valid guilds
+
+Details:
+- Calls an API hosted on AWS through sendToApi
+
+*/
+
 const sendToApi = require("./sendToApi.js");
 
 var getValidGuilds = function () {

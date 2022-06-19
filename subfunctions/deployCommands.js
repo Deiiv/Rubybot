@@ -1,3 +1,12 @@
+/*
+
+Deploys a list of slash commands
+
+Details:
+- Commands must be defined here in order for them to be registered as a slash command
+
+*/
+
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { SlashCommandBuilder } = require('@discordjs/builders');

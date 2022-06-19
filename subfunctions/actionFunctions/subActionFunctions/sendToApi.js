@@ -1,3 +1,13 @@
+/*
+
+Handles calling the backend API 
+
+Details:
+- Calls an API hosted on AWS
+- Handles all API calls based on the message + path provided
+
+*/
+
 const fetch = require("node-fetch");
 const logger = require("./../../logger");
 

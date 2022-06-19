@@ -1,3 +1,9 @@
+/*
+
+Handles the "info" action, which provides info about the bot
+
+*/
+
 const Discord = require("discord.js");
 
 var handleActionInfo = function (msg, notAnInteraction) {

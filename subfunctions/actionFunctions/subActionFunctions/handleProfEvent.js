@@ -1,3 +1,13 @@
+/*
+
+Handles the a profession modification event
+
+Details:
+- Calls an API hosted on AWS through sendToApi
+- Handles both read and write events (the API in the backend handles each differently based on the data provided)
+
+*/
+
 const sendToApi = require("./sendToApi.js");
 
 var handleProfEvent = function (data) {

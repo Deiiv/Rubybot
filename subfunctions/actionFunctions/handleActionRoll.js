@@ -1,3 +1,12 @@
+/*
+
+Handles the "roll" action, which allows a user to roll a die or combination of dice (using XdY)
+
+Details:
+- Input limits are in the environment variables (in .env) and are instantiated in handleOnReady.js 
+
+*/
+
 const Discord = require("discord.js");
 
 var handleActionRoll = function (msg, notAnInteraction) {

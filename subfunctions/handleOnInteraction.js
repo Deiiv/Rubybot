@@ -1,3 +1,13 @@
+/*
+
+Handles interaction events (from slash commands)
+
+Details:
+- We have to define the slash commands in deployCommands.js for users to be able to leverage slash commands
+- Functions themselves have to handle responses back to the interaction (using .reply)
+
+*/
+
 const Discord = require("discord.js");
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");

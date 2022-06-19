@@ -1,3 +1,15 @@
+/*
+
+Handles the "alma"/"almanax" action types, which provides a list of all offerings for a month to the caller
+
+Details:
+- Calls an API hosted on AWS through sendToApi
+- Provides an instant response to the user
+- The full async response is sent through a webhook to the almanax channel once data is pulled
+- Flow is: Discord command -> bot (instant reply with no info) -> API -> Lambda -> Discord Webhook (full response with list)
+
+*/
+
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
 const logger = require("./../logger");

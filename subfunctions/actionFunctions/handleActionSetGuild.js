@@ -1,3 +1,13 @@
+/*
+
+Handles the "setGuild" action, which allows a user to set their guild in their user data
+
+Details:
+- Only valid guilds are supported, which are pulled from the backend API
+- Sets the data in the backend database using handleProfEvent (which sends to the API)
+
+*/
+
 const Discord = require("discord.js");
 const getValidGuilds = require("./subActionFunctions/getValidGuilds.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");

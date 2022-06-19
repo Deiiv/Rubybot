@@ -1,3 +1,12 @@
+/*
+
+Handles the "help" action, which provides a list of currently supported commands and their usage
+
+Details:
+- Help has a sub-menu for profession commands, used with "!help prof"
+
+*/
+
 const Discord = require("discord.js");
 
 var handleActionHelp = function (msg, notAnInteraction) {

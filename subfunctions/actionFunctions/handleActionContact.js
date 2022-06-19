@@ -1,3 +1,12 @@
+/*
+
+Handles the "contact" action, which allows for a user to send a message to the server admins
+
+Details:
+- This action can only be used in a private message with the bot (to ensure privacy)
+
+*/
+
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
 

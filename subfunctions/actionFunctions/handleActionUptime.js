@@ -1,3 +1,14 @@
+/*
+
+Handles the "uptime" action, which provides details of the bot and server uptime
+
+Details:
+- Provides a formatted timestamp of the bot uptime, and server up time
+- Bot uptime is how long the node server instance has been running
+- Server uptime is how long the backend server (in this case, ec2 instance) has been running
+
+*/
+
 const Discord = require("discord.js");
 const logger = require("./../logger");
 

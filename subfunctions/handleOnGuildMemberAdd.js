@@ -1,3 +1,12 @@
+/*
+
+Handles guild member add events, which occurs when a new member joins the discord server
+
+Details:
+- Has a slightly different message for the Ruby server
+
+*/
+
 const Discord = require("discord.js");
 
 var handleOnGuildMemberAdd = function (member) {

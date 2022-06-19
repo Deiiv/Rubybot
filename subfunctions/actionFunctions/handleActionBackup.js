@@ -1,3 +1,13 @@
+/*
+
+Handles the "backup" action, which generates a backup of the discord server
+
+Details:
+- This is meant for admin use only
+- Stores the backup encrypted in AWS S3
+
+*/
+
 const Discord = require("discord.js");
 const fs = require('fs-extra');
 const prettyBytes = require('pretty-bytes');

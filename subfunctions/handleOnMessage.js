@@ -1,3 +1,17 @@
+/*
+
+Handles message events (normal text messages)
+
+Details:
+- Only valid commands listed here are supported
+- Because we now support interactions (see handleOnInteraction.js and deployCommands.js) we have to make sure
+the sub functions reply correctly. To do this, we pass another field "notAnInteraction" to old functions so
+that they can reply using the old way
+- Also handles reactToKeywords, which allows the bot to react to specific key words
+- Once interactions are fully tested, this will be deprecated and scoped down to only handle functions such as reactToKeywords
+
+*/
+
 const Discord = require("discord.js");
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");

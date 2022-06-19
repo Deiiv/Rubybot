@@ -1,3 +1,14 @@
+/*
+
+Handles the "add" action, which is used to add a profession level to a users records.
+
+Details:
+- Profession must be one of the valid professions, found in profList
+- Calls an API hosted on AWS through handleProfEvent to post the data
+- Data is stored encrypted in AWS DynamoDB
+
+*/
+
 const Discord = require("discord.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 const profList = [

@@ -1,3 +1,13 @@
+/*
+
+Handles the "onReady" event, which is sent to the bot once the login is successful
+
+Details:
+- All initialization actions should occur here (to make sure the bot is in a logged in state)
+- This is also where we can manually leave a server if needed, using `if(guild.name === "x") guild.leave();`
+
+*/
+
 const logger = require("./logger");
 const deployCommands = require("./deployCommands");
 const scanMembers = require("./scanMembers.js");
@@ -9,8 +19,6 @@ var handleOnReady = function (client) {
 	logger.info("Connected to the following servers:");
 	client.guilds.cache.forEach(function (guild) {
 		logger.info(guild.name + " " + guild.id);
-
-		// if(guild.name === "x") guild.leave();
 
 		/*
 			Setting up a cron job to run every minute
