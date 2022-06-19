@@ -1,5 +1,5 @@
 view latest guild related events
-const root : HTMLElement | TextNode  = parse(html);
+    const root : HTMLElement | TextNode  = parse(html);
         if(root instanceof HTMLElement){
             const actus =  root.querySelectorAll('.ak-actions-list .ak-title');
             let string = '';
@@ -15,3 +15,6 @@ scoreboard for total levels
 
 move to own account, integrate with a pipeline from github to auto restart
     - this would be a good way to reset user data, and add some sort of confirmation that the info is still valid (send a monthly notice?)
+
+add an option to create a poll (not sure if this is needed)
+    - if yes, restrict it to admins only
