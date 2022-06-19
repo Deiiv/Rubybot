@@ -9,6 +9,7 @@ const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
 const handleActionPortals = require("./actionFunctions/handleActionPortals.js");
 const handleActionBackup = require("./actionFunctions/handleActionBackup.js");
+const reactToKeywords = require("./actionFunctions/reactToKeywords.js");
 const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal", "!backup"];
 
 var handleOnMessage = function (msg) {
@@ -108,18 +109,8 @@ var handleOnMessage = function (msg) {
 		}
 	}
 	else {
-		/*
-		
-		add reaction for Phoebe comments
-
-		TODO: move this to it's own function that handles more of these actions for other words,
-		making sure it's ordered
-
-		*/
-		if (msg.content.toLowerCase().indexOf("phoebe") != -1) {
-			// only add reaction if the emoji exists in bot memory
-			if (process.env.phoebepog) msg.react(process.env.phoebepog);
-		}
+		// add a reaction for specific keywords
+		reactToKeywords(msg);
 	}
 };
 module.exports = handleOnMessage;
