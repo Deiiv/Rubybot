@@ -11,6 +11,7 @@ to log in and "vote" for our guild, but the link they provide is to their own we
 credentials, afterwhich the scammer logs into your Dofus account and steals your items
 - This function has a list of members to ignore, which is essentially the list of names to filter by but of the
 original users (going off of the user id)
+- Guild members list maxes out at 1000 (based on the documentation), so this function needs to be revisited later
 
 */
 
