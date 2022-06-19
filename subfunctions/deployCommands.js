@@ -17,7 +17,23 @@ const commands = [
 	new SlashCommandBuilder().setName('help').setDescription('Help with available Rubybot commands'),
 	new SlashCommandBuilder().setName('uptime').setDescription('Uptime of the bot and the underlying server'),
 	// new SlashCommandBuilder().setName('roll').setDescription('Roll dice'),
-	// new SlashCommandBuilder().setName('almanax').setDescription('View Almanax offerings for a full month'),
+	new SlashCommandBuilder().setName('almanax').setDescription('View Almanax offerings for a full month')
+		.addStringOption(option =>
+			option
+				.setRequired(true)
+				.setName('month')
+				.setDescription('The month to pull Almanax info for'))
+		.addStringOption(option =>
+			option
+				.setRequired(true)
+				.setName('day')
+				.setDescription('The day to pull Almanax info for'))
+		.addStringOption(option =>
+			option
+				.setRequired(true)
+				.setName('day421412')
+				.addChoices()
+				.setDescription('The day to pull Almanax info for'))
 ]
 	.map(command => command.toJSON());
 

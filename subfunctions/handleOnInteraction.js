@@ -23,6 +23,9 @@ const handleActionBackup = require("./actionFunctions/handleActionBackup.js");
 const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal", "!backup"];
 
 var handleOnInteraction = async function (interaction) {
+	if (!interaction.isCommand()) return;	// handle different types of interactions, for now just a normal command is supported
+	// console.log(interaction.options.getString('name'))
+
 	if (interaction.channel.name === "talk-to-rubybot" || interaction.channel.name === "professions" || interaction.channel.name === "development" || interaction.channel.name === "test") {
 		const { commandName } = interaction;
 		if (commandName === 'info') {
@@ -35,7 +38,7 @@ var handleOnInteraction = async function (interaction) {
 		else if (commandName === 'roll') {
 			handleActionRoll(interaction);
 		}
-		else if (commandName === 'alma') {
+		else if (commandName === 'almanax') {
 			handleActionAlma(interaction);
 		}
 		// else if (commandName === 'view') {

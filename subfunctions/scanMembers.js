@@ -26,11 +26,12 @@ var scanMembers = function (guild) {
 	logger.info(`Running scanMembers function for ${guild.name} | ${guild.id}`);
 	try {
 		guild.members.cache.each(member => {
-			console.log(`Checking for: ${memberTag} | ${memberId} | ${memberDisplayName}`);
-
 			let memberTag = member.user.tag;
 			let memberDisplayName = member.displayName;
 			let memberId = member.user.id;
+
+			console.log(`Checking for: ${memberTag} | ${memberId} | ${memberDisplayName}`);
+
 			if (namesToFilter.includes(memberTag.split("#")[0].toLowerCase) && !scanMembersIgnoreList.includes(memberId)) {
 				console.log(`Found a matching name: ${memberTag} | ${memberId} | ${memberDisplayName}`);
 				logger.info(`Found a matching name: ${memberTag} | ${memberId} | ${memberDisplayName}`);
