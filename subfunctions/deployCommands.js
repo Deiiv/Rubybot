@@ -32,12 +32,19 @@ const commands = [
 				.addChoice("Enurado")
 				.addChoice("Srambad")
 				.addChoice("Xelorium")
-				.addChoice("Ecaflipus"))
+				.addChoice("Ecaflipus")),
 	// .addChoice("All Dimensions", "all")
 	// .addChoice("Enurado", "Enurado")
 	// .addChoice("Srambad", "Srambad")
 	// .addChoice("Xelorium", "Xelorium")
 	// .addChoice("Ecaflipus", "Ecaflipus"))
+
+	// new SlashCommandBuilder().setName('view').setDescription('View profession info')
+	// 	// this needs to be as a sub command, called "user" (eg. /view user <username>)
+	// 	.addUserOption(option =>
+	// 		option.setName("user")
+	// 			.setDescription("The user to view"))
+	// 	.setRequired(true)
 
 	// .addStringOption(option =>
 	// 	option
