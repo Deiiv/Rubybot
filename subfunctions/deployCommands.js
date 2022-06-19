@@ -7,6 +7,7 @@ const commands = [
 	new SlashCommandBuilder().setName('info').setDescription('For viewing bot information'),
 	new SlashCommandBuilder().setName('help').setDescription('Help with available Rubybot commands'),
 	new SlashCommandBuilder().setName('uptime').setDescription('Uptime of the bot and the underlying server'),
+	new SlashCommandBuilder().setName('roll').setDescription('Roll dice'),
 ]
 	.map(command => command.toJSON());
 

@@ -16,15 +16,16 @@ var handleOnInteraction = async function (interaction) {
 	if (interaction.channel.name === "talk-to-rubybot" || interaction.channel.name === "professions" || interaction.channel.name === "development" || interaction.channel.name === "test") {
 		const { commandName } = interaction;
 		if (commandName === 'info') {
-			handleActionInfo(interaction, true);
+			handleActionInfo(interaction);
 		} else if (commandName === 'help') {
-			handleActionHelp(interaction, true);
+			handleActionHelp(interaction);
 		} else if (commandName === 'uptime') {
 			handleActionUptime(interaction);
 		}
-		// else if (commandName === 'roll') {
-		// 	handleActionRoll(interaction, true);
-		// } else if (commandName === 'alma') {
+		else if (commandName === 'roll') {
+			handleActionRoll(interaction);
+		}
+		// else if (commandName === 'alma') {
 		// 	handleActionAlma(interaction, true);
 		// } else if (commandName === 'view') {
 		// 	handleActionView(interaction, true);

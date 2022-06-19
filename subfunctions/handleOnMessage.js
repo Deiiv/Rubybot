@@ -20,36 +20,36 @@ var handleOnMessage = function (msg) {
 			switch (msg.content.split(" ")[0]) {
 				// view bot info
 				case "!info":
-					handleActionInfo(msg);
+					handleActionInfo(msg, true);
 					break;
 				// view help menu
 				case "!help":
-					handleActionHelp(msg);
+					handleActionHelp(msg, true);
 					break;
 				// rolls dice
 				case "!roll":
-					handleActionRoll(msg);
+					handleActionRoll(msg, true);
 					break;
 				// alma monthly call
 				case "!alma":
-					handleActionAlma(msg);
+					handleActionAlma(msg, true);
 					break;
 				// view profession details
 				case "!view":
-					handleActionView(msg);
+					handleActionView(msg, true);
 					break;
 				// set guild in db for user
 				case "!setguild":
-					handleActionSetGuild(msg);
+					handleActionSetGuild(msg, true);
 					break;
 				// add prof actions
 				case "!add":
-					handleActionAdd(msg);
+					handleActionAdd(msg, true);
 					break;
 				// gets current dimension portals
 				case "!portals":
 				case "!portal":
-					handleActionPortals(msg);
+					handleActionPortals(msg, true);
 					break;
 				case "!contact":
 					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`This can only be used in direct pm with the bot (me)`).setDescription(process.env.peepoHappy);
@@ -69,7 +69,7 @@ var handleOnMessage = function (msg) {
 			switch (msg.content.split(" ")[0]) {
 				// discord server backup
 				case "!backup":
-					handleActionBackup(msg);
+					handleActionBackup(msg, true);
 					break;
 				default:
 					break;
@@ -80,19 +80,19 @@ var handleOnMessage = function (msg) {
 			switch (msg.content.split(" ")[0]) {
 				// contacts discord admins in guild discord
 				case "!contact":
-					handleActionContact(msg);
+					handleActionContact(msg, true);
 					break;
 				// view help menu
 				case "!help":
-					handleActionHelp(msg);
+					handleActionHelp(msg, true);
 					break;
 				// view profession details
 				case "!view":
-					handleActionView(msg);
+					handleActionView(msg, true);
 					break;
 				// view bot info
 				case "!info":
-					handleActionInfo(msg);
+					handleActionInfo(msg, true);
 					break;
 				default:
 					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Only !contact, !help, !info, and !view will work here`).setDescription(process.env.peepoHappy);

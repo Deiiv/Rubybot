@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-var handleActionInfo = function (msg, interactionBool) {
+var handleActionInfo = function (msg, notAnInteraction) {
 	const infoEmbed = new Discord.MessageEmbed()
 		.setColor(process.env.embedColour)
 		.setTitle(`Rubybot :robot:`)
@@ -10,7 +10,7 @@ var handleActionInfo = function (msg, interactionBool) {
 		.addField("Hosted on:", process.env.host)
 		.addField("Developed by:", process.env.adminUserTag);
 
-	if (interactionBool) msg.reply({ embeds: [infoEmbed] });
-	else msg.channel.send({ embeds: [infoEmbed] });
+	if (notAnInteraction) msg.channel.send({ embeds: [infoEmbed] });
+	else msg.reply({ embeds: [infoEmbed] });
 };
 module.exports = handleActionInfo;
