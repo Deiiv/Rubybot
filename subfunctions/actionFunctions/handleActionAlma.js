@@ -60,7 +60,7 @@ var handleActionAlma = function (msg, notAnInteraction) {
 	}
 	else {
 		// const month = parseInt(msg.options.getString('month'));
-		const month = msg.options.getString('month');
+		var month = msg.options.getString('month');
 
 		if (month > 0 && month < 13) {
 			let almaChannel = "";

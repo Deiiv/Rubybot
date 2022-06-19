@@ -22,7 +22,23 @@ const commands = [
 			option
 				.setRequired(true)
 				.setName('month')
-				.setDescription('The month to pull Almanax info for'))
+				.setDescription('The month to pull Almanax info for')),
+	new SlashCommandBuilder().setName('portals').setDescription('View a Dimension portal position')
+		.addStringOption(option =>
+			option.setName("dimension")
+				.setDescription("The Dimension portal needed")
+				.setRequired(true)
+				.addChoice("All Dimensions")
+				.addChoice("Enurado")
+				.addChoice("Srambad")
+				.addChoice("Xelorium")
+				.addChoice("Ecaflipus"))
+	// .addChoice("All Dimensions", "all")
+	// .addChoice("Enurado", "Enurado")
+	// .addChoice("Srambad", "Srambad")
+	// .addChoice("Xelorium", "Xelorium")
+	// .addChoice("Ecaflipus", "Ecaflipus"))
+
 	// .addStringOption(option =>
 	// 	option
 	// 		.setRequired(true)
