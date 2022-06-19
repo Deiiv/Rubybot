@@ -7,7 +7,8 @@ const commands = [
 	new SlashCommandBuilder().setName('info').setDescription('For viewing bot information'),
 	new SlashCommandBuilder().setName('help').setDescription('Help with available Rubybot commands'),
 	new SlashCommandBuilder().setName('uptime').setDescription('Uptime of the bot and the underlying server'),
-	new SlashCommandBuilder().setName('roll').setDescription('Roll dice'),
+	// new SlashCommandBuilder().setName('roll').setDescription('Roll dice'),
+	// new SlashCommandBuilder().setName('almanax').setDescription('View Almanax offerings for a full month'),
 ]
 	.map(command => command.toJSON());
 
@@ -17,6 +18,7 @@ var deployCommands = function (clientId, guildId, guildName) {
 	rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
 		.then(() => logger.info(`Successfully registered application commands for server ${guildName}`))
 		.catch(err => {
+			logger.info("Hit an error at deployCommands");
 			logger.info(err);
 		});
 }

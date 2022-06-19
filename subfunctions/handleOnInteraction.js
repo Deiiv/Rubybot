@@ -25,16 +25,17 @@ var handleOnInteraction = async function (interaction) {
 		else if (commandName === 'roll') {
 			handleActionRoll(interaction);
 		}
-		// else if (commandName === 'alma') {
-		// 	handleActionAlma(interaction, true);
-		// } else if (commandName === 'view') {
-		// 	handleActionView(interaction, true);
+		else if (commandName === 'alma') {
+			handleActionAlma(interaction);
+		}
+		// else if (commandName === 'view') {
+		// 	handleActionView(interaction);
 		// } else if (commandName === 'setGuild') {
-		// 	handleActionSetGuild(interaction, true);
+		// 	handleActionSetGuild(interaction);
 		// } else if (commandName === 'add') {
-		// 	handleActionAdd(interaction, true);
+		// 	handleActionAdd(interaction);
 		// } else if (commandName === 'portals') {
-		// 	handleActionPortals(interaction, true);
+		// 	handleActionPortals(interaction);
 		// }
 	}
 	else {

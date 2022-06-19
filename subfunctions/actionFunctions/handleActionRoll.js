@@ -16,7 +16,6 @@ var handleActionRoll = function (msg, notAnInteraction) {
 				.setColor(process.env.embedColour)
 				.setTitle("X in !roll XdY must be between " + minX + " and " + maxX)
 				.setDescription(":game_die:");
-
 			if (notAnInteraction) msg.channel.send({ embeds: [message] });
 			else msg.reply({ embeds: [message] });
 		} else if (isNaN(y) || y < minY || y > maxY) {
@@ -24,7 +23,6 @@ var handleActionRoll = function (msg, notAnInteraction) {
 				.setColor(process.env.embedColour)
 				.setTitle("Y in !roll XdY must be between " + minY + " and " + maxY)
 				.setDescription(":game_die:");
-
 			if (notAnInteraction) msg.channel.send({ embeds: [message] });
 			else msg.reply({ embeds: [message] });
 		} else {
@@ -35,13 +33,11 @@ var handleActionRoll = function (msg, notAnInteraction) {
 				.setColor(process.env.embedColour)
 				.setTitle(":game_die: " + messageContent[1])
 				.setDescription(numbers.join(" | "));
-
 			if (notAnInteraction) msg.channel.send({ embeds: [message] });
 			else msg.reply({ embeds: [message] });
 		}
 	} else {
 		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input! Proper usage: !roll XdY").setDescription(":game_die:");
-
 		if (notAnInteraction) msg.channel.send({ embeds: [message] });
 		else msg.reply({ embeds: [message] });
 	}
