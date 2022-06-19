@@ -20,7 +20,6 @@ const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
 const handleActionPortals = require("./actionFunctions/handleActionPortals.js");
 const handleActionBackup = require("./actionFunctions/handleActionBackup.js");
-const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal", "!backup"];
 
 var handleOnInteraction = async function (interaction) {
 	if (!interaction.isCommand()) return;	// handle different types of interactions, for now just a normal command is supported
@@ -38,7 +37,7 @@ var handleOnInteraction = async function (interaction) {
 		else if (commandName === 'roll') {
 			handleActionRoll(interaction);
 		}
-		else if (commandName === 'almanax') {
+		else if (commandName === 'alma') {
 			handleActionAlma(interaction);
 		}
 		// else if (commandName === 'view') {
