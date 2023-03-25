@@ -26,7 +26,7 @@ client.on("ready", () => {
 	try {
 		handleOnReady(client);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -35,7 +35,7 @@ client.on("guildMemberAdd", (member) => {
 	try {
 		handleOnGuildMemberAdd(member);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -44,7 +44,7 @@ client.on("messageCreate", (msg) => {
 	try {
 		handleOnMessage(msg);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -55,7 +55,7 @@ client.on('interactionCreate', async interaction => {
 	try {
 		await handleOnInteraction(interaction);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -63,7 +63,7 @@ client.on("messageReactionAdd", (reaction, user) => {
 	try {
 		handleMessageReaction(reaction, user, "add");
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -71,7 +71,7 @@ client.on("messageReactionRemove", (reaction, user) => {
 	try {
 		handleMessageReaction(reaction, user, "remove");
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -82,7 +82,7 @@ client.login(process.env.clientkey);
 
 client.on("shardError", (error) => {
 	logger.info("A websocket connection encountered an error (shardError)");
-	logger.info(error);
+	logger.error(error);
 });
 
 client.on("shardReconnecting", (id) => {

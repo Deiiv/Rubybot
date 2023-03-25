@@ -51,7 +51,7 @@ var handleActionPortals = function (msg) {
 		})
 		.catch((err) => {
 			logger.info("Error in getSiteData");
-			logger.info(err);
+			logger.error(err);
 		});
 };
 module.exports = handleActionPortals;

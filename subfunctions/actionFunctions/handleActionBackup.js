@@ -58,7 +58,7 @@ var handleActionBackup = function (msg) {
 						logger.info("Response from s3 : " + JSON.stringify(data));
 					})
 					.catch(err => {
-						logger.info(err);
+						logger.error(err);
 					})
 				logger.info("Removing local backup file");
 				fs.remove(`${backupPath}${backupData.id}.json`)
@@ -66,7 +66,7 @@ var handleActionBackup = function (msg) {
 						logger.info("File removed");
 					})
 					.catch(err => {
-						logger.info(err);
+						logger.error(err);
 					})
 			});
 			break;

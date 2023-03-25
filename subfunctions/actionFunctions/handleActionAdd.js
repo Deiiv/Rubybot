@@ -56,7 +56,7 @@ var handleActionAdd = function (msg) {
 						msg.channel.send({ embeds: [message] });
 					})
 					.catch((error) => {
-						logger.info(error);
+						logger.error(error);
 					});
 			} else {
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).addField("Invalid profession level!", "Level must be between 1-200 (inclusive)");

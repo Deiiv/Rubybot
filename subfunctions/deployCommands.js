@@ -16,7 +16,7 @@ var deployCommands = function (clientId, guildId, guildName) {
 	rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
 		.then(() => logger.info(`Successfully registered application commands for server ${guildName}`))
 		.catch(err => {
-			logger.info(err);
+			logger.error(err);
 		});
 }
 module.exports = deployCommands;

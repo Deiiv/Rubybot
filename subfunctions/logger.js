@@ -1,3 +1,4 @@
+/*
 const winston = require("winston");
 require("winston-daily-rotate-file");
 const { format } = require("winston");
@@ -24,3 +25,23 @@ module.exports = winston.createLogger({
 		}),
 	],
 });
+*/
+var info = function (msg) {
+	console.log("[INFO]", msg);
+}
+
+var error = function (error) {
+	console.log("[ERROR]", error);
+}
+
+module.exports = {
+	info: info,
+	error: error
+}
+
+// function logger() {
+// 	this.info = function (msg) {
+// 		console.log("[INFO22]", msg);
+// 	}
+// }
+// module.exports.logger = logger;

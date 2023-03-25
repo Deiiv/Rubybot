@@ -32,7 +32,7 @@ var sendToApi = function (message, path, callback) {
 		})
 		.catch((err) => {
 			logger.info("Error in fetch");
-			logger.info(err);
+			logger.error(err);
 			return callback(null, err);
 		});
 };

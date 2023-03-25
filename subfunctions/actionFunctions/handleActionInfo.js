@@ -7,7 +7,7 @@ var handleActionInfo = function (msg, interactionBool) {
 		.setDescription("Created for various functionality in discord, including Dofus specific features")
 		.addField("Version:", process.env.botversion)
 		.addField("Runtime:", process.env.runtime)
-		.addField("Hosted on:", process.env.host)
+		.addField("Hosted at:", process.env.host)
 		.addField("Developed by:", process.env.adminUserTag);
 
 	if (interactionBool) msg.reply({ embeds: [infoEmbed] });

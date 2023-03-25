@@ -49,7 +49,7 @@ var handleActionView = function (msg) {
 				msg.channel.send({ embeds: [message] });
 			})
 			.catch((error) => {
-				logger.info(error);
+				logger.error(error);
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
 				msg.channel.send({ embeds: [message] });
 			});
@@ -88,7 +88,7 @@ var handleActionView = function (msg) {
 					}
 				})
 				.catch((error) => {
-					logger.info(error);
+					logger.error(error);
 					let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
 					msg.channel.send({ embeds: [message] });
 				});
@@ -142,7 +142,7 @@ var handleActionView = function (msg) {
 						}
 					})
 					.catch((error) => {
-						logger.info(error);
+						logger.error(error);
 						let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
 						msg.channel.send({ embeds: [message] });
 					});
