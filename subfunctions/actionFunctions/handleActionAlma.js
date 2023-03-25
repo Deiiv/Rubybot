@@ -9,7 +9,7 @@ var handleActionAlma = function (msg) {
 		try {
 			almaChannel = msg.member.guild.channels.cache.find((ch) => ch.name.includes("almanax"));
 		} catch (err) {
-			logger.info(err);
+			logger.error(err);
 			let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Encountered an error: No Almanax channel found").setDescription(":interrobang:");
 			msg.channel.send({ embeds: [message] });
 			return;

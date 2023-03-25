@@ -13,7 +13,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 			await reaction.fetch();
 		} catch (error) {
 			logger.info("Something went wrong when fetching the message:");
-			logger.info(error);
+			logger.error(error);
 			// Return as `reaction.message.author` may be undefined/null
 			return;
 		}
@@ -57,7 +57,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 										logger.info("Done updating user in db");
 									})
 									.catch((error) => {
-										logger.info(error);
+										logger.error(error);
 									});
 							}
 						} else {
@@ -90,12 +90,12 @@ var handleMessageReaction = async (reaction, user, type) => {
 												logger.info("Done updating user in db");
 											})
 											.catch((error) => {
-												logger.info(error);
+												logger.error(error);
 											});
 									}
 								})
 								.catch((error) => {
-									logger.info(error);
+									logger.error(error);
 								});
 						}
 					} else if (type === "remove") {
@@ -123,18 +123,18 @@ var handleMessageReaction = async (reaction, user, type) => {
 									user.send({ embeds: [message] });
 								})
 								.catch((error) => {
-									logger.info(error);
+									logger.error(error);
 								});
 						}
 					}
 				} catch (err) {
 					logger.info("Error when adding/removing role");
-					logger.info(err);
+					logger.error(err);
 				}
 			})
 			.catch((err) => {
 				logger.info("Error at members.fetch()");
-				logger.info(err);
+				logger.error(err);
 			});
 	} else return;
 };
