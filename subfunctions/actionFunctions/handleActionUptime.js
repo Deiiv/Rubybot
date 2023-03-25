@@ -4,8 +4,10 @@ const logger = require("./../logger");
 var handleActionUptime = function (msg) {
 	const uptimeEmbed = new Discord.MessageEmbed()
 		.setColor(process.env.embedColour)
-		.addField("Rubybot uptime:", secondsFormat(process.uptime()))
-		.addField("Server uptime:", secondsFormat(require('os').uptime()));
+		.addFields(
+			{ name: 'Rubybot uptime:', value: secondsFormat(process.uptime()) },
+			{ name: 'Server uptime:', value: secondsFormat(require('os').uptime()) },
+		);
 
 	msg.reply({ embeds: [uptimeEmbed] });
 };

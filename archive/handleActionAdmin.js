@@ -12,7 +12,7 @@ Not in use
 
 
 
-*/
+
 
 const Discord = require("discord.js");
 
@@ -25,3 +25,4 @@ var handleActionAdmin = function (msg) {
 	msg.channel.send({ embeds: [adminEmbed] });
 };
 module.exports = handleActionAdmin;
+*/

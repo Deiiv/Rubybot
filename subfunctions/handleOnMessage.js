@@ -118,7 +118,8 @@ var handleOnMessage = function (msg) {
 		*/
 		if (msg.content.toLowerCase().indexOf("phoebe") != -1) {
 			// only add reaction if the emoji exists in bot memory
-			if (process.env.phoebepog) msg.react(process.env.phoebepog);
+			// if (process.env.phoebepog) msg.react(process.env.phoebepog);
+			if (process.env.phoepeek) msg.react(process.env.phoepeek);
 		}
 	}
 };

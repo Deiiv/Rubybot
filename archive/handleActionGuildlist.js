@@ -12,7 +12,7 @@ Not in use
 
 
 
-*/
+
 
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
@@ -116,3 +116,4 @@ var handleActionGuildlist = function (msg) {
 	}
 };
 module.exports = handleActionGuildlist;
+*/
