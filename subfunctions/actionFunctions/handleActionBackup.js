@@ -42,10 +42,12 @@ var handleActionBackup = function (msg) {
 				message = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.setTitle(`Backup created! ${process.env.peepoHappy}`)
-					.addField("Backup ID", backupData.id, false)
-					.addField("Server ID", backupData.guildID, false)
-					.addField("Size", `${prettyBytes(size)}`, false)
-					.addField("Created at", formatedDate, false);
+					.addFields(
+						{ name: 'Backup ID', value: backupData.id },
+						{ name: 'Server ID', value: backupData.guildID },
+						{ name: 'Size', value: `${prettyBytes(size)}` },
+						{ name: 'Created at', value: formatedDate },
+					);
 				msg.channel.send({ embeds: [message] });
 				var params = {
 					Body: JSON.stringify(backupData),

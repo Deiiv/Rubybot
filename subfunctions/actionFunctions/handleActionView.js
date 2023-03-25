@@ -45,7 +45,9 @@ var handleActionView = function (msg) {
 					.setColor(process.env.embedColour)
 					.setTitle(`:tools: ${data.username}'s Professions :hammer_pick:`)
 					.setDescription(data.profList)
-					.addField(`:shield: Guild :shield:`, data.guild);
+					.addFields(
+						{ name: ':shield: Guild :shield:', value: data.guild },
+					);
 				msg.channel.send({ embeds: [message] });
 			})
 			.catch((error) => {
@@ -83,7 +85,9 @@ var handleActionView = function (msg) {
 							.setColor(process.env.embedColour)
 							.setTitle(`:tools: ${username}'s Professions :hammer_pick:`)
 							.setDescription(data.profList)
-							.addField(`:shield: Guild :shield:`, data.guild);
+							.addFields(
+								{ name: ':shield: Guild :shield:', value: data.guild },
+							);
 						msg.channel.send({ embeds: [message] });
 					}
 				})

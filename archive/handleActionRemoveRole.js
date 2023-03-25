@@ -12,7 +12,7 @@ Not in use
 
 
 
-*/
+
 
 const Discord = require("discord.js");
 const getValidRoles = require("./subActionFunctions/getValidRoles.js");
@@ -62,3 +62,4 @@ var handleActionRemoveRole = function (msg) {
 		});
 };
 module.exports = handleActionRemoveRole;
+*/

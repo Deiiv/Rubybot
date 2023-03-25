@@ -12,7 +12,7 @@ Not in use
 
 
 
-*/
+
 
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
@@ -50,14 +50,20 @@ var handleActionRolelist = function (msg) {
 				guild = msg.member.guild.name;
 			} catch (err) {
 				console.log(err);
-				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
+				let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+					.addFields(
+						{ name: `Encountered an error: ${err.message}`, value: 'Make sure you call this command from inside a server (not through PM\'s)' },
+					);
 				msg.channel.send({ embeds: [message] });
 				return;
 			}
 			getValidRoles(guild)
 				.then((validRoles) => {
 					if (validRoles.includes(roleToAdd)) {
-						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Role " + roleToAdd + " is already in role list", process.env.monkaThink);
+						let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+							.addFields(
+								{ name: `Role ${roleToAdd} is already in role list`, value: process.env.monkaThink },
+							);
 						msg.channel.send({ embeds: [message] });
 					} else {
 						console.log("Old rolesList : " + validRoles.toString());
@@ -73,10 +79,16 @@ var handleActionRolelist = function (msg) {
 						sendToApi(message, "/admin/rolelist", function (response, error) {
 							if (error) {
 								console.log(error);
-								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+								let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+									.addFields(
+										{ name: `Encountered an error: ${error.message}`, value: ':interrobang:' },
+									);
 								msg.channel.send({ embeds: [message] });
 							} else {
-								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Roles list updated, new list: ", validRoles.toString());
+								let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+									.addFields(
+										{ name: 'Roles list updated, new list: ', value: validRoles.toString() },
+									);
 								msg.channel.send({ embeds: [message] });
 							}
 						});
@@ -84,7 +96,10 @@ var handleActionRolelist = function (msg) {
 				})
 				.catch((error) => {
 					console.log(error);
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+					let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+						.addFields(
+							{ name: `Encountered an error: ${error.message}`, value: ':interrobang:' },
+						);
 					msg.channel.send({ embeds: [message] });
 				});
 		} else if (messageContent[1] === "remove") {
@@ -130,7 +145,10 @@ var handleActionRolelist = function (msg) {
 				})
 				.catch((error) => {
 					console.log(error);
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
+					let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+						.addFields(
+							{ name: `Encountered an error: ${error.message}`, value: ':interrobang:' },
+						);
 					msg.channel.send({ embeds: [message] });
 				});
 		} else {
@@ -143,3 +161,4 @@ var handleActionRolelist = function (msg) {
 	}
 };
 module.exports = handleActionRolelist;
+*/
