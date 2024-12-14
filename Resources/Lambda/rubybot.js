@@ -1,5 +1,5 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocument, GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocument, GetCommand, ScanCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 
 const dynamodb = DynamoDBDocument.from(new DynamoDB());
 
@@ -172,28 +172,33 @@ export const handler = (event, context, callback) => {
 
 	if (event.action === "getProf") {
 		let scanParams = {
-			FilterExpression: "attribute_exists(" + event.prof + ")",
+			FilterExpression: `${event.prof} >= :value`,
 			TableName: "Dofus-user-data",
 			ExpressionAttributeNames: {
 				"#PROF": event.prof,
 				"#USERNAME": "UserName",
 				"#GUILD": "Guild"
 			},
+			ExpressionAttributeValues: {
+				":value": event.level
+			},
 			ProjectionExpression: "#PROF, #USERNAME, #GUILD"
 		};
 		console.log("Scan params", scanParams);
+
+		const command = new ScanCommand(scanParams);
+
 		dynamodb
-			.scan(scanParams)
-			.promise()
-			.then(result => {
-				console.log(result);
-				var data = [];
-				result.Items.forEach(function (item) {
-					data.push(AWS.DynamoDB.Converter.unmarshall(item));
-				});
+			.send(command)
+			.then(data => {
+				// console.log(result);
+				// var data = [];
+				// result.Items.forEach(function(item) {
+				// 	data.push(AWS.DynamoDB.Converter.unmarshall(item));
+				// });
 				console.log(data);
 
-				if (data.length === 0) {
+				if (data.Count === 0) {
 					let response = {
 						statusCode: 200,
 						body: "NONE"
@@ -201,7 +206,7 @@ export const handler = (event, context, callback) => {
 					callback(null, response);
 				}
 
-				data = data.sort(function (a, b) {
+				data.Items = data.Items.sort(function (a, b) {
 					return b[event.prof] - a[event.prof];
 				});
 
@@ -209,7 +214,7 @@ export const handler = (event, context, callback) => {
 				let limit = parseInt(event.limit);
 				let count = 0;
 
-				data.forEach(function (item) {
+				data.Items.forEach(function (item) {
 					let levelInt = parseInt(item[event.prof], 10);
 					let eventLevelInt = parseInt(event.level, 10);
 					if (levelInt >= eventLevelInt) {
@@ -260,17 +265,11 @@ export const handler = (event, context, callback) => {
 				"#GUILD": "Guild"
 			},
 			ExpressionAttributeValues: {
-				":NAME": {
-					S: event.username
-				},
-				":GUILD": {
-					S: event.guild || "None"
-				}
+				":NAME": event.username,
+				":GUILD": event.guild || "None"
 			},
 			Key: {
-				UserId: {
-					S: event.id
-				}
+				UserId: event.id
 			},
 			ReturnValues: "ALL_NEW",
 			TableName: "Dofus-user-data",
@@ -279,9 +278,10 @@ export const handler = (event, context, callback) => {
 
 		console.log("Calling DynamoDB with params : " + JSON.stringify(updateParams));
 
+		const command = new UpdateCommand(updateParams);
+
 		dynamodb
-			.updateItem(updateParams)
-			.promise()
+			.send(command)
 			.then(result => {
 				console.log("Updated data for " + event.username);
 				let response = {
@@ -315,17 +315,11 @@ export const handler = (event, context, callback) => {
 				"#PROF": event.prof
 			},
 			ExpressionAttributeValues: {
-				":NAME": {
-					S: event.username
-				},
-				":PROF": {
-					S: event.level
-				}
+				":NAME": event.username,
+				":PROF": event.level
 			},
 			Key: {
-				UserId: {
-					S: event.id
-				}
+				UserId: event.id
 			},
 			ReturnValues: "ALL_NEW",
 			TableName: "Dofus-user-data",
@@ -334,9 +328,10 @@ export const handler = (event, context, callback) => {
 
 		console.log("Calling DynamoDB with params : " + JSON.stringify(updateParams));
 
+		const command = new UpdateCommand(updateParams);
+
 		dynamodb
-			.updateItem(updateParams)
-			.promise()
+			.send(command)
 			.then(result => {
 				console.log("Updated data : " + JSON.stringify(result));
 				let response = {
