@@ -262,18 +262,20 @@ export const handler = (event, context, callback) => {
 		let updateParams = {
 			ExpressionAttributeNames: {
 				"#NAME": "UserName",
-				"#GUILD": "Guild"
+				"#GUILD": "Guild",
+				"#LASTMODIFIED": "LastModified"
 			},
 			ExpressionAttributeValues: {
 				":NAME": event.username,
-				":GUILD": event.guild || "None"
+				":GUILD": event.guild || "None",
+				":LASTMODIFIED": new Date().toISOString()
 			},
 			Key: {
 				UserId: event.id
 			},
 			ReturnValues: "ALL_NEW",
 			TableName: "Dofus-user-data",
-			UpdateExpression: "SET #NAME = :NAME, #GUILD = :GUILD"
+			UpdateExpression: "SET #NAME = :NAME, #GUILD = :GUILD, #LASTMODIFIED = :LASTMODIFIED"
 		};
 
 		console.log("Calling DynamoDB with params : " + JSON.stringify(updateParams));
@@ -312,18 +314,20 @@ export const handler = (event, context, callback) => {
 		let updateParams = {
 			ExpressionAttributeNames: {
 				"#NAME": "UserName",
-				"#PROF": event.prof
+				"#PROF": event.prof,
+				"#LASTMODIFIED": "LastModified"
 			},
 			ExpressionAttributeValues: {
 				":NAME": event.username,
-				":PROF": event.level
+				":PROF": event.level,
+				":LASTMODIFIED": new Date().toISOString()
 			},
 			Key: {
 				UserId: event.id
 			},
 			ReturnValues: "ALL_NEW",
 			TableName: "Dofus-user-data",
-			UpdateExpression: "SET #NAME = :NAME, #PROF = :PROF"
+			UpdateExpression: "SET #NAME = :NAME, #PROF = :PROF, #LASTMODIFIED = :LASTMODIFIED"
 		};
 
 		console.log("Calling DynamoDB with params : " + JSON.stringify(updateParams));
