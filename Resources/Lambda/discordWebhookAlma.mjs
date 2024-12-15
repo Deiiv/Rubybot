@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-// const formData = require('form-data');
+import formData from 'form-data';
 import {
     PutObjectCommand,
     S3Client,
@@ -10,12 +10,7 @@ import fs from 'fs';
 import promise from 'promise';
 import cheerio from 'cheerio';
 import moment from 'moment-timezone';
-// const fetch = require('node-fetch');
-// const http = require('https');
-// const fs = require('fs')
-// const promise = require('promise');
-// const cheerio = require('cheerio');
-// const moment = require('moment-timezone');
+
 const webhookUrls = ["https://discord.com/api/webhooks/", "https://discord.com/api/webhooks/", "https://discord.com/api/webhooks/", "https://discord.com/api/webhooks/"];
 
 export const handler = (event, context, callback) => {
@@ -68,22 +63,22 @@ export const handler = (event, context, callback) => {
                             // console.log("Got image", imageData);
                             // result.image = imageData;
 
-                            const s3client = new S3Client({ region: "ca-central-1" });
+                            // const s3client = new S3Client({region: "ca-central-1"});
 
-                            const putCommand = new PutObjectCommand({
-                                Bucket: 'rubybot',
-                                Key: 'tempAlmaImages/almaImage1.png',
-                                Body: imageData
-                                // Body: await readFile(filePath),
-                            });
-                            //   try {
-                            s3client.send(putCommand)
-                                .then(response => {
-                                    console.log("response from s3 : ", response);
-                                })
-                                .catch(err => {
-                                    console.log("err from s3 : ", err);
-                                })
+                            //   const putCommand = new PutObjectCommand({
+                            //     Bucket: 'rubybot',
+                            //     Key: 'tempAlmaImages/almaImage1.png',
+                            //     Body: imageData
+                            //     // Body: await readFile(filePath),
+                            //   });
+                            // //   try {
+                            //     s3client.send(putCommand)
+                            //         .then(response => {
+                            //             console.log("response from s3 : ", response);
+                            //         })
+                            //         .catch(err => {
+                            //             console.log("err from s3 : ", err);
+                            //         })
 
                             //   } catch (err) {
                             //         if (err instanceof S3ServiceException) {
@@ -94,7 +89,8 @@ export const handler = (event, context, callback) => {
                             //         throw err;
                             //     }
                             // }
-                            fs.writeFile('/tmp/almaImg.png', imageData, 'binary', function (err) {
+                            // result.image = imageData;
+                            fs.writeFile('/tmp/almaImg.png', Buffer.from(imageData, 'base64'), function (err) {
                                 if (err) throw err
                                 console.log('Image saved.')
 
@@ -187,7 +183,8 @@ function sendDataToWebhook(data, webhookUrl) {
                 }
                 ],
                 "thumbnail": {
-                    "url": "attachment://file1"
+                    "url": "attachment://tmp/almaImage.png"
+                    // "url":"https://static.ankama.com/dofus/www/game/items/200/56429.w75h75.png"
                     // "url": data.image
                 }
             }]
@@ -195,24 +192,35 @@ function sendDataToWebhook(data, webhookUrl) {
 
         console.log("Embed data : " + JSON.stringify(embedData));
 
-        // const form = new formData();
-        // form.append('file1', fs.createReadStream('./tmp/almaImg.png')); // give absolute path if possible        
-        // var headers = form.getHeaders();
+        fs.readFile('/tmp/almaImg.png', { encoding: 'base64' }, function (err, image) {
+            if (err)
+                console.log(err);
+            else {
+                const form = new formData();
+                // form.append('file1', new Blob([data.image], {type:"application/octet-stream"}));
+                // form.append('file1', fs.createReadStream('./tmp/almaImg.png')); // give absolute path if possible       
+                // form.append('file1', fs.createReadStream('./tmp/almaImg.png')); // give absolute path if possible       
+                form.append('file1', image, 'almaImage.png');
+                form.append('payload_json', JSON.stringify(embedData))
+                var headers = form.getHeaders();
 
-        // console.log("headers : ", headers);
+                // console.log("headers : ", headers);
 
-        fetch(webhookUrl, {
-            method: 'post',
-            body: JSON.stringify(embedData),
-            // headers: headers
-            // form.getHeaders()
-            headers: { 'Content-Type': 'application/json' }
+                fetch(webhookUrl, {
+                    method: 'post',
+                    // body: JSON.stringify(embedData),
+                    // headers: headers
+                    headers: form.getHeaders(),
+                    body: form
+                    // headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(data => {
+                        console.log('Request succeeded with JSON response', data);
+                    })
+                    .catch(error => {
+                        console.log('Request failed', error);
+                    });
+            }
         })
-            .then(data => {
-                console.log('Request succeeded with JSON response', data);
-            })
-            .catch(error => {
-                console.log('Request failed', error);
-            });
     });
 }
