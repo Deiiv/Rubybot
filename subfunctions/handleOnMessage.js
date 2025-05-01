@@ -121,7 +121,7 @@ var handleOnMessage = function (msg) {
 			// if (process.env.phoebepog) msg.react(process.env.phoebepog);
 			if (process.env.phoepeek) msg.react(process.env.phoepeek);
 		}
-		if (msg.guild.id === "375518646015098893" && (msg.content.toLowerCase().startsWith("cel ") || msg.content.toLowerCase().endsWith(" cel") || msg.content.toLowerCase().includes(" cel ") || msg.content.toLowerCase().includes(" cel."))) {
+		if (msg.guild.id === "375518646015098893" && (msg.content.toLowerCase() == "cel" || msg.content.toLowerCase().startsWith("cel ") || msg.content.toLowerCase().endsWith(" cel") || msg.content.toLowerCase().includes(" cel ") || msg.content.toLowerCase().includes(" cel."))) {
 			// only add reaction if the emoji exists in bot memory
 			// if (process.env.phoebepog) msg.react(process.env.phoebepog);
 			if (process.env.celface) msg.react(process.env.celface);
