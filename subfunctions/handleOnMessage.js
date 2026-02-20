@@ -44,23 +44,23 @@ var handleOnMessage = function (msg) {
 			})
 			.then((bannedUser) => {
 				logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-				var message = new Discord.MessageEmbed()
+				var messageSuccess = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.setTitle(`Successfully banned user caught in the honey pot`)
 					.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-				adminChannel.send(message);
+				adminChannel.send(messageSuccess);
 				return;
 			})
 			.catch((error) => {
 				logger.info(`Failed to ban user: ${error.message}`);
 				logger.info(error);
-				var message = new Discord.MessageEmbed()
+				var messageError = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.setTitle(`FAILED to ban user!`)
 					.setDescription(
 						`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
 					);
-				adminChannel.send(message);
+				adminChannel.send(messageError);
 				return;
 			});
 	}
