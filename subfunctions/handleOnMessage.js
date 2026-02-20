@@ -36,19 +36,19 @@ var handleOnMessage = function (msg) {
 			.setDescription(
 				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}\n\nMessage content:\n\n${msg.content}`
 			);
-		adminChannel.send(message);
+		adminChannel.send({ embeds: [message] });
 		msg.member
 			.ban({
-				days: 1,
+				deleteMessageSeconds: 60 * 60 * 24,
 				reason: "Caught in the honey pot, see discord-admins message for more info",
 			})
-			.then((bannedUser) => {
+			.then(() => {
 				logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
 				var messageSuccess = new Discord.MessageEmbed()
 					.setColor(process.env.embedColour)
 					.setTitle(`Successfully banned user caught in the honey pot`)
 					.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-				adminChannel.send(messageSuccess);
+				adminChannel.send({ embeds: [messageSuccess] });
 				return;
 			})
 			.catch((error) => {
@@ -60,7 +60,7 @@ var handleOnMessage = function (msg) {
 					.setDescription(
 						`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
 					);
-				adminChannel.send(messageError);
+				adminChannel.send({ embeds: [messageError] });
 				return;
 			});
 	}
