@@ -12,7 +12,7 @@ Not in use, discord.js v 12+ solves this using partials
 
 
 
-*/
+
 
 var handleRaw = function (client, packet) {
 	// ignore unrelated
@@ -35,3 +35,4 @@ var handleRaw = function (client, packet) {
 	});
 };
 module.exports = handleRaw;
+*/

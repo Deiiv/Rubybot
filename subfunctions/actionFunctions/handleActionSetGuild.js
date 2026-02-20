@@ -19,27 +19,27 @@ var handleActionSetGuild = function (msg) {
 						.then(() => {
 							logger.info("Done updating user in db");
 							let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Updated guild to ${guild} for ${msg.member.displayName}`).setDescription(process.env.pepoG);
-							msg.channel.send(message);
+							msg.channel.send({ embeds: [message] });
 						})
 						.catch((error) => {
-							logger.info(error);
+							logger.error(error);
 						});
 				} else {
 					let message = new Discord.MessageEmbed()
 						.setColor(process.env.embedColour)
 						.setTitle("Invalid guild!")
 						.setDescription(`Please send one of the following: ${validGuilds.toString()}.\nIf your guild is not in this list, please reach out to ${process.env.adminUserTag}`);
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				}
 			})
 			.catch((error) => {
-				logger.info(error);
+				logger.error(error);
 				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			});
 	} else {
 		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Please include a guild name, eg. !setguild Ruby").setDescription(process.env.pepoG);
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 	}
 };
 module.exports = handleActionSetGuild;

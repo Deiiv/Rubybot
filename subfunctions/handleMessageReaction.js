@@ -13,7 +13,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 			await reaction.fetch();
 		} catch (error) {
 			logger.info("Something went wrong when fetching the message:");
-			logger.info(error);
+			logger.error(error);
 			// Return as `reaction.message.author` may be undefined/null
 			return;
 		}
@@ -21,7 +21,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 
 	if (!reaction.message.channel.guild) return;
 	var serverName = reaction.message.channel.guild.name;
-	if (serverName != "Deiv's Dev Corner" && serverName != "Ruby" && serverName != "Aurora") return;
+	if (serverName != "Deiv's Dev Corner" && serverName != "Ruby" && serverName != "Armonia") return;
 
 	let reactionName = reaction.emoji.name;
 	reactionName = reactionName.replace("_role", "");
@@ -42,7 +42,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 								.setColor(process.env.embedColour)
 								.setTitle("Done adding role!")
 								.setDescription(`${reactionName} role successfully added in the ${serverName} discord server for your user (${user.username})`);
-							user.send(message);
+							user.send({ embeds: [message] });
 
 							// if the role is "ruby" then udpate user in db with ruby as guild
 							if (reactionName.toLowerCase() === "ruby") {
@@ -57,7 +57,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 										logger.info("Done updating user in db");
 									})
 									.catch((error) => {
-										logger.info(error);
+										logger.error(error);
 									});
 							}
 						} else {
@@ -66,9 +66,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							reaction.message.guild
-								.member(user)
-								.roles.add(role)
+							guildMember.roles.add(role)
 								.then(() => {
 									logger.info(`Added role ${reactionName} to user ${user.username}`);
 
@@ -76,7 +74,8 @@ var handleMessageReaction = async (reaction, user, type) => {
 										.setColor(process.env.embedColour)
 										.setTitle("Done adding role!")
 										.setDescription(`${reactionName} role successfully added in the ${serverName} discord server for your user (${user.username})`);
-									user.send(message);
+									user.send({ embeds: [message] });
+
 
 									// if the role is "ruby" then udpate user in db with ruby as guild
 									if (reactionName.toLowerCase() === "ruby") {
@@ -91,12 +90,12 @@ var handleMessageReaction = async (reaction, user, type) => {
 												logger.info("Done updating user in db");
 											})
 											.catch((error) => {
-												logger.info(error);
+												logger.error(error);
 											});
 									}
 								})
 								.catch((error) => {
-									logger.info(error);
+									logger.error(error);
 								});
 						}
 					} else if (type === "remove") {
@@ -107,37 +106,35 @@ var handleMessageReaction = async (reaction, user, type) => {
 								.setColor(process.env.embedColour)
 								.setTitle("Done removing role!")
 								.setDescription(`${reactionName} role successfully removed in the ${serverName} discord server for your user (${user.username})`);
-							user.send(message);
+							user.send({ embeds: [message] });
 						} else {
 							let role = reaction.message.guild.roles.cache.find((role) => role.name.toLowerCase() === reactionName.toLowerCase());
 							if (!role) {
 								logger.info(`Invalid role reaction : ${reactionName}`);
 								return;
 							}
-							reaction.message.guild
-								.member(user)
-								.roles.remove(role)
+							guildMember.roles.remove(role)
 								.then(() => {
 									logger.info(`Removed role ${reactionName} from user ${user.username}`);
 									let message = new Discord.MessageEmbed()
 										.setColor(process.env.embedColour)
 										.setTitle("Done removing role!")
 										.setDescription(`${reactionName} role successfully removed in the ${serverName} discord server for your user (${user.username})`);
-									user.send(message);
+									user.send({ embeds: [message] });
 								})
 								.catch((error) => {
-									logger.info(error);
+									logger.error(error);
 								});
 						}
 					}
 				} catch (err) {
 					logger.info("Error when adding/removing role");
-					logger.info(err);
+					logger.error(err);
 				}
 			})
 			.catch((err) => {
 				logger.info("Error at members.fetch()");
-				logger.info(err);
+				logger.error(err);
 			});
 	} else return;
 };

@@ -12,7 +12,7 @@ Not in use
 
 
 
-*/
+
 
 const Discord = require("discord.js");
 const getValidRoles = require("./subActionFunctions/getValidRoles.js");
@@ -24,7 +24,7 @@ var handleActionRemoveRole = function (msg) {
 	} catch (err) {
 		console.log(err);
 		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 		return;
 	}
 	getValidRoles(guild)
@@ -38,27 +38,28 @@ var handleActionRemoveRole = function (msg) {
 						.removeRole(role)
 						.then(() => {
 							let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Done!", roleName.toLowerCase() + " role successfully removed " + process.env.peepoHappy);
-							msg.channel.send(message);
+							msg.channel.send({ embeds: [message] });
 						})
 						.catch((error) => {
 							console.log(error);
 							let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-							msg.channel.send(message);
+							msg.channel.send({ embeds: [message] });
 						});
 				} else {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("You don't have the " + roleName.toLowerCase() + " role", process.env.monkaThink);
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 					return;
 				}
 			} else {
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid role!", "Please send one of the following: " + validRoles.toString());
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 			}
 		})
 		.catch((error) => {
 			console.log(error);
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		});
 };
 module.exports = handleActionRemoveRole;
+*/

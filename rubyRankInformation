@@ -1,0 +1,138 @@
+```diff
+- ---------------------------- -
+- Dofus Guild Rank Information -
+- ---------------------------- -
+``````ini
+[Leader] [SiC] [Treasurer]
+
+Leadership ranks
+``````ini
+[Protector]
+
+Veteran Ruby member that qualifies for the role *
+``````ini
+[Craftsman]
+
+Have every profession level 200 **
+``````ini
+[Reservist]
+
+Have every gathering profession level 200 (Alchemist, Farmer, Fisher) **
+``````ini
+[Guard]
+
+Have every magus profession level 200 **
+``````ini
+[Scout]
+
+Have every crafting profession level 200 **
+``````ini
+[Diplomat]
+
+Unlock the achievement "In Quest of Knowledge" (1400+ quests)
+``````ini
+[Secretary]
+
+By being every npc's errand boy, you deserve this title! (Unlock the achievement "In Quest of Heroes" (1000+ quests))
+``````ini
+[Pet Killer]
+
+Unlock the achievement "How to Wane Your Dragon" (Unlocking Dolmanax)
+``````ini
+[Poacher]
+
+Have the "A River of Blood Runs Through It" achievement
+``````ini
+[Treasure Hunter]
+
+Have the "Six out of Six" achievement
+``````ini
+[Thief]
+
+Have a Kolo rank of Diamond or higher
+``````ini
+[Initiate]
+
+Unlock the "Mission Impossible 1" and "Mission Impossible 2" achievements (Beating every dungeon achievements below 191<)
+``````ini
+[Murderer]
+
+Have Brakmar alignment level 100
+``````ini
+[Governor]
+
+Have Bonta alignment level 100
+``````ini
+[Muse]
+
+Event planner
+``````ini
+[Counselor]
+
+Helps players with builds and class planning
+``````ini
+[Chosen One]
+
+Have 20 000 achievements points
+``````ini
+[Mentor]
+
+Rank reserved for Ruby members that are known to be very helpful towards guild members
+``````ini
+[Recruiting Officer]
+
+Recruit actively in /c and /r chat without spamming, and clean messages
+``````ini
+[Breeder]
+
+Have the achievement "Who's The Daddy?"
+``````ini
+[Merchant]
+
+Have 300M kamas+
+``````ini
+[Apprentice]
+
+Every professions 100+
+``````ini
+[Torturer]
+
+Have the "An Odyssey in Three Dimensions" achievement
+``````ini
+[Mascot]
+
+Win a Ruby event
+``````ini
+[Penitent]
+
+Have the "The Empewow's New Cawwots" achievement
+``````ini
+[Perceptor Killer]
+
+Have the "Mighty Oaks from Little Acorns Grow" achievement
+``````ini
+[Deserter]
+
+On hiatus
+``````ini
+[Traitor]
+
+Have the "Koko Boy" achievement
+``````ini
+[Nuisance]
+
+Have the "The Grand Old Duke of Bwork" achievement
+``````ini
+[Dogsbody]
+
+Have the "Piwis" achievement
+``````ini
+[On Trial]
+
+Joined the guild
+``````fix
+* This role will be offered to members by the moderators/leadership themselves, you can't apply to it!
+** Must be willing to craft/mage for guild mates without charging them, but you can accept tips!
+NOTE: all ranks are only available for members that have been in the discord server for at least 2 weeks
+```
+Apply for the ranks over at #dofus-guild-rank-application! Make sure to include your in-game name, the rank you want, and a screenshot for proof of meeting the requirement (include your character tab (c) and the achievement (u))!

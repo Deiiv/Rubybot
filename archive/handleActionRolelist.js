@@ -12,7 +12,7 @@ Not in use
 
 
 
-*/
+
 
 const Discord = require("discord.js");
 const sendToApi = require("./subActionFunctions/sendToApi.js");
@@ -29,18 +29,18 @@ var handleActionRolelist = function (msg) {
 		} catch (err) {
 			console.log(err);
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 			return;
 		}
 		if (messageContent[1] === "view") {
 			getValidRoles(guild)
 				.then((validRoles) => {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Current list of valid roles:", validRoles.toString());
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				})
 				.catch((error) => {
 					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-					msg.channel.send(message);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else if (messageContent[1] === "add") {
 			let roleToAdd = messageContent.splice(2).join(" ");
@@ -50,15 +50,21 @@ var handleActionRolelist = function (msg) {
 				guild = msg.member.guild.name;
 			} catch (err) {
 				console.log(err);
-				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
-				msg.channel.send(message);
+				let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+					.addFields(
+						{ name: `Encountered an error: ${err.message}`, value: 'Make sure you call this command from inside a server (not through PM\'s)' },
+					);
+				msg.channel.send({ embeds: [message] });
 				return;
 			}
 			getValidRoles(guild)
 				.then((validRoles) => {
 					if (validRoles.includes(roleToAdd)) {
-						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Role " + roleToAdd + " is already in role list", process.env.monkaThink);
-						msg.channel.send(message);
+						let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+							.addFields(
+								{ name: `Role ${roleToAdd} is already in role list`, value: process.env.monkaThink },
+							);
+						msg.channel.send({ embeds: [message] });
 					} else {
 						console.log("Old rolesList : " + validRoles.toString());
 						validRoles.push(roleToAdd);
@@ -73,19 +79,28 @@ var handleActionRolelist = function (msg) {
 						sendToApi(message, "/admin/rolelist", function (response, error) {
 							if (error) {
 								console.log(error);
-								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-								msg.channel.send(message);
+								let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+									.addFields(
+										{ name: `Encountered an error: ${error.message}`, value: ':interrobang:' },
+									);
+								msg.channel.send({ embeds: [message] });
 							} else {
-								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Roles list updated, new list: ", validRoles.toString());
-								msg.channel.send(message);
+								let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+									.addFields(
+										{ name: 'Roles list updated, new list: ', value: validRoles.toString() },
+									);
+								msg.channel.send({ embeds: [message] });
 							}
 						});
 					}
 				})
 				.catch((error) => {
 					console.log(error);
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-					msg.channel.send(message);
+					let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+						.addFields(
+							{ name: `Encountered an error: ${error.message}`, value: ':interrobang:' },
+						);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else if (messageContent[1] === "remove") {
 			let roleToRemove = messageContent.splice(2).join(" ");
@@ -96,7 +111,7 @@ var handleActionRolelist = function (msg) {
 			} catch (err) {
 				console.log(err);
 				let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + err.message, "Make sure you call this command from inside a server (not through PM's)");
-				msg.channel.send(message);
+				msg.channel.send({ embeds: [message] });
 				return;
 			}
 			getValidRoles(guild)
@@ -116,30 +131,34 @@ var handleActionRolelist = function (msg) {
 							if (error) {
 								console.log(error);
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-								msg.channel.send(message);
+								msg.channel.send({ embeds: [message] });
 							} else {
 								let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Roles list updated, new list: ", validRoles.toString());
-								msg.channel.send(message);
+								msg.channel.send({ embeds: [message] });
 							}
 						});
 					} else {
 						console.log("Role trying to remove is not in current list");
 						let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("The role " + roleToRemove + " is not in the current list, so can't remove it.", "" + process.env.pepoG);
-						msg.channel.send(message);
+						msg.channel.send({ embeds: [message] });
 					}
 				})
 				.catch((error) => {
 					console.log(error);
-					let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Encountered an error: " + error.message, ":interrobang:");
-					msg.channel.send(message);
+					let message = new Discord.RichEmbed().setColor(process.env.embedColour)
+						.addFields(
+							{ name: `Encountered an error: ${error.message}`, value: ':interrobang:' },
+						);
+					msg.channel.send({ embeds: [message] });
 				});
 		} else {
 			let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Invalid input!", "View proper usage by calling !admin");
-			msg.channel.send(message);
+			msg.channel.send({ embeds: [message] });
 		}
 	} else {
 		let message = new Discord.RichEmbed().setColor(process.env.embedColour).addField("Only members with the correct role can use this option", process.env.pepoG);
-		msg.channel.send(message);
+		msg.channel.send({ embeds: [message] });
 	}
 };
 module.exports = handleActionRolelist;
+*/

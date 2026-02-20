@@ -32,6 +32,6 @@ var handleOnGuildMemberAdd = function (member) {
 		.setTitle(`Welcome ${member.displayName}! ` + process.env.pepeRuby)
 		.setDescription(`${member}, ` + message);
 
-	channel.send(welcomeMessageEmbed);
+	channel.send({ embeds: [welcomeMessageEmbed] });
 };
 module.exports = handleOnGuildMemberAdd;

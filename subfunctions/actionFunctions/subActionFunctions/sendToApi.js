@@ -31,7 +31,8 @@ var sendToApi = function (message, path, callback) {
 			return callback(json.body);
 		})
 		.catch((err) => {
-			logger.info("Error in fetch", err);
+			logger.info("Error in fetch");
+			logger.error(err);
 			return callback(null, err);
 		});
 };

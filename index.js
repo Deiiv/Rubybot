@@ -1,19 +1,23 @@
 require("dotenv").config();
 const logger = require("./subfunctions/logger");
-const Discord = require("discord.js");
-const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
+const { Discord, Client, Intents } = require('discord.js');
+const client = new Client({ intents: new Intents(32767), partials: ["MESSAGE", "CHANNEL", "REACTION"] });
 const handleOnReady = require("./subfunctions/handleOnReady.js");
 const handleOnGuildMemberAdd = require("./subfunctions/handleOnGuildMemberAdd.js");
 const handleOnMessage = require("./subfunctions/handleOnMessage.js");
 const handleMessageReaction = require("./subfunctions/handleMessageReaction.js");
+const handleOnInteraction = require("./subfunctions/handleOnInteraction");
 
 /*
 
 -------------------- TODO --------------------
 
-add nickname instead of username (maybe setnickname command)
+total lvl for profs
+	score board (top 10/20)]
 
-!portals
+maybe add a counter for other statistics, who uses the most commands? total command counter?
+
+integrate with slash commands
 
 */
 
@@ -22,7 +26,7 @@ client.on("ready", () => {
 	try {
 		handleOnReady(client);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -31,16 +35,27 @@ client.on("guildMemberAdd", (member) => {
 	try {
 		handleOnGuildMemberAdd(member);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
 //message event
-client.on("message", (msg) => {
+client.on("messageCreate", (msg) => {
 	try {
 		handleOnMessage(msg);
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
+	}
+});
+
+//interaction created event (slash commands)
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	try {
+		await handleOnInteraction(interaction);
+	} catch (err) {
+		logger.error(err);
 	}
 });
 
@@ -48,7 +63,7 @@ client.on("messageReactionAdd", (reaction, user) => {
 	try {
 		handleMessageReaction(reaction, user, "add");
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -56,7 +71,7 @@ client.on("messageReactionRemove", (reaction, user) => {
 	try {
 		handleMessageReaction(reaction, user, "remove");
 	} catch (err) {
-		logger.info(err);
+		logger.error(err);
 	}
 });
 
@@ -67,7 +82,7 @@ client.login(process.env.clientkey);
 
 client.on("shardError", (error) => {
 	logger.info("A websocket connection encountered an error (shardError)");
-	logger.info(error);
+	logger.error(error);
 });
 
 client.on("shardReconnecting", (id) => {
