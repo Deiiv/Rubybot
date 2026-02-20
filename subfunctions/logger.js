@@ -4,6 +4,11 @@ const { format } = require("winston");
 const { combine, timestamp, label, printf, errors } = format;
 
 const customFormat = printf((info) => {
+	
+	//temporary console log for debugging
+	console.log(info.message);
+	
+	
 	if (info.stack) {
 		return `${info.timestamp} [${info.label}] ${info.level} ${info.message} : ${info.stack}`;
 	}

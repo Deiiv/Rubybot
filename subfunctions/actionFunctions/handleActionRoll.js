@@ -34,7 +34,10 @@ var handleActionRoll = function (msg) {
 			msg.channel.send(message);
 		}
 	} else {
-		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input! Proper usage: !roll XdY").setDescription(":game_die:");
+		let message = new Discord.MessageEmbed()
+			.setColor(process.env.embedColour)
+			.setTitle("Invalid input! Proper usage: !roll XdY")
+			.setDescription(":game_die:");
 		msg.channel.send(message);
 	}
 };
