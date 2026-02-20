@@ -10,14 +10,26 @@ const handleActionAdd = require("./actionFunctions/handleActionAdd.js");
 const handleActionContact = require("./actionFunctions/handleActionContact.js");
 const handleActionPortals = require("./actionFunctions/handleActionPortals.js");
 const handleActionBackup = require("./actionFunctions/handleActionBackup.js");
-const validCommands = ["!info", "!help", "!roll", "!alma", "!view", "!setguild", "!add", "!contact", "!portals", "!portal", "!backup"];
+const validCommands = [
+	"!info",
+	"!help",
+	"!roll",
+	"!alma",
+	"!view",
+	"!setguild",
+	"!add",
+	"!contact",
+	"!portals",
+	"!portal",
+	"!backup",
+];
 
 var handleOnMessage = function (msg) {
 	// ignore bot messages
 	if (msg.author.bot) return;
 
 	if (msg.channel.name === "honey-pot" && !msg.member.permissions.has("ADMINISTRATOR")) {
-		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-admins");
+		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
 		var message = new Discord.MessageEmbed()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
@@ -54,7 +66,12 @@ var handleOnMessage = function (msg) {
 	}
 
 	if (validCommands.includes(msg.content.split(" ")[0])) {
-		if (msg.channel.name === "talk-to-rubybot" || msg.channel.name === "professions" || msg.channel.name === "development" || msg.channel.name === "test") {
+		if (
+			msg.channel.name === "talk-to-rubybot" ||
+			msg.channel.name === "professions" ||
+			msg.channel.name === "development" ||
+			msg.channel.name === "test"
+		) {
 			switch (msg.content.split(" ")[0]) {
 				// view bot info
 				case "!info":
@@ -90,13 +107,18 @@ var handleOnMessage = function (msg) {
 					handleActionPortals(msg);
 					break;
 				case "!contact":
-					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`This can only be used in direct pm with the bot (me)`).setDescription(process.env.peepoHappy);
+					var message = new Discord.MessageEmbed()
+						.setColor(process.env.embedColour)
+						.setTitle(`This can only be used in direct pm with the bot (me)`)
+						.setDescription(process.env.peepoHappy);
 					msg.channel.send({ embeds: [message] });
 					break;
 				default:
 					var message = new Discord.MessageEmbed()
 						.setColor(process.env.embedColour)
-						.setTitle(`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`)
+						.setTitle(
+							`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`
+						)
 						.setDescription(process.env.peepoHappy);
 					msg.channel.send({ embeds: [message] });
 					break;
@@ -133,7 +155,10 @@ var handleOnMessage = function (msg) {
 					handleActionInfo(msg);
 					break;
 				default:
-					var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Only !contact, !help, !info, and !view will work here`).setDescription(process.env.peepoHappy);
+					var message = new Discord.MessageEmbed()
+						.setColor(process.env.embedColour)
+						.setTitle(`Only !contact, !help, !info, and !view will work here`)
+						.setDescription(process.env.peepoHappy);
 					msg.channel.send({ embeds: [message] });
 					break;
 			}
@@ -141,11 +166,13 @@ var handleOnMessage = function (msg) {
 			let talkToRubybotChannel = msg.guild.channels.cache.find((ch) => ch.name === "talk-to-rubybot");
 			var text = "Please create a channel named 'talk-to-rubybot' to send your commands.";
 			if (talkToRubybotChannel) text = `Please send your commands in ${talkToRubybotChannel.toString()}`;
-			var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Wrong channel! ${process.env.monkaO}`).setDescription(text);
+			var message = new Discord.MessageEmbed()
+				.setColor(process.env.embedColour)
+				.setTitle(`Wrong channel! ${process.env.monkaO}`)
+				.setDescription(text);
 			msg.channel.send({ embeds: [message] });
 		}
-	}
-	else {
+	} else {
 		/*
 		
 		add reaction for Phoebe comments
@@ -159,7 +186,16 @@ var handleOnMessage = function (msg) {
 			// if (process.env.phoebepog) msg.react(process.env.phoebepog);
 			if (process.env.phoepeek) msg.react(process.env.phoepeek);
 		}
-		if (msg.guild.id === "375518646015098893" && (msg.content.toLowerCase() == "cel." || msg.content.toLowerCase() == "cel" || msg.content.toLowerCase().startsWith("cel ") || msg.content.toLowerCase().endsWith(" cel") || msg.content.toLowerCase().endsWith(" cel.") || msg.content.toLowerCase().includes(" cel ") || msg.content.toLowerCase().includes(" cel."))) {
+		if (
+			msg.guild.id === "375518646015098893" &&
+			(msg.content.toLowerCase() == "cel." ||
+				msg.content.toLowerCase() == "cel" ||
+				msg.content.toLowerCase().startsWith("cel ") ||
+				msg.content.toLowerCase().endsWith(" cel") ||
+				msg.content.toLowerCase().endsWith(" cel.") ||
+				msg.content.toLowerCase().includes(" cel ") ||
+				msg.content.toLowerCase().includes(" cel."))
+		) {
 			// only add reaction if the emoji exists in bot memory
 			// if (process.env.phoebepog) msg.react(process.env.phoebepog);
 			if (process.env.celface) msg.react(process.env.celface);
