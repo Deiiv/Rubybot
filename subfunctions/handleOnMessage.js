@@ -34,7 +34,7 @@ var handleOnMessage = function (msg) {
 		!msg.member.permissions.has("ADMINISTRATOR")
 	) {
 		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
-		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "welcome");
+		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "🏠welcome");
 		var message = new Discord.MessageEmbed()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
