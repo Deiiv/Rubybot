@@ -34,7 +34,7 @@ var handleOnMessage = function (msg) {
 		!msg.member.permissions.has("ADMINISTRATOR")
 	) {
 		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
-		let dofusModChannel = msg.guild.channels.cache.find((ch) => ch.name === "quitfull-quitshit");
+		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "welcome");
 		var message = new Discord.MessageEmbed()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
@@ -42,7 +42,6 @@ var handleOnMessage = function (msg) {
 				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}\n\nMessage content:\n\n${msg.content}`
 			);
 		adminChannel.send({ embeds: [message] });
-		dofusModChannel.send({ embeds: [message] });
 		msg.member
 			.ban({
 				deleteMessageSeconds: 60 * 60 * 24,
@@ -55,7 +54,15 @@ var handleOnMessage = function (msg) {
 					.setTitle(`Successfully banned user caught in the honey pot`)
 					.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
 				adminChannel.send({ embeds: [messageSuccess] });
-				dofusModChannel.send({ embeds: [messageSuccess] });
+
+				var messagePublicSuccess = new Discord.MessageEmbed()
+					.setColor(process.env.embedColour)
+					.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
+					.setDescription(
+						`${msg.author} (${msg.author.tag}) has been caught red-handed spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪\n\n🦅🚀*Mission Accomplished*🚀🦅`
+					);
+				publicChannel.send({ embeds: [messagePublicSuccess] });
+
 				return;
 			})
 			.catch((error) => {
@@ -68,7 +75,6 @@ var handleOnMessage = function (msg) {
 						`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
 					);
 				adminChannel.send({ embeds: [messageError] });
-				dofusModChannel.send({ embeds: [messageError] });
 				return;
 			});
 	}
