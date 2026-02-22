@@ -34,7 +34,7 @@ var handleOnMessage = function (msg) {
 		!msg.member.permissions.has("ADMINISTRATOR")
 	) {
 		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
-		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "welcome");
+		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "🏠welcome");
 		var message = new Discord.MessageEmbed()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
@@ -59,7 +59,7 @@ var handleOnMessage = function (msg) {
 					.setColor(process.env.embedColour)
 					.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
 					.setDescription(
-						`${msg.author} (${msg.author.tag}) has been caught red-handed spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪\n\n🦅🚀*Mission Accomplished*🚀🦅`
+						`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪🦅🚀`
 					);
 				publicChannel.send({ embeds: [messagePublicSuccess] });
 
