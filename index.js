@@ -32,7 +32,7 @@ integrate with slash commands
 */
 
 //client initiated and is ready
-client.on("ready", () => {
+client.on("clientReady", () => {
 	try {
 		handleOnReady(client);
 	} catch (err) {
