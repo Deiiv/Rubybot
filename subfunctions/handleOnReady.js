@@ -38,7 +38,7 @@ var handleOnReady = function (client) {
 	// these are defined here so that .env can be hidden, but still have customizable values stored in git
 	process.env.adminUserTag = "<@140904638084808705>";
 	process.env.embedColour = "#FEC6C7";
-	process.env.botversion = 12.09;
+	process.env.botversion = 12.11;
 	process.env.runtime = "Node.Js 18.x | Discord.Js 13.x";
 	process.env.host = "Deiv's House";
 	process.env.author = "Deiv";
