@@ -35,47 +35,66 @@ var handleOnMessage = function (msg) {
 	) {
 		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
 		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "🏠welcome");
+		
+		let mentionsList = msg.mentions.users.size > 0 
+			? msg.mentions.users.map(u => `${u.tag} (${u.id})`).join("\n")
+			: "None";
+		
+		let attachmentsList = msg.attachments.size > 0
+			? msg.attachments.map(att => `[${att.name}](${att.url})`).join("\n")
+			: "None";
+		
 		var message = new Discord.MessageEmbed()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
 			.setDescription(
-				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}\n\nMessage content:\n\n${msg.content}`
-			);
+				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}`
+			)
+			.addField("Message Content", msg.content || "(no text content)")
+			.addField("Mentions", mentionsList)
+			.addField("Attachments", attachmentsList);
 		adminChannel.send({ embeds: [message] });
-		msg.member
-			.ban({
-				deleteMessageSeconds: 60 * 60 * 24,
-				reason: "Caught in the honey pot, see discord-admins message for more info",
-			})
+		msg.delete()
 			.then(() => {
-				logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-				var messageSuccess = new Discord.MessageEmbed()
-					.setColor(process.env.embedColour)
-					.setTitle(`Successfully banned user caught in the honey pot`)
-					.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-				adminChannel.send({ embeds: [messageSuccess] });
+				msg.member
+					.ban({
+						deleteMessageSeconds: 60 * 60 * 24,
+						reason: "Caught in the honey pot, see discord-admins message for more info",
+					})
+					.then(() => {
+						logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
+						var messageSuccess = new Discord.MessageEmbed()
+							.setColor(process.env.embedColour)
+							.setTitle(`Successfully banned user caught in the honey pot`)
+							.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
+						adminChannel.send({ embeds: [messageSuccess] });
 
-				var messagePublicSuccess = new Discord.MessageEmbed()
-					.setColor(process.env.embedColour)
-					.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
-					.setDescription(
-						`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪🦅🚀`
-					);
-				publicChannel.send({ embeds: [messagePublicSuccess] });
+						var messagePublicSuccess = new Discord.MessageEmbed()
+							.setColor(process.env.embedColour)
+							.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
+							.setDescription(
+								`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪🦅🚀`
+							);
+						publicChannel.send({ embeds: [messagePublicSuccess] });
 
-				return;
+						return;
+					})
+					.catch((error) => {
+						logger.info(`Failed to ban user: ${error.message}`);
+						logger.info(error);
+						var messageError = new Discord.MessageEmbed()
+							.setColor(process.env.embedColour)
+							.setTitle(`FAILED to ban user!`)
+							.setDescription(
+								`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
+							);
+						adminChannel.send({ embeds: [messageError] });
+						return;
+					});
 			})
 			.catch((error) => {
-				logger.info(`Failed to ban user: ${error.message}`);
+				logger.info(`Failed to delete honey pot message: ${error.message}`);
 				logger.info(error);
-				var messageError = new Discord.MessageEmbed()
-					.setColor(process.env.embedColour)
-					.setTitle(`FAILED to ban user!`)
-					.setDescription(
-						`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
-					);
-				adminChannel.send({ embeds: [messageError] });
-				return;
 			});
 	}
 
