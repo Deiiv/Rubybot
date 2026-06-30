@@ -1,6 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
+const logger = require("./../logger");
 
 var handleActionHelp = function (msg, interactionBool) {
+	logger.info(`User ${msg.author?.tag || msg.user?.id} requested help (content: ${msg.content})`);
 	const helpEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.addFields(

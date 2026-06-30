@@ -25,8 +25,10 @@ const logger = require("./../logger");
 
 var handleActionAdd = function (msg) {
 	let messageContent = msg.content.split(" ");
+	logger.info(`User ${msg.author.tag} (${msg.author.id}) executed !add command with params: ${messageContent.slice(1).join(", ")}`);
 
 	if (messageContent.length < 3) {
+		logger.info(`Invalid input - missing parameters`);
 		let message = new EmbedBuilder().setColor(process.env.embedColour)
 			.addFields(
 				{ name: 'Invalid input!', value: 'View proper usage by calling !help prof' },
@@ -43,6 +45,7 @@ var handleActionAdd = function (msg) {
 			if (level >= 1 && level <= 200) {
 				let username = msg.member.displayName;
 				let userid = msg.author.id;
+				logger.info(`Updating profession: ${prof} level ${level} for user ${username} (${userid})`);
 
 				let params = {
 					username: username,
@@ -54,7 +57,7 @@ var handleActionAdd = function (msg) {
 
 				handleProfEvent(params)
 					.then(() => {
-						logger.info("Done updating user in db");
+						logger.info(`Successfully updated profession ${prof} to level ${level} for user ${username} (${userid})`);
 						let message = new EmbedBuilder().setColor(process.env.embedColour)
 							.addFields(
 								{ name: `Profession ${prof} set to level ${level} for user ${username}`, value: process.env.peepoHappy },
@@ -62,9 +65,11 @@ var handleActionAdd = function (msg) {
 						msg.channel.send({ embeds: [message] });
 					})
 					.catch((error) => {
+						logger.error(`Failed to update profession for user ${userid}: ${error.message}`);
 						logger.error(error);
 					});
 			} else {
+				logger.info(`Invalid profession level: ${level} (must be 1-200)`);
 				let message = new EmbedBuilder().setColor(process.env.embedColour)
 					.addFields(
 						{ name: 'Invalid profession level!', value: 'Level must be between 1-200 (inclusive)' },
@@ -72,6 +77,7 @@ var handleActionAdd = function (msg) {
 				msg.channel.send({ embeds: [message] });
 			}
 		} else {
+			logger.info(`Invalid profession: ${prof}`);
 			let message = new EmbedBuilder().setColor(process.env.embedColour)
 				.addFields(
 					{ name: 'Invalid profession! List of valid professions:', value: profList.toString() },
@@ -79,6 +85,7 @@ var handleActionAdd = function (msg) {
 			msg.channel.send({ embeds: [message] });
 		}
 	} else {
+		logger.info(`Invalid input - missing profession or level`);
 		let message = new EmbedBuilder().setColor(process.env.embedColour)
 			.addFields(
 				{ name: 'Invalid input!', value: 'View proper usage by calling !help prof' },

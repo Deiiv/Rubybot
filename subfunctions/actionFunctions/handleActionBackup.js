@@ -2,11 +2,12 @@ const { EmbedBuilder } = require("discord.js");
 const fs = require('fs-extra');
 const prettyBytes = require('pretty-bytes');
 const backup = require("discord-backup");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const backupPath = __dirname + "/../../discord-server-backups/";
 backup.setStorageFolder(backupPath);
-const AWS = require("aws-sdk");
 const logger = require("../logger");
-const s3 = new AWS.S3();
+
+const s3Client = new S3Client({ region: process.env.AWS_REGION || "us-east-1" });
 const bucketName = "rubybot";
 
 var handleActionBackup = function (msg) {
@@ -54,20 +55,23 @@ var handleActionBackup = function (msg) {
 					Bucket: bucketName,
 					Key: `discord-server-backups/${backupData.id}.json`
 				};
-				logger.info(`Uploading to S3 to bucket ${params.Bucket} with key ${params.Key}`);
-				s3.putObject(params).promise()
+				logger.info(`Uploading backup to S3 bucket '${params.Bucket}' with key '${params.Key}', size: ${prettyBytes(size)}`);
+				const uploadCommand = new PutObjectCommand(params);
+				s3Client.send(uploadCommand)
 					.then(data => {
-						logger.info("Response from s3 : " + JSON.stringify(data));
+						logger.info(`Successfully uploaded backup ${backupData.id} to S3`);
 					})
 					.catch(err => {
+						logger.error(`Failed to upload backup to S3: ${err.message}`);
 						logger.error(err);
 					})
-				logger.info("Removing local backup file");
+				logger.info(`Removing local backup file: ${backupPath}${backupData.id}.json`);
 				fs.remove(`${backupPath}${backupData.id}.json`)
 					.then(() => {
-						logger.info("File removed");
+						logger.info("Local backup file removed successfully");
 					})
 					.catch(err => {
+						logger.error(`Failed to remove local backup file: ${err.message}`);
 						logger.error(err);
 					})
 			});

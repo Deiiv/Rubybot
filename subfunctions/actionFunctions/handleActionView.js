@@ -24,6 +24,7 @@ const profList = [
 ];
 
 var handleActionView = function (msg) {
+	logger.info(`User ${msg.author.tag} invoked !view with content: ${msg.content}`);
 	let messageContent = msg.content.split(" ");
 	if (messageContent.length === 1) {
 		let userid = msg.author.id;

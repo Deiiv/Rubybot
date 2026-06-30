@@ -4,6 +4,7 @@ const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 const logger = require("./../logger");
 
 var handleActionSetGuild = function (msg) {
+	logger.info(`User ${msg.author.tag} invoked !setguild with content: ${msg.content}`);
 	let guild = msg.content.substring(10);
 	if (guild && guild.length > 0) {
 		getValidGuilds()
