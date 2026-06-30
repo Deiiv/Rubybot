@@ -35,12 +35,24 @@ var handleOnMessage = function (msg) {
 	) {
 		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
 		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "🏠welcome");
+		
+		let mentionsList = msg.mentions.users.size > 0 
+			? msg.mentions.users.map(u => `${u.tag} (${u.id})`).join("\n")
+			: "None";
+		
+		let attachmentsList = msg.attachments.size > 0
+			? msg.attachments.map(att => `[${att.name}](${att.url})`).join("\n")
+			: "None";
+		
 		var message = new Discord.MessageEmbed()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
 			.setDescription(
-				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}\n\nMessage content:\n\n${msg.content}`
-			);
+				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}`
+			)
+			.addField("Message Content", msg.content || "(no text content)")
+			.addField("Mentions", mentionsList)
+			.addField("Attachments", attachmentsList);
 		adminChannel.send({ embeds: [message] });
 		msg.delete()
 			.then(() => {
