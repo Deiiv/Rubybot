@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const getValidGuilds = require("./subActionFunctions/getValidGuilds.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 const logger = require("./../logger");
@@ -18,14 +18,14 @@ var handleActionSetGuild = function (msg) {
 					handleProfEvent(params)
 						.then(() => {
 							logger.info("Done updating user in db");
-							let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Updated guild to ${guild} for ${msg.member.displayName}`).setDescription(process.env.pepoG);
+							let message = new EmbedBuilder().setColor(process.env.embedColour).setTitle(`Updated guild to ${guild} for ${msg.member.displayName}`).setDescription(process.env.pepoG);
 							msg.channel.send({ embeds: [message] });
 						})
 						.catch((error) => {
 							logger.error(error);
 						});
 				} else {
-					let message = new Discord.MessageEmbed()
+					let message = new EmbedBuilder()
 						.setColor(process.env.embedColour)
 						.setTitle("Invalid guild!")
 						.setDescription(`Please send one of the following: ${validGuilds.toString()}.\nIf your guild is not in this list, please reach out to ${process.env.adminUserTag}`);
@@ -34,11 +34,11 @@ var handleActionSetGuild = function (msg) {
 			})
 			.catch((error) => {
 				logger.error(error);
-				let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
+				let message = new EmbedBuilder().setColor(process.env.embedColour).setTitle(`Encountered an error: ${error.message}`).setDescription(":interrobang:");
 				msg.channel.send({ embeds: [message] });
 			});
 	} else {
-		let message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Please include a guild name, eg. !setguild Ruby").setDescription(process.env.pepoG);
+		let message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("Please include a guild name, eg. !setguild Ruby").setDescription(process.env.pepoG);
 		msg.channel.send({ embeds: [message] });
 	}
 };

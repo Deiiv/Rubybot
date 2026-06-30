@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const fs = require('fs-extra');
 const prettyBytes = require('pretty-bytes');
 const backup = require("discord-backup");
@@ -14,13 +14,13 @@ var handleActionBackup = function (msg) {
 	var message;
 
 	if (msg.author.id != "140904638084808705") {
-		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("You're not allowed to use this command!").setDescription(process.env.pepeCry);
+		message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("You're not allowed to use this command!").setDescription(process.env.pepeCry);
 		msg.channel.send({ embeds: [message] });
 		return;
 	}
 
 	if (!messageContent[1]) {
-		message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("Proper usage: !backup create OR !backup list OR !backup info X :floppy_disk:");
+		message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("Invalid input!").setDescription("Proper usage: !backup create OR !backup list OR !backup info X :floppy_disk:");
 		msg.channel.send({ embeds: [message] });
 		return;
 	}
@@ -28,7 +28,7 @@ var handleActionBackup = function (msg) {
 	switch (messageContent[1]) {
 		// create backup
 		case "create":
-			message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup creation process starting...").setDescription(process.env.pepoG);
+			message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("Backup creation process starting...").setDescription(process.env.pepoG);
 			msg.channel.send({ embeds: [message] });
 			backup.create(msg.guild, {
 				jsonBeautify: true,
@@ -39,7 +39,7 @@ var handleActionBackup = function (msg) {
 				var yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString();
 				var formatedDate = `${yyyy}/${(mm[1] ? mm : "0" + mm[0])}/${(dd[1] ? dd : "0" + dd[0])}`;
 				var { size } = fs.statSync(`${backupPath}${backupData.id}.json`);
-				message = new Discord.MessageEmbed()
+				message = new EmbedBuilder()
 					.setColor(process.env.embedColour)
 					.setTitle(`Backup created! ${process.env.peepoHappy}`)
 					.addFields(
@@ -74,17 +74,17 @@ var handleActionBackup = function (msg) {
 			break;
 		// list backups
 		case "list":
-			message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup list command is temporarily disabled!").setDescription(process.env.pepeCry);
+			message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("Backup list command is temporarily disabled!").setDescription(process.env.pepeCry);
 			msg.channel.send({ embeds: [message] });
 			break;
 		// get info of a backup
 		case "info":
 			if (!messageContent[2]) {
-				message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Invalid input! Proper usage: !backup create OR !backup list OR !backup info X").setDescription(process.env.pepeCry);
+				message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("Invalid input! Proper usage: !backup create OR !backup list OR !backup info X").setDescription(process.env.pepeCry);
 				msg.channel.send({ embeds: [message] });
 			}
 			else {
-				message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle("Backup info command is temporarily disabled!").setDescription(process.env.pepeCry);
+				message = new EmbedBuilder().setColor(process.env.embedColour).setTitle("Backup info command is temporarily disabled!").setDescription(process.env.pepeCry);
 				msg.channel.send({ embeds: [message] });
 			}
 			break;

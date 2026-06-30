@@ -1,7 +1,7 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 var handleActionHelp = function (msg, interactionBool) {
-	const helpEmbed = new Discord.MessageEmbed()
+	const helpEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.addFields(
 			{ name: ':closed_book: For help with adding and viewing professions:', value: '!help prof' },
@@ -13,7 +13,7 @@ var handleActionHelp = function (msg, interactionBool) {
 			{ name: `For any other issues, reach out to ${process.env.author}`, value: process.env.adminUserTag },
 		);
 
-	const helpProfEmbed = new Discord.MessageEmbed()
+	const helpProfEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.addFields(
 			{ name: ':tools: To add or update a profession level you have:', value: '!add PROFESSION LEVEL' },

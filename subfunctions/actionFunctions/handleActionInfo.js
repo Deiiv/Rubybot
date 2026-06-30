@@ -1,7 +1,7 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 var handleActionInfo = function (msg, interactionBool) {
-	const infoEmbed = new Discord.MessageEmbed()
+	const infoEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.setTitle(`Rubybot :robot:`)
 		.setDescription("Created for various functionality in discord, including Dofus specific features")

@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const logger = require("./logger");
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");
@@ -44,15 +44,17 @@ var handleOnMessage = function (msg) {
 			? msg.attachments.map(att => `[${att.name}](${att.url})`).join("\n")
 			: "None";
 		
-		var message = new Discord.MessageEmbed()
+		var message = new EmbedBuilder()
 			.setColor(process.env.embedColour)
 			.setTitle(`Honey pot ban triggered`)
 			.setDescription(
 				`The following user will now be been banned and messages from the past 24 hours will be deleted:\n\n${msg.member} | ${msg.author.tag} | ${msg.member.displayName} | ${msg.author.id}`
 			)
-			.addField("Message Content", msg.content || "(no text content)")
-			.addField("Mentions", mentionsList)
-			.addField("Attachments", attachmentsList);
+			.addFields(
+				{ name: "Message Content", value: msg.content || "(no text content)" },
+				{ name: "Mentions", value: mentionsList },
+				{ name: "Attachments", value: attachmentsList }
+			);
 		adminChannel.send({ embeds: [message] });
 		msg.delete()
 			.then(() => {
@@ -63,13 +65,13 @@ var handleOnMessage = function (msg) {
 					})
 					.then(() => {
 						logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-						var messageSuccess = new Discord.MessageEmbed()
+						var messageSuccess = new EmbedBuilder()
 							.setColor(process.env.embedColour)
 							.setTitle(`Successfully banned user caught in the honey pot`)
 							.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
 						adminChannel.send({ embeds: [messageSuccess] });
 
-						var messagePublicSuccess = new Discord.MessageEmbed()
+						var messagePublicSuccess = new EmbedBuilder()
 							.setColor(process.env.embedColour)
 							.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
 							.setDescription(
@@ -82,7 +84,7 @@ var handleOnMessage = function (msg) {
 					.catch((error) => {
 						logger.info(`Failed to ban user: ${error.message}`);
 						logger.info(error);
-						var messageError = new Discord.MessageEmbed()
+						var messageError = new EmbedBuilder()
 							.setColor(process.env.embedColour)
 							.setTitle(`FAILED to ban user!`)
 							.setDescription(
@@ -140,14 +142,14 @@ var handleOnMessage = function (msg) {
 					handleActionPortals(msg);
 					break;
 				case "!contact":
-					var message = new Discord.MessageEmbed()
+					var message = new EmbedBuilder()
 						.setColor(process.env.embedColour)
 						.setTitle(`This can only be used in direct pm with the bot (me)`)
 						.setDescription(process.env.peepoHappy);
 					msg.channel.send({ embeds: [message] });
 					break;
 				default:
-					var message = new Discord.MessageEmbed()
+					var message = new EmbedBuilder()
 						.setColor(process.env.embedColour)
 						.setTitle(
 							`This command either doesn't work here, or you don't have access to it! Type !help for proper usage`
@@ -188,7 +190,7 @@ var handleOnMessage = function (msg) {
 					handleActionInfo(msg);
 					break;
 				default:
-					var message = new Discord.MessageEmbed()
+					var message = new EmbedBuilder()
 						.setColor(process.env.embedColour)
 						.setTitle(`Only !contact, !help, !info, and !view will work here`)
 						.setDescription(process.env.peepoHappy);
@@ -199,7 +201,7 @@ var handleOnMessage = function (msg) {
 			let talkToRubybotChannel = msg.guild.channels.cache.find((ch) => ch.name === "talk-to-rubybot");
 			var text = "Please create a channel named 'talk-to-rubybot' to send your commands.";
 			if (talkToRubybotChannel) text = `Please send your commands in ${talkToRubybotChannel.toString()}`;
-			var message = new Discord.MessageEmbed()
+			var message = new EmbedBuilder()
 				.setColor(process.env.embedColour)
 				.setTitle(`Wrong channel! ${process.env.monkaO}`)
 				.setDescription(text);
