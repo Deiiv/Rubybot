@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");
 const handleActionUptime = require("./actionFunctions/handleActionUptime.js");
@@ -40,7 +40,7 @@ var handleOnInteraction = async function (interaction) {
 		let talkToRubybotChannel = interaction.guild.channels.cache.find((ch) => ch.name === "talk-to-rubybot");
 		var text = "Please create a channel named 'talk-to-rubybot' to send your commands.";
 		if (talkToRubybotChannel) text = `Please send your commands in ${talkToRubybotChannel.toString()}`;
-		var message = new Discord.MessageEmbed().setColor(process.env.embedColour).setTitle(`Wrong channel! ${process.env.monkaO}`).setDescription(text);
+		var message = new EmbedBuilder().setColor(process.env.embedColour).setTitle(`Wrong channel! ${process.env.monkaO}`).setDescription(text);
 		await interaction.reply({ embeds: [message] });
 	}
 };

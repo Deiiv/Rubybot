@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const handleProfEvent = require("./actionFunctions/subActionFunctions/handleProfEvent.js");
 const logger = require("./logger");
 
@@ -38,7 +38,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						// asking to add but already have, ignore
 						if (userRoles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 							logger.info(`Role ${reactionName} already set for user ${user.username}`);
-							let message = new Discord.MessageEmbed()
+							let message = new EmbedBuilder()
 								.setColor(process.env.embedColour)
 								.setTitle("Done adding role!")
 								.setDescription(`${reactionName} role successfully added in the ${serverName} discord server for your user (${user.username})`);
@@ -70,7 +70,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 								.then(() => {
 									logger.info(`Added role ${reactionName} to user ${user.username}`);
 
-									let message = new Discord.MessageEmbed()
+									let message = new EmbedBuilder()
 										.setColor(process.env.embedColour)
 										.setTitle("Done adding role!")
 										.setDescription(`${reactionName} role successfully added in the ${serverName} discord server for your user (${user.username})`);
@@ -102,7 +102,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 						// asking to remove but it's already gone, ignore
 						if (!userRoles.find((r) => r.name.toLowerCase() === reactionName.toLowerCase())) {
 							logger.info(`Role ${reactionName} already removed from user ${user.username}, ignoring`);
-							let message = new Discord.MessageEmbed()
+							let message = new EmbedBuilder()
 								.setColor(process.env.embedColour)
 								.setTitle("Done removing role!")
 								.setDescription(`${reactionName} role successfully removed in the ${serverName} discord server for your user (${user.username})`);
@@ -116,7 +116,7 @@ var handleMessageReaction = async (reaction, user, type) => {
 							guildMember.roles.remove(role)
 								.then(() => {
 									logger.info(`Removed role ${reactionName} from user ${user.username}`);
-									let message = new Discord.MessageEmbed()
+									let message = new EmbedBuilder()
 										.setColor(process.env.embedColour)
 										.setTitle("Done removing role!")
 										.setDescription(`${reactionName} role successfully removed in the ${serverName} discord server for your user (${user.username})`);

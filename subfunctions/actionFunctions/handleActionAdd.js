@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const handleProfEvent = require("./subActionFunctions/handleProfEvent.js");
 const profList = [
 	"Alchemist",
@@ -27,7 +27,7 @@ var handleActionAdd = function (msg) {
 	let messageContent = msg.content.split(" ");
 
 	if (messageContent.length < 3) {
-		let message = new Discord.MessageEmbed().setColor(process.env.embedColour)
+		let message = new EmbedBuilder().setColor(process.env.embedColour)
 			.addFields(
 				{ name: 'Invalid input!', value: 'View proper usage by calling !help prof' },
 			);
@@ -55,7 +55,7 @@ var handleActionAdd = function (msg) {
 				handleProfEvent(params)
 					.then(() => {
 						logger.info("Done updating user in db");
-						let message = new Discord.MessageEmbed().setColor(process.env.embedColour)
+						let message = new EmbedBuilder().setColor(process.env.embedColour)
 							.addFields(
 								{ name: `Profession ${prof} set to level ${level} for user ${username}`, value: process.env.peepoHappy },
 							);
@@ -65,21 +65,21 @@ var handleActionAdd = function (msg) {
 						logger.error(error);
 					});
 			} else {
-				let message = new Discord.MessageEmbed().setColor(process.env.embedColour)
+				let message = new EmbedBuilder().setColor(process.env.embedColour)
 					.addFields(
 						{ name: 'Invalid profession level!', value: 'Level must be between 1-200 (inclusive)' },
 					);
 				msg.channel.send({ embeds: [message] });
 			}
 		} else {
-			let message = new Discord.MessageEmbed().setColor(process.env.embedColour)
+			let message = new EmbedBuilder().setColor(process.env.embedColour)
 				.addFields(
 					{ name: 'Invalid profession! List of valid professions:', value: profList.toString() },
 				);
 			msg.channel.send({ embeds: [message] });
 		}
 	} else {
-		let message = new Discord.MessageEmbed().setColor(process.env.embedColour)
+		let message = new EmbedBuilder().setColor(process.env.embedColour)
 			.addFields(
 				{ name: 'Invalid input!', value: 'View proper usage by calling !help prof' },
 			);

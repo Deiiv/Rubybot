@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 var handleOnGuildMemberAdd = function (member) {
 	const channel = member.guild.channels.cache.find((ch) => ch.name.includes("welcome"));
@@ -27,7 +27,7 @@ var handleOnGuildMemberAdd = function (member) {
 		}
 	}
 
-	let welcomeMessageEmbed = new Discord.MessageEmbed()
+	let welcomeMessageEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.setTitle(`Welcome ${member.displayName}! ` + process.env.pepeRuby)
 		.setDescription(`${member}, ` + message);

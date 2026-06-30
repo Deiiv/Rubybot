@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const logger = require("./../logger");
 
 var handleActionUptime = function (msg) {
-	const uptimeEmbed = new Discord.MessageEmbed()
+	const uptimeEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.addFields(
 			{ name: 'Rubybot uptime:', value: secondsFormat(process.uptime()) },
