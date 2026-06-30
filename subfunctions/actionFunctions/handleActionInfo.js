@@ -1,6 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
+const logger = require("./../logger");
 
 var handleActionInfo = function (msg, interactionBool) {
+	logger.info(`User ${msg.author?.tag || msg.user?.id} requested bot info`);
 	const infoEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.setTitle(`Rubybot :robot:`)

@@ -3,6 +3,7 @@ const sendToApi = require("./subActionFunctions/sendToApi.js");
 const logger = require("./../logger");
 
 var handleActionAlma = function (msg) {
+	logger.info(`User ${msg.author.tag} invoked !alma with content: ${msg.content}`);
 	let messageContent = msg.content.split(" ");
 	if (messageContent[1] && messageContent[1].length < 3 && messageContent[1] > 0 && messageContent[1] < 13) {
 		let almaChannel = "";

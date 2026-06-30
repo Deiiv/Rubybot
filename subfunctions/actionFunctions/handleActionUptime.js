@@ -2,6 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const logger = require("./../logger");
 
 var handleActionUptime = function (msg) {
+	logger.info(`User ${msg.author.tag} requested uptime`);
 	const uptimeEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.addFields(

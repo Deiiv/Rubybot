@@ -1,6 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
+const logger = require("./../logger");
 
 var handleActionRoll = function (msg) {
+	logger.info(`User ${msg.author.tag} invoked !roll with content: ${msg.content}`);
 	var messageContent = msg.content.split(" ");
 	var numbers = [];
 	const minX = parseInt(process.env.rollMinX, 10);

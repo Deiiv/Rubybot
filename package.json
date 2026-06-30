@@ -17,9 +17,10 @@
 	},
 	"homepage": "https://github.com/Deiiv/rubybot#readme",
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.400.0",
+		"@aws-sdk/client-ssm": "^3.400.0",
 		"@discordjs/builders": "^1.6.0",
 		"@discordjs/rest": "^2.0.0",
-		"aws-sdk": "^2.1354.0",
 		"cheerio": "^1.0.0-rc.10",
 		"discord-api-types": "^0.37.0",
 		"discord-backup": "^3.0.0",
