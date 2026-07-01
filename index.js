@@ -32,18 +32,14 @@ integrate with slash commands
 */
 
 // client initiated and is ready
-let _readyHandled = false;
-const _runReady = () => {
-	if (_readyHandled) return;
-	_readyHandled = true;
+// For discord.js v14+ the clientReady event should be used and client.once ensures a single invocation.
+client.once("clientReady", () => {
 	try {
 		handleOnReady(client);
 	} catch (err) {
 		logger.error(err);
 	}
-};
-// Use the clientReady event (preferred in recent discord.js versions) to avoid deprecation warnings
-client.once("clientReady", _runReady);
+});
 
 //someone new joined the server
 client.on("guildMemberAdd", (member) => {
