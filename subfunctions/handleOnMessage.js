@@ -1,5 +1,7 @@
 const { EmbedBuilder, PermissionsBitField } = require("discord.js");
+const fetch = require("node-fetch");
 const logger = require("./logger");
+const processedHoneyPot = new Set();
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");
 const handleActionRoll = require("./actionFunctions/handleActionRoll.js");
@@ -24,7 +26,7 @@ const validCommands = [
 	"!backup",
 ];
 
-var handleOnMessage = function (msg) {
+var handleOnMessage = async function (msg) {
 	// ignore bot messages
 	if (msg.author.bot) return;
 
@@ -40,9 +42,22 @@ var handleOnMessage = function (msg) {
 			? msg.mentions.users.map(u => `${u.tag} (${u.id})`).join("\n")
 			: "None";
 		
-		let attachmentsList = msg.attachments.size > 0
-			? msg.attachments.map(att => `[${att.name}](${att.url})`).join("\n")
-			: "None";
+		let attachmentsList = "None";
+		let files = [];
+		if (msg.attachments.size > 0) {
+			attachmentsList = msg.attachments.map(att => `${att.name || 'attachment'}`).join("\n");
+			// download attachments before deleting the original message so uploads persist
+			try {
+				const downloads = await Promise.all(
+					Array.from(msg.attachments.map(att => fetch(att.url).then(res => res.buffer()).then(buf => ({ buf, name: att.name || 'file' }))))
+				);
+				files = downloads.map(d => ({ attachment: d.buf, name: d.name }));
+			} catch (err) {
+				logger.info(`Failed downloading attachments: ${err.message}`);
+				logger.info(err);
+				attachmentsList = msg.attachments.map(att => `[${att.name}](${att.url})`).join("\n");
+			}
+		}
 		
 		var message = new EmbedBuilder()
 			.setColor(process.env.embedColour)
@@ -55,49 +70,57 @@ var handleOnMessage = function (msg) {
 				{ name: "Mentions", value: mentionsList },
 				{ name: "Attachments", value: attachmentsList }
 			);
-		adminChannel.send({ embeds: [message] });
-		msg.delete()
-			.then(() => {
-				msg.member
-					.ban({
-						deleteMessageSeconds: 60 * 60 * 24,
-						reason: "Caught in the honey pot, see discord-admins message for more info",
-					})
-					.then(() => {
-						logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-						var messageSuccess = new EmbedBuilder()
-							.setColor(process.env.embedColour)
-							.setTitle(`Successfully banned user caught in the honey pot`)
-							.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
-						adminChannel.send({ embeds: [messageSuccess] });
 
-						var messagePublicSuccess = new EmbedBuilder()
-							.setColor(process.env.embedColour)
-							.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
-							.setDescription(
-								`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪🦅🚀`
-							);
-						publicChannel.send({ embeds: [messagePublicSuccess] });
+		// send to admin channel once; include files if present
+		try {
+			if (adminChannel) await adminChannel.send({ embeds: [message], files });
+			else logger.info("Admin channel not found for honey pot alert");
+		} catch (err) {
+			logger.info(`Failed to send honey pot admin message: ${err.message}`);
+			logger.info(err);
+		}
 
-						return;
-					})
-					.catch((error) => {
-						logger.info(`Failed to ban user: ${error.message}`);
-						logger.info(error);
-						var messageError = new EmbedBuilder()
-							.setColor(process.env.embedColour)
-							.setTitle(`FAILED to ban user!`)
-							.setDescription(
-								`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
-							);
-						adminChannel.send({ embeds: [messageError] });
-						return;
-					});
-			})
-			.catch((error) => {
-				logger.info(`Failed to delete honey pot message: ${error.message}`);
-				logger.info(error);
+		// attempt to delete the offending message (non-fatal)
+		try {
+			await msg.delete();
+		} catch (err) {
+			logger.info(`Failed to delete honey pot message: ${err.message}`);
+			logger.info(err);
+		}
+
+		// attempt to ban
+		try {
+			await msg.member.ban({
+				deleteMessageSeconds: 60 * 60 * 24,
+				reason: "Caught in the honey pot, see discord-admins message for more info",
 			});
+			logger.info(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
+			var messageSuccess = new EmbedBuilder()
+				.setColor(process.env.embedColour)
+				.setTitle(`Successfully banned user caught in the honey pot`)
+				.setDescription(`Successfully banned user: ${msg.author.tag} (ID: ${msg.author.id})`);
+			if (adminChannel) adminChannel.send({ embeds: [messageSuccess] });
+
+			var messagePublicSuccess = new EmbedBuilder()
+				.setColor(process.env.embedColour)
+				.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
+				.setDescription(
+					`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\\n\\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪🦅🚀`
+				);
+			if (publicChannel) publicChannel.send({ embeds: [messagePublicSuccess] });
+			return;
+		} catch (error) {
+			logger.info(`Failed to ban user: ${error.message}`);
+			logger.info(error);
+			var messageError = new EmbedBuilder()
+				.setColor(process.env.embedColour)
+				.setTitle(`FAILED to ban user!`)
+				.setDescription(
+					`The following user has been caught in the honey pot but could NOT be banned:\n\n${msg.member} | ${msg.member.displayName} | ${msg.author.id}\n\nError:\n\n${error.message}`
+				);
+			if (adminChannel) adminChannel.send({ embeds: [messageError] });
+			return;
+		}
 	}
 
 	if (validCommands.includes(msg.content.split(" ")[0])) {
