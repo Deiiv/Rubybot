@@ -32,7 +32,8 @@ integrate with slash commands
 */
 
 // client initiated and is ready
-client.once("ready", () => {
+// For discord.js v14+ the clientReady event should be used and client.once ensures a single invocation.
+client.once("clientReady", () => {
 	try {
 		handleOnReady(client);
 	} catch (err) {
