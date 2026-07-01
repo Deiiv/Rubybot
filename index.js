@@ -42,7 +42,7 @@ const _runReady = () => {
 		logger.error(err);
 	}
 };
-client.once("ready", _runReady);
+// Use the clientReady event (preferred in recent discord.js versions) to avoid deprecation warnings
 client.once("clientReady", _runReady);
 
 //someone new joined the server
