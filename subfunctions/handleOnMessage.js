@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 const logger = require("./logger");
 const handleActionInfo = require("./actionFunctions/handleActionInfo.js");
 const handleActionHelp = require("./actionFunctions/handleActionHelp.js");
@@ -31,7 +31,7 @@ var handleOnMessage = function (msg) {
 	if (
 		msg.channel.name === "honey-pot" &&
 		msg.channel.id === process.env.honeyPotChannelID &&
-		!msg.member.permissions.has("ADMINISTRATOR")
+		!msg.member.permissions.has(PermissionsBitField.Flags.Administrator)
 	) {
 		let adminChannel = msg.guild.channels.cache.find((ch) => ch.name === "discord-mods");
 		let publicChannel = msg.guild.channels.cache.find((ch) => ch.name === "🏠welcome");
