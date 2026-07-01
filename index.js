@@ -32,13 +32,18 @@ integrate with slash commands
 */
 
 // client initiated and is ready
-client.once("ready", () => {
+let _readyHandled = false;
+const _runReady = () => {
+	if (_readyHandled) return;
+	_readyHandled = true;
 	try {
 		handleOnReady(client);
 	} catch (err) {
 		logger.error(err);
 	}
-});
+};
+client.once("ready", _runReady);
+client.once("clientReady", _runReady);
 
 //someone new joined the server
 client.on("guildMemberAdd", (member) => {
