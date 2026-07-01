@@ -92,7 +92,7 @@ var handleOnMessage = function (msg) {
 					for (let i = 0; i < attachmentsArray.length; i++) {
 						const att = attachmentsArray[i];
 						const res = results[i];
-						if (res) uploadedItems.push(Object.assign({ origName: att.name || att.url }, res));
+						if (res) uploadedItems.push(Object.assign({ origName: att.name || att.url, origSize: att.size }, res));
 						else {
 							const reason = att.size > SINGLE_MAX ? `Too large (${(att.size / 1024).toFixed(1)} KB)` : "Download failed";
 							skippedItems.push(`${att.name || att.url} — ${reason} — ${(att.size/1024).toFixed(1)} KB`);
@@ -109,7 +109,7 @@ var handleOnMessage = function (msg) {
 						total = available.reduce((s, r) => s + r.size, 0);
 					}
 					// record removed files as skipped
-					removedDueToTotal.forEach((it) => skippedItems.push(`${it.origName || it.name} — Not uploaded (exceeded total upload size) — ${(it.size/1024).toFixed(1)} KB`));
+					removedDueToTotal.forEach((it) => skippedItems.push(`${it.origName || it.name} — Not uploaded (exceeded total upload size) — ${((it.origSize || it.size)/1024).toFixed(1)} KB`));
 				}
 				// Build embed summarizing uploaded and skipped attachments
 				const files = available.map((a) => ({ attachment: a.buf, name: a.name }));
@@ -122,7 +122,7 @@ var handleOnMessage = function (msg) {
 							{ name: "Channel", value: msg.channel ? msg.channel.toString() : "(unknown)", inline: true },
 							{
 								name: "Files included (uploaded)",
-								value: available.length > 0 ? available.map((a) => `${a.name} — ${(a.size / 1024).toFixed(1)} KB`).join("\n") : "None",
+								value: available.length > 0 ? available.map((a) => `${a.name} — ${( (a.origSize || a.size) / 1024).toFixed(1)} KB`).join("\n") : "None",
 							}
 						);
 					// list skipped attachments with reasons
