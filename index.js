@@ -31,8 +31,8 @@ integrate with slash commands
 
 */
 
-//client initiated and is ready
-client.on("clientReady", () => {
+// client initiated and is ready
+client.once("ready", () => {
 	try {
 		handleOnReady(client);
 	} catch (err) {
