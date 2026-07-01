@@ -43,9 +43,8 @@ var handleOnMessage = function (msg) {
 		let attachmentsList = "None";
 		// send admin alert immediately without files to avoid delaying ban
 		if (msg.attachments.size > 0) {
-			attachmentsList = msg.attachments
-				.map((att) => `${att.name || "attachment"} (${(att.size / 1024).toFixed(1)} KB) - ${att.url}`)
-				.join("\n");
+			// list names only (no URLs) in the initial alert to avoid leaking attachments twice
+			attachmentsList = msg.attachments.map((att) => `${att.name || "attachment"} (${(att.size / 1024).toFixed(1)} KB)`).join("\n");
 		}
 		// Prepare and send initial admin alert quickly
 		var message = new EmbedBuilder()
@@ -65,6 +64,69 @@ var handleOnMessage = function (msg) {
 				logger.info(err);
 			});
 		} else logger.info("Admin channel not found for honey pot alert");
+
+		// If attachments are small enough, download them in background and re-upload as a followup to admin channel
+		if (msg.attachments.size > 0 && adminChannel) {
+			const SINGLE_MAX = 8 * 1024 * 1024; // 8 MB per file
+			const TOTAL_MAX = 8 * 1024 * 1024; // 8 MB total upload
+			const downloads = Array.from(
+				msg.attachments.map((att) => {
+					if (att.size > SINGLE_MAX) {
+						logger.info(`Skipping download for ${att.url}: size ${att.size} > ${SINGLE_MAX}`);
+						return Promise.resolve(null);
+					}
+					return fetch(att.url)
+						.then((res) => res.buffer())
+						.then((buf) => ({ buf, name: att.name || "file", size: buf.length }))
+						.catch((err) => {
+							logger.info(`Failed to download attachment ${att.url}: ${err.message}`);
+							logger.info(err);
+							return null;
+						});
+				})
+			);
+			Promise.all(downloads)
+				.then((results) => {
+					const available = results.filter(Boolean);
+					let total = available.reduce((s, r) => s + r.size, 0);
+					if (total > TOTAL_MAX) {
+						// trim files until under limit
+						available.sort((a, b) => b.size - a.size);
+						while (total > TOTAL_MAX && available.length) {
+							total -= available[0].size;
+							available.shift();
+						}
+					}
+					if (available.length === 0) {
+						logger.info("No attachments available for upload (too large or failed)");
+						return;
+					}
+					const files = available.map((a) => ({ attachment: a.buf, name: a.name }));
+					const attachEmbed = new EmbedBuilder()
+						.setColor(process.env.embedColour)
+						.setTitle(`Honey pot: attachments (uploaded)`)
+						.setDescription(`Attachments from a honey-pot message by ${msg.author} (${msg.author.tag})`)
+						.addFields(
+							{ name: "Author ID", value: `${msg.author.id}`, inline: true },
+							{ name: "Channel", value: msg.channel ? msg.channel.toString() : "(unknown)", inline: true },
+							{
+								name: "Files included",
+								value: available.map((a) => `${a.name} — ${(a.size / 1024).toFixed(1)} KB`).join("\n"),
+							}
+						);
+					// Add links for ALL original attachments so the follow-up is the comprehensive summary
+					const linksField = msg.attachments.map((att) => `[${att.name || att.url}](${att.url})`).join("\n");
+					attachEmbed.addFields({ name: "Attachment Links", value: linksField });
+					adminChannel.send({ embeds: [attachEmbed], files }).catch((err) => {
+						logger.info(`Failed to upload attachments to admin channel: ${err.message}`);
+						logger.info(err);
+					});
+				})
+				.catch((err) => {
+					logger.info(`Attachment background download failed: ${err.message}`);
+					logger.info(err);
+				});
+		}
 
 		// attempt to delete the offending message (non-fatal)
 		msg.delete().catch((err) => {
