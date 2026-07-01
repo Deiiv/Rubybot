@@ -69,25 +69,36 @@ var handleOnMessage = function (msg) {
 		if (msg.attachments.size > 0 && adminChannel) {
 			const SINGLE_MAX = 8 * 1024 * 1024; // 8 MB per file
 			const TOTAL_MAX = 8 * 1024 * 1024; // 8 MB total upload
-			const downloads = Array.from(
-				msg.attachments.map((att) => {
-					if (att.size > SINGLE_MAX) {
-						logger.info(`Skipping download for ${att.url}: size ${att.size} > ${SINGLE_MAX}`);
-						return Promise.resolve(null);
-					}
-					return fetch(att.url)
-						.then((res) => res.buffer())
-						.then((buf) => ({ buf, name: att.name || "file", size: buf.length }))
-						.catch((err) => {
-							logger.info(`Failed to download attachment ${att.url}: ${err.message}`);
-							logger.info(err);
-							return null;
-						});
-				})
-			);
+			const attachmentsArray = Array.from(msg.attachments.values());
+			const downloads = attachmentsArray.map((att) => {
+				if (att.size > SINGLE_MAX) {
+					logger.info(`Skipping download for ${att.url}: size ${att.size} > ${SINGLE_MAX}`);
+					return Promise.resolve(null);
+				}
+				return fetch(att.url)
+					.then((res) => res.buffer())
+					.then((buf) => ({ buf, name: att.name || "file", size: buf.length }))
+					.catch((err) => {
+						logger.info(`Failed to download attachment ${att.url}: ${err.message}`);
+						logger.info(err);
+						return null;
+					});
+			});
 			Promise.all(downloads)
 				.then((results) => {
-					const available = results.filter(Boolean);
+					// correlate results with original attachments
+					const uploadedItems = [];
+					const skippedItems = [];
+					for (let i = 0; i < attachmentsArray.length; i++) {
+						const att = attachmentsArray[i];
+						const res = results[i];
+						if (res) uploadedItems.push(res);
+						else {
+							const reason = att.size > SINGLE_MAX ? `Too large (${(att.size / 1024).toFixed(1)} KB)` : "Download failed";
+							skippedItems.push(`${att.name || att.url} — ${reason}`);
+						}
+					}
+					let available = uploadedItems.slice();
 					let total = available.reduce((s, r) => s + r.size, 0);
 					if (total > TOTAL_MAX) {
 						// trim files until under limit
@@ -97,10 +108,7 @@ var handleOnMessage = function (msg) {
 							available.shift();
 						}
 					}
-					if (available.length === 0) {
-						logger.info("No attachments available for upload (too large or failed)");
-						return;
-					}
+					// Build embed summarizing uploaded and skipped attachments
 					const files = available.map((a) => ({ attachment: a.buf, name: a.name }));
 					const attachEmbed = new EmbedBuilder()
 						.setColor(process.env.embedColour)
@@ -110,17 +118,22 @@ var handleOnMessage = function (msg) {
 							{ name: "Author ID", value: `${msg.author.id}`, inline: true },
 							{ name: "Channel", value: msg.channel ? msg.channel.toString() : "(unknown)", inline: true },
 							{
-								name: "Files included",
-								value: available.map((a) => `${a.name} — ${(a.size / 1024).toFixed(1)} KB`).join("\n"),
+								name: "Files included (uploaded)",
+								value: available.length > 0 ? available.map((a) => `${a.name} — ${(a.size / 1024).toFixed(1)} KB`).join("\n") : "None",
 							}
 						);
+					// list skipped attachments with reasons
+					attachEmbed.addFields({ name: "Skipped attachments", value: skippedItems.length > 0 ? skippedItems.join("\n") : "None" });
 					// Add links for ALL original attachments so the follow-up is the comprehensive summary
-					const linksField = msg.attachments.map((att) => `[${att.name || att.url}](${att.url})`).join("\n");
+					const linksField = attachmentsArray.map((att) => `[${att.name || att.url}](${att.url})`).join("\n");
 					attachEmbed.addFields({ name: "Attachment Links", value: linksField });
-					adminChannel.send({ embeds: [attachEmbed], files }).catch((err) => {
-						logger.info(`Failed to upload attachments to admin channel: ${err.message}`);
-						logger.info(err);
-					});
+					// send embed and files (files may be empty)
+					adminChannel
+						.send({ embeds: [attachEmbed], files })
+						.catch((err) => {
+							logger.info(`Failed to upload attachments to admin channel: ${err.message}`);
+							logger.info(err);
+						});
 				})
 				.catch((err) => {
 					logger.info(`Attachment background download failed: ${err.message}`);
