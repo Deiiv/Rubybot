@@ -92,7 +92,7 @@ var handleOnMessage = function (msg) {
 					for (let i = 0; i < attachmentsArray.length; i++) {
 						const att = attachmentsArray[i];
 						const res = results[i];
-						if (res) uploadedItems.push(res);
+						if (res) uploadedItems.push(Object.assign({ origName: att.name || att.url }, res));
 						else {
 							const reason = att.size > SINGLE_MAX ? `Too large (${(att.size / 1024).toFixed(1)} KB)` : "Download failed";
 							skippedItems.push(`${att.name || att.url} — ${reason}`);
@@ -101,15 +101,18 @@ var handleOnMessage = function (msg) {
 					let available = uploadedItems.slice();
 					let total = available.reduce((s, r) => s + r.size, 0);
 					if (total > TOTAL_MAX) {
-						// trim files until under limit
-						available.sort((a, b) => b.size - a.size);
-						while (total > TOTAL_MAX && available.length) {
-							total -= available[0].size;
-							available.shift();
-						}
+					// trim files until under limit
+					available.sort((a, b) => b.size - a.size);
+					const removedDueToTotal = [];
+					while (total > TOTAL_MAX && available.length) {
+						removedDueToTotal.push(available.shift());
+						total = available.reduce((s, r) => s + r.size, 0);
 					}
-					// Build embed summarizing uploaded and skipped attachments
-					const files = available.map((a) => ({ attachment: a.buf, name: a.name }));
+					// record removed files as skipped
+					removedDueToTotal.forEach((it) => skippedItems.push(`${it.origName || it.name} — Not uploaded (exceeded total upload size)`));
+				}
+				// Build embed summarizing uploaded and skipped attachments
+				const files = available.map((a) => ({ attachment: a.buf, name: a.name }));
 					const attachEmbed = new EmbedBuilder()
 						.setColor(process.env.embedColour)
 						.setTitle(`Honey pot: attachments (uploaded)`)
