@@ -95,7 +95,7 @@ var handleOnMessage = function (msg) {
 						if (res) uploadedItems.push(Object.assign({ origName: att.name || att.url }, res));
 						else {
 							const reason = att.size > SINGLE_MAX ? `Too large (${(att.size / 1024).toFixed(1)} KB)` : "Download failed";
-							skippedItems.push(`${att.name || att.url} — ${reason}`);
+							skippedItems.push(`${att.name || att.url} — ${reason} — ${(att.size/1024).toFixed(1)} KB`);
 						}
 					}
 					let available = uploadedItems.slice();
@@ -109,7 +109,7 @@ var handleOnMessage = function (msg) {
 						total = available.reduce((s, r) => s + r.size, 0);
 					}
 					// record removed files as skipped
-					removedDueToTotal.forEach((it) => skippedItems.push(`${it.origName || it.name} — Not uploaded (exceeded total upload size)`));
+					removedDueToTotal.forEach((it) => skippedItems.push(`${it.origName || it.name} — Not uploaded (exceeded total upload size) — ${(it.size/1024).toFixed(1)} KB`));
 				}
 				// Build embed summarizing uploaded and skipped attachments
 				const files = available.map((a) => ({ attachment: a.buf, name: a.name }));
