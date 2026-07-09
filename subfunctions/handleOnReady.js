@@ -2,11 +2,18 @@ const logger = require("./logger");
 const deployCommands = require("./deployCommands");
 
 var handleOnReady = function (client) {
-	logger.info("Logged in as:");
-	logger.info(client.user.username + " " + client.user.id);
+	logger.info("=".repeat(50));
+	logger.info("🤖 RUBYBOT STARTED");
+	logger.info("=".repeat(50));
+	logger.info(`Username: ${client.user.username}`);
+	logger.info(`User ID: ${client.user.id}`);
+	logger.info(`Version: ${13.15}`);
+	logger.info(`Runtime: Node.js 24.x | Discord.js 14.x`);
+	logger.info(`Host: Deiv's House`);
+	logger.info("=".repeat(50));
 	logger.info("Connected to the following servers:");
 	client.guilds.cache.forEach(function (guild) {
-		logger.info(guild.name + " " + guild.id);
+		logger.info(`  - ${guild.name} (${guild.id})`);
 		// if(guild.name === "x") guild.leave();
 
 		// deploy commands in each server
@@ -34,11 +41,11 @@ var handleOnReady = function (client) {
 		if (!process.env.jackieWhat)
 			process.env.jackieWhat = guild.emojis.cache.find((emoji) => emoji.name === "jackieWhat") || "";
 	});
-	logger.info("------------------------------");
+	logger.info("=".repeat(50));
 	// these are defined here so that .env can be hidden, but still have customizable values stored in git
 	process.env.adminUserTag = "<@140904638084808705>";
 	process.env.embedColour = "#FEC6C7";
-	process.env.botversion = 13.14;
+	process.env.botversion = 13.15;
 	process.env.runtime = "Node.Js 24.x | Discord.Js 14.x";
 	process.env.host = "Deiv's House";
 	process.env.author = "Deiv";
