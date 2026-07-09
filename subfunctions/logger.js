@@ -26,12 +26,25 @@ module.exports = winston.createLogger({
 	],
 });
 */
+function getLocalTimestamp() {
+	const now = new Date();
+	return now.toLocaleString('en-US', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		second: '2-digit',
+		hour12: true
+	});
+}
+
 var info = function (msg) {
-	console.log("[INFO]", msg);
+	console.log(`[${getLocalTimestamp()}] [INFO]`, msg);
 };
 
 var error = function (error) {
-	console.log("[ERROR]", error);
+	console.log(`[${getLocalTimestamp()}] [ERROR]`, error);
 };
 
 module.exports = {
