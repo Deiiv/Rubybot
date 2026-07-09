@@ -1,8 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
 const logger = require("./../logger");
 
-var handleActionHelp = function (msg, interactionBool) {
-	logger.info(`User ${msg.author?.tag || msg.user?.id} requested help (content: ${msg.content})`);
+var handleActionHelp = function (interaction, isInteraction) {
+	logger.info(`User ${interaction.user?.tag || interaction.user?.id} requested help`);
 	const helpEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.addFields(
@@ -25,14 +25,7 @@ var handleActionHelp = function (msg, interactionBool) {
 			{ name: `${process.env.pepoG} To set your guild:`, value: '!setguild GUILD' },
 		);
 
-	if (interactionBool) msg.reply({ embeds: [helpEmbed] });
-	else {
-		let messageContent = msg.content.split(" ");
-		if (messageContent[1] && messageContent[1] === "prof") {
-			msg.channel.send({ embeds: [helpProfEmbed] });
-		} else {
-			msg.channel.send({ embeds: [helpEmbed] });
-		}
-	}
+	if (isInteraction) interaction.reply({ embeds: [helpEmbed] });
+	else interaction.channel.send({ embeds: [helpEmbed] });
 };
 module.exports = handleActionHelp;
