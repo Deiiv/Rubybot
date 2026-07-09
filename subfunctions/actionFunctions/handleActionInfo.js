@@ -1,8 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
 const logger = require("./../logger");
 
-var handleActionInfo = function (msg, interactionBool) {
-	logger.info(`User ${msg.author?.tag || msg.user?.id} requested bot info`);
+var handleActionInfo = function (interaction, isInteraction) {
+	logger.info(`User ${interaction.user?.tag || interaction.user?.id} requested bot info`);
 	const infoEmbed = new EmbedBuilder()
 		.setColor(process.env.embedColour)
 		.setTitle(`Rubybot :robot:`)
@@ -14,7 +14,7 @@ var handleActionInfo = function (msg, interactionBool) {
 			{ name: 'Developed by:', value: process.env.adminUserTag, inline: true },
 		);
 
-	if (interactionBool) msg.reply({ embeds: [infoEmbed] });
-	else msg.channel.send({ embeds: [infoEmbed] });
+	if (isInteraction) interaction.reply({ embeds: [infoEmbed] });
+	else interaction.channel.send({ embeds: [infoEmbed] });
 };
 module.exports = handleActionInfo;
