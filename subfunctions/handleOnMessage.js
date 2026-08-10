@@ -168,7 +168,7 @@ var handleOnMessage = function (msg) {
 					.setColor(process.env.embedColour)
 					.setTitle(`🚨 LADIES AND GENTLEMEN... WE GOT 'EM 🚨`)
 					.setDescription(
-						`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\\n\\nThe spam era has ENDED 🔚☠️ Ruby stays UNDEFEATED ${process.env.ruby}👑💎🏆💪🦅🚀`
+						`${msg.author} (${msg.author.tag}) has been caught RED-HANDED spamming in the honey pot and has been PERMANENTLY BANNED from the server 🍯🔨⚡🚫\n\nThe spam era has ENDED 🔚☠️ ...`
 					);
 				if (publicChannel) publicChannel.send({ embeds: [messagePublicSuccess] });
 				return;
